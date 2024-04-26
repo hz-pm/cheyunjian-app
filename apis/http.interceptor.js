@@ -7,6 +7,9 @@ const codeMessage = {
 	500: '服务器内部错误，无法完成请求',
 };
 
+import Request from '@/utils/luch-request/index.js'
+const http = new Request();
+
 //国际化
 // import Vue from 'vue'
 // import messages from '../locale/index'
@@ -20,8 +23,8 @@ const codeMessage = {
 // const i18n = new VueI18n(i18nConfig)
 
 const install = (Vue, vm) => {
-	// 这个配置是一次配置，全局通用的，具体参数见 https://www.uviewui.com/js/http.html
-	uni.$u.http.setConfig((config) => {
+	// 这个配置是一次配置，全局通用的，具体参数见
+	http.setConfig((config) => {
 		// 域名设置
 		config.baseURL = projectConfig.baseUrl;
 		// 全局header
@@ -74,7 +77,7 @@ const install = (Vue, vm) => {
 	});
 
 	// 请求拦截部分，如配置，每次请求前都会执行
-	uni.$u.http.interceptors.request.use((config) => {
+	http.interceptors.request.use((config) => {
 
 		if (config.custom.ShowLoading) {
 			uni.showLoading({
@@ -99,31 +102,10 @@ const install = (Vue, vm) => {
 		// config.header.token = token;
 		// config.header.Token = 'xxxxxx';
 		let lang = localStorage.getItem('locale')
-		let langStr = 'en-us'
 		if(lang == 'en'){
 		    config.header['Accept-Language'] = 'en-us,en;q=0.9'
-			langStr = 'en-us'
 		}else if(lang == 'ja'){
 		    config.header['Accept-Language'] = 'jp-jp,jp;q=0.9'
-			langStr = 'jp-jp'
-		}else if(lang == 'zh-Hans'){
-		    config.header['Accept-Language'] = 'zh-Hans,zh;q=0.9'
-			langStr = 'zh-Hans'
-		}else if(lang == 'zh-Hant'){
-		    config.header['Accept-Language'] = 'zh-Hant,zh;q=0.9'
-			langStr = 'zh-Hant'
-		}else if(lang == 'th'){
-		    config.header['Accept-Language'] = 'th-th,th;q=0.9'
-			langStr = 'th-th'
-		}else if(lang == 'pt'){
-		    config.header['Accept-Language'] = 'pt-pt,pt;q=0.9'
-			langStr = 'pt-pt'
-		}else if(lang == 'ms'){
-		    config.header['Accept-Language'] = 'ms-ms,ms;q=0.9'
-			langStr = 'ms-ms'
-		}else{
-			config.header['Accept-Language'] = 'zh-Hant,zh;q=0.9'
-			langStr = 'zh-Hant'
 		}
 
 		if (vm.$store.state.vuex_token != '') {
@@ -141,9 +123,7 @@ const install = (Vue, vm) => {
 		
 		//统一添加语言参数
 		if(config.data){
-			config.data.lang = langStr;
-		}else{
-			config.data = {"lang":langStr}
+			config.data.lang = lang
 		}
 		
 		// 可以对某个url进行特别处理，此url参数为this.$u.get(url)中的url值
@@ -158,7 +138,7 @@ const install = (Vue, vm) => {
 	})
 
 	// 响应拦截，如配置，每次请求结束都会执行本方法
-	uni.$u.http.interceptors.response.use((res) => {
+	http.interceptors.response.use((res) => {
 		// 自定义参数
 		const custom = res.config?.custom
 		if (custom.ShowLoading) {

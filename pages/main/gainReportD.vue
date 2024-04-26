@@ -81,7 +81,7 @@
 					</view>
 					
 					<navigator url="/pages/mine/vipCard" style="width: 100%;display: flex;flex-direction: row;justify-content: center;margin-top: 35rpx;">
-						<image src="../../static/banner-dyg.png" style="width: 90%;height: 160rpx;border-radius: 20rpx;"></image>
+						<image src="../../static/banner-dyg.webp" style="width: 90%;height: 160rpx;border-radius: 20rpx;"></image>
 					</navigator>
 
 					<view style="height: 150rpx;"></view>
@@ -98,9 +98,9 @@
 						<text style="font-size: 28rpx;font-weight: bold;margin-top: 35rpx;">如何获得车架号、整车型号、电池包编码</text>
 						<view style="width: 92%;margin-top: 35rpx;display: flex;flex-direction: column;align-items: center;justify-content: center;">
 							<text style="font-size: 28rpx;width: 100%;margin-top: 35rpx;">检测所需的车架号(VIN码)，以及整车型号(公告号)可以通过您的行驶证及车辆铭牌获得，电池包编码可以从电池包铭牌获得，参考以下图例：</text>
-							<image src="../../static/vin-example1.png" style="width: 100%;height: 450rpx;margin-top: 35rpx;"></image>
-							<image src="../../static/vin-example2.png" style="width: 100%;height: 380rpx;margin-top: 35rpx;"></image>
-							<image src="../../static/vin-example3.png" style="width: 100%;height: 220rpx;margin-top: 35rpx;"></image>
+							<image src="../../static/vin-example1.webp" style="width: 100%;height: 450rpx;margin-top: 35rpx;"></image>
+							<image src="../../static/vin-example2.webp" style="width: 100%;height: 380rpx;margin-top: 35rpx;"></image>
+							<image src="../../static/vin-example3.webp" style="width: 100%;height: 220rpx;margin-top: 35rpx;"></image>
 							<view style="height: 80rpx;"></view>
 						</view>
 					</view>
@@ -129,8 +129,8 @@
 				</view>
 				<scroll-view scroll-y="true" style="height: 80vh;">
 					<view style="width: 100%;display: flex;flex-direction: column;align-items: center;">
-						<image src="../../static/example-m-dyg2-2.png" style="width: 100%;height: 3600rpx;" v-if="curTab===1"></image>
-						<image src="../../static/example-m-dyg2-3.png" style="width: 100%;height: 3900rpx;"  v-if="curTab===2"></image>
+						<image src="../../static/example-m-dyg2-2.webp" style="width: 100%;height: 3600rpx;" v-if="curTab===1"></image>
+						<image src="../../static/example-m-dyg2-3.webp" style="width: 100%;height: 3900rpx;"  v-if="curTab===2"></image>
 						<view style="height: 80rpx;"></view>
 					</view>
 				</scroll-view>

@@ -1,7 +1,8 @@
 // common/http.api.js
 
 import * as user from './modules/user.js';
-const http = uni.$u.http;
+import Request from '@/utils/luch-request/index.js'
+const http = new Request();
 
 // api 接口管理
 const install = (Vue, vm) => {

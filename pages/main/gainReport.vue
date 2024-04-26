@@ -82,7 +82,7 @@
 			<view style="display: flex;flex-direction: column;align-items: center;height: 80vh;">
 				<scroll-view scroll-y="true" style="height: 80vh;">
 					<view style="width: 100%;height: 650rpx;display: flex;flex-direction: column;align-items: center;">
-						<image src="../../static/img-rhhdcj.png" style="width: 700rpx;height: 1500rpx;"></image>
+						<image src="../../static/img-rhhdcj.webp" style="width: 700rpx;height: 1500rpx;"></image>
 					</view>
 				</scroll-view>
 			</view>
@@ -95,7 +95,7 @@
 			<view style="display: flex;flex-direction: column;align-items: center;height: 80vh;">
 				<scroll-view scroll-y="true" style="height: 80vh;">
 					<view style="width: 100%;height: 6000rpx;display: flex;flex-direction: column;align-items: center;">
-						<image src="../../static/img-jc-demo.png" style="width: 100%;height: 6000rpx;"></image>
+						<image src="../../static/img-jc-demo.webp" style="width: 100%;height: 6000rpx;"></image>
 					</view>
 				</scroll-view>
 			</view>

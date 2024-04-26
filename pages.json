@@ -1,7 +1,5 @@
 {
 	"easycom": {
-		// uview 组件
-		"^u-(.*)": "@/uni_modules/uview-ui/components/u-$1/u-$1.vue",
 		// 自定义组件
 		"^cl-(.*)": "@/components/cl-$1/cl-$1.vue"
 	},
@@ -12,10 +10,9 @@
 			"name": "login",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "登录车数万维",
                 "enablePullDownRefresh": false,
-				"navigationStyle": "custom",
-				"disableScroll": true
+				"navigationStyle": "default"
             }
             
         }
@@ -25,8 +22,7 @@
             {
                 "navigationBarTitleText": "",
                 "enablePullDownRefresh": false,
-				"navigationStyle": "custom",
-				"disableScroll": true
+				"navigationStyle": "custom"
             }
             
         }
@@ -36,8 +32,7 @@
             {
                 "navigationBarTitleText": "",
                 "enablePullDownRefresh": false,
-				"navigationStyle": "custom",
-				"disableScroll": true
+				"navigationStyle": "custom"
             }
             
         }
@@ -47,8 +42,7 @@
             {
                 "navigationBarTitleText": "",
                 "enablePullDownRefresh": false,
-        		"navigationStyle": "custom",
-        		"disableScroll": true
+        		"navigationStyle": "custom"
             }
             
         },{
@@ -57,8 +51,7 @@
             {
                 "navigationBarTitleText": "",
                 "enablePullDownRefresh": false,
-				"navigationStyle": "custom",
-				"disableScroll": true
+				"navigationStyle": "custom"
             }
             
         },{
@@ -67,8 +60,7 @@
             {
                 "navigationBarTitleText": "",
                 "enablePullDownRefresh": false,
-				"navigationStyle": "custom",
-				"disableScroll": true
+				"navigationStyle": "custom"
             }
             
         },{
@@ -77,8 +69,7 @@
             {
                 "navigationBarTitleText": "",
                 "enablePullDownRefresh": false,
-				"navigationStyle": "custom",
-				"disableScroll": true
+				"navigationStyle": "custom"
             }
             
         },{
@@ -87,8 +78,7 @@
             {
                 "navigationBarTitleText": "",
                 "enablePullDownRefresh": false,
-				"navigationStyle": "custom",
-				"disableScroll": true
+				"navigationStyle": "custom"
             }
             
         },{
@@ -97,8 +87,7 @@
             {
                 "navigationBarTitleText": "",
                 "enablePullDownRefresh": false,
-				"navigationStyle": "custom",
-				"disableScroll": true
+				"navigationStyle": "custom"
             }
             
         },{
@@ -107,8 +96,7 @@
             {
                 "navigationBarTitleText": "",
                 "enablePullDownRefresh": false,
-				"navigationStyle": "custom",
-				"disableScroll": true
+				"navigationStyle": "custom"
             }
             
         },
@@ -118,8 +106,7 @@
         	{
         	    "navigationBarTitleText": "",
         	    "enablePullDownRefresh": false,
-        		"navigationStyle": "custom",
-        		"disableScroll": true
+        		"navigationStyle": "custom"
         	}
         },
         {
@@ -128,8 +115,7 @@
         	{
         	    "navigationBarTitleText": "",
         	    "enablePullDownRefresh": false,
-        		"navigationStyle": "custom",
-        		"disableScroll": true
+        		"navigationStyle": "custom"
         	}
         },
         {
@@ -138,8 +124,7 @@
         	{
         	    "navigationBarTitleText": "",
         	    "enablePullDownRefresh": false,
-        		"navigationStyle": "custom",
-        		"disableScroll": true
+        		"navigationStyle": "custom"
         	}
         },
 		{
@@ -148,8 +133,7 @@
 			{
 			    "navigationBarTitleText": "",
 			    "enablePullDownRefresh": false,
-				"navigationStyle": "custom",
-				"disableScroll": true
+				"navigationStyle": "custom"
 			}
 		},
 		{
@@ -158,8 +142,7 @@
 			{
 			    "navigationBarTitleText": "",
 			    "enablePullDownRefresh": false,
-				"navigationStyle": "custom",
-				"disableScroll": true
+				"navigationStyle": "custom"
 			}
 		},
 		{
@@ -168,8 +151,7 @@
 			{
 			    "navigationBarTitleText": "",
 			    "enablePullDownRefresh": false,
-				"navigationStyle": "custom",
-				"disableScroll": true
+				"navigationStyle": "custom"
 			}
 		},
 		{
@@ -178,8 +160,7 @@
 			{
 			    "navigationBarTitleText": "",
 			    "enablePullDownRefresh": false,
-				"navigationStyle": "custom",
-				"disableScroll": true
+				"navigationStyle": "custom"
 			}
 		},
 		{
@@ -222,7 +203,30 @@
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "hubspot",
-		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8"
+		"navigationBarBackgroundColor": "#FFF",
+		"backgroundColor": "#FFF"
+	},
+	"tabBar": {
+		"color": "#a2a2a2",
+		"selectedColor": "#30ad55",
+		"borderStyle": "black",
+		"backgroundColor": "#ffffff",
+		"list": [{
+			"pagePath": "pages/main/main",
+			"iconPath": "static/tab-1-n.png",
+			"selectedIconPath": "static/tab-1-s.png",
+			"text": "首页"
+		}, {
+			"pagePath": "pages/main/queryTramFiles",
+			"iconPath": "static/tab-2-n.png",
+			"selectedIconPath": "static/tab-2-s.png",
+			"text": "车智驾"
+		}, {
+			"pagePath": "pages/main/mine",
+			"iconPath": "static/tab-3-n.png",
+			"selectedIconPath": "static/tab-3-s.png",
+			"text": "我的"
+		}]
 	}
+
 }

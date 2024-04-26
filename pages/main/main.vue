@@ -81,7 +81,7 @@
 						</navigator>
 					</view>
 					
-					<image src="../../static/img-home-bottom.png" style="width: 92%;height: 720rpx;border-radius: 20rpx;
+					<image src="../../static/img-home-bottom.webp" style="width: 92%;height: 720rpx;border-radius: 20rpx;
 					margin-top: 35rpx;"></image>
 					
 					<text style="width: 92%;font-size: 28rpx;transform: scale(0.8); color: #808080;text-align: center;margin-top: 40rpx;">Copyright © 2022 福建常岳新能源科技有限公司</text>
@@ -100,22 +100,18 @@
 			</view>
 		</scroll-view>
 		
-		<custom-tabbar :tabIndex="index1" @clickTabbar="clickTabbar"></custom-tabbar>
 	</view>
 </template>
 
 <script>
-	import customTabbar from "../../components/custom-tabbar/custom-tabbar.vue"
 	import {
 		// getIndexContent,
 	} from '../../apis/modules/user';
 	export default {
 		components: {
-			customTabbar,
 		},
 		data() {
 			return {
-				index1: 0,
 				current:0,
 				list5: [
 					{
@@ -158,23 +154,6 @@
 
 		},
 		methods: {
-
-			clickTabbar(index) {
-				let path = 'main'
-				if (index == 0) {
-					path = 'main'
-				} else if (index == 1) {
-					path = 'queryTramFiles'
-				} else if (index == 2) {
-					path = 'mine'
-				}
-				
-				console.log(path+'========>' + index)
-				uni.navigateTo({
-					url: 'pages/main/' + path,
-					type: 'tab'
-				})
-			},
 			clickGrid(index){
 				console.log('========>'+index)
 				if(index == 0){
@@ -206,7 +185,8 @@
 	}
 
 	.indicator {
-		@include flex(row);
+		display: flex;
+		flex-direction: row;
 		justify-content: center;
 
 		&__dot {

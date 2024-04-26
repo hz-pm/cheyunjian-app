@@ -132,46 +132,23 @@
 				<view style="height: 150rpx;"></view>
 			</view>
 		</scroll-view>
-
-		<custom-tabbar :tabIndex="index1" @clickTabbar="clickTabbar"></custom-tabbar>
 	</view>
 </template>
 
 <script>
-	import customTabbar from "../../components/custom-tabbar/custom-tabbar.vue"
 	import projectConfig from '@/common/config.js';
 	import {
 		getIndexContent,
 	} from '../../apis/modules/user';
 	export default {
 		components: {
-			customTabbar,
 		},
 		data() {
 			return {
-				index1: 2,
 				phoneList: ['13316028972', '呼叫']
 			}
 		},
 		methods: {
-			clickTabbar(index) {
-				let path = 'main'
-				if (index == 0) {
-					path = 'main'
-				} else if (index == 1) {
-					path = 'queryTramFiles'
-				} else if (index == 2) {
-					path = 'mine'
-				}
-				uni.switchTab({
-					url: 'pages/main/' + path,
-				})
-
-				// uni.$u.route({
-				// 	type:'tab',
-				// 	url: 'pages/main/'+path,
-				// })
-			},
 			goSetting() {
 				uni.$u.route({
 					url: 'pages/mine/myInfo'

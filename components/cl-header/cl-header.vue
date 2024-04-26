@@ -1,5 +1,8 @@
 <template>
-	<view style="width: 100vw;background-color: antiquewhite;height: 100rpx;">
+	<view style="width: 100vw;">
+		<view v-if="isOccupy" :style="{
+			height: `calc(${statusBarHeight}px)`
+		}"></view>
 		<view class="header" :style="{
 				'padding-top': `${statusBarHeight}px;`,
 				'background-color': realBackgroundColor,
@@ -14,10 +17,6 @@
 				<text v-else class="nav-text">{{ title }}</text>
 			</view>
 		</view>
-
-		<view v-if="isOccupy" :style="{
-			height: `calc(${statusBarHeight}px)`
-		}"></view>
 	</view>
 </template>
 
@@ -175,13 +174,14 @@
 		width: 100%;
 		display: flex;
 		align-items: center;
-		justify-content: center;
-		padding: 0 30rpx;
 	}
 
 	.nav-text {
 		font-size: 34rpx;
 		margin-left: 20rpx;
+		position: absolute;
+		left: 50%;
+		right: 50%;
 	}
 
 	.back-btn {

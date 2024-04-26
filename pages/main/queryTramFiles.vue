@@ -89,7 +89,7 @@
 					style="font-size: 30rpx;color: #111;font-weight: bold;margin-top: 15rpx;margin-bottom: 15rpx;">版本区别</text>
 				<scroll-view scroll-y="true" style="height: 80vh;">
 					<view style="width: 100%;height: 1500rpx;display: flex;flex-direction: column;align-items: center;">
-						<image src="../../static/img-v-q.png" style="width: 700rpx;height: 1500rpx;"></image>
+						<image src="../../static/img-v-q.webp" style="width: 700rpx;height: 1500rpx;"></image>
 					</view>
 				</scroll-view>
 			</view>
@@ -184,12 +184,10 @@
 			</view>
 		</uni-popup>
 
-		<custom-tabbar :tabIndex="index1" @clickTabbar="clickTabbar"></custom-tabbar>
 	</view>
 </template>
 
 <script>
-	import customTabbar from "../../components/custom-tabbar/custom-tabbar.vue"
 	import projectConfig from '@/common/config.js';
 
 	import {
@@ -197,11 +195,9 @@
 	} from '../../apis/modules/user';
 	export default {
 		components: {
-			customTabbar,
 		},
 		data() {
 			return {
-				index1: 1,
 				showPop: false,
 				showModal: false,
 				content: '本服务主要针对个人车主，因此每个账号最多仅可检测评估5台车，敬请注意！车智驾数据每月15日凌晨00:00更新，您可在每月15日后查询最新的数据。',
@@ -212,20 +208,6 @@
 			}
 		},
 		methods: {
-			clickTabbar(index) {
-				let path = 'main'
-				if (index == 0) {
-					path = 'main';
-				} else if (index == 1) {
-					path = 'queryTramFiles';
-				} else if (index == 2) {
-					path = 'mine';
-				}
-				uni.navigateTo({
-					url: 'pages/main/' + path,
-					type: 'tab'
-				})
-			},
 			open() {
 				this.showPop = true
 				this.$refs.popup.open()

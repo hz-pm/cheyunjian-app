@@ -1,5 +1,6 @@
 // test user request api
-const http = uni.$u.http;
+import Request from '@/utils/luch-request/index.js'
+const http = new Request();
 
 //
 // export function getUserInfo(params){

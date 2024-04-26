@@ -1,7 +1,7 @@
 <template>
 	<view class="content">
-		<cl-header backgroundColor="#FFF" title="登录车数万维" defaultTextColor="#111"></cl-header>
-
+		
+		
 		<view class="top-v">
 			<view style="height: 180rpx;"></view>
 			<image src="../../static/logo-login.png" style="width: 200rpx;height: 220rpx;"></image>

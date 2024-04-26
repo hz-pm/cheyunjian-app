@@ -201,7 +201,7 @@
 
 			&__text {
 				padding: 12px 15px;
-				color: $u-content-color;
+				color: #666;
 				font-size: 14px;
 				line-height: 18px;
 			}

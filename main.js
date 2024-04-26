@@ -1,18 +1,7 @@
 import Vue from 'vue'
 import App from './App'
 import store from '@/store';
-import messages from './locale/index'
 
-// let lang = localStorage.getItem('locale')
-// if(!lang){
-//   lang = 'en'
-//   localStorage.setItem('locale', lang);
-// }
-// let i18nConfig = {
-//   // locale: 'zh-Hant',
-//   locale: lang,
-//   messages
-// }
 
 import * as filters from '@/common/filters.js';
 
@@ -25,10 +14,6 @@ Object.keys(filters).forEach(key => {
 import {router,RouterMount} from './common/router.js';
 Vue.use(router);
 
-// 引入uview
-import uView from '@/uni_modules/uview-ui';
-Vue.use(uView);
-
 // 全局引入vuex
 let vuexStore = require("@/store/$u.mixin.js");
 Vue.mixin(vuexStore);
@@ -36,22 +21,13 @@ Vue.mixin(vuexStore);
 // 引入扩展方法
 import '@/common/extend.js';
 
-//国际化
-// import VueI18n from 'vue-i18n'
-// Vue.use(VueI18n)
-// const i18n = new VueI18n(i18nConfig)
-
 Vue.config.productionTip = false
 App.mpType = 'app'
 
 const app = new Vue({
-	// i18n,
 	store,
     ...App
 })
-// if(lang){
-//   uni.setLocale(lang)
-// }
 
 import installPlugin from 'pages/components/jj-messagebox/messageView/index.js'
 installPlugin(Vue)
