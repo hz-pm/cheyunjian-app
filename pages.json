@@ -1,0 +1,228 @@
+{
+	"easycom": {
+		// uview 组件
+		"^u-(.*)": "@/uni_modules/uview-ui/components/u-$1/u-$1.vue",
+		// 自定义组件
+		"^cl-(.*)": "@/components/cl-$1/cl-$1.vue"
+	},
+
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+            "path" : "pages/login/login",
+			"name": "login",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false,
+				"navigationStyle": "custom",
+				"disableScroll": true
+            }
+            
+        }
+        ,{
+            "path" : "pages/main/main",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false,
+				"navigationStyle": "custom",
+				"disableScroll": true
+            }
+            
+        }
+        ,{
+            "path" : "pages/main/queryTramFiles",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false,
+				"navigationStyle": "custom",
+				"disableScroll": true
+            }
+            
+        }
+        ,{
+            "path" : "pages/main/mine",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false,
+        		"navigationStyle": "custom",
+        		"disableScroll": true
+            }
+            
+        },{
+            "path" : "pages/mine/myInfo",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false,
+				"navigationStyle": "custom",
+				"disableScroll": true
+            }
+            
+        },{
+            "path" : "pages/mine/baseCompany",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false,
+				"navigationStyle": "custom",
+				"disableScroll": true
+            }
+            
+        },{
+            "path" : "pages/mine/vipCard",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false,
+				"navigationStyle": "custom",
+				"disableScroll": true
+            }
+            
+        },{
+            "path" : "pages/mine/skuList",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false,
+				"navigationStyle": "custom",
+				"disableScroll": true
+            }
+            
+        },{
+            "path" : "pages/mine/recharge",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false,
+				"navigationStyle": "custom",
+				"disableScroll": true
+            }
+            
+        },{
+            "path" : "pages/mine/rechargeDetails",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false,
+				"navigationStyle": "custom",
+				"disableScroll": true
+            }
+            
+        },
+        {
+        	"path" : "pages/reg/webView",
+        	"style" : 
+        	{
+        	    "navigationBarTitleText": "",
+        	    "enablePullDownRefresh": false,
+        		"navigationStyle": "custom",
+        		"disableScroll": true
+        	}
+        },
+        {
+        	"path" : "pages/reg/register",
+        	"style" : 
+        	{
+        	    "navigationBarTitleText": "",
+        	    "enablePullDownRefresh": false,
+        		"navigationStyle": "custom",
+        		"disableScroll": true
+        	}
+        },
+        {
+        	"path" : "pages/reg/updatePassword",
+        	"style" : 
+        	{
+        	    "navigationBarTitleText": "",
+        	    "enablePullDownRefresh": false,
+        		"navigationStyle": "custom",
+        		"disableScroll": true
+        	}
+        },
+		{
+			"path" : "pages/mine/bill",
+			"style" : 
+			{
+			    "navigationBarTitleText": "",
+			    "enablePullDownRefresh": false,
+				"navigationStyle": "custom",
+				"disableScroll": true
+			}
+		},
+		{
+			"path" : "pages/mine/carRecord",
+			"style" : 
+			{
+			    "navigationBarTitleText": "",
+			    "enablePullDownRefresh": false,
+				"navigationStyle": "custom",
+				"disableScroll": true
+			}
+		},
+		{
+			"path" : "pages/mine/appraiseRecord",
+			"style" : 
+			{
+			    "navigationBarTitleText": "",
+			    "enablePullDownRefresh": false,
+				"navigationStyle": "custom",
+				"disableScroll": true
+			}
+		},
+		{
+			"path" : "pages/mine/question",
+			"style" : 
+			{
+			    "navigationBarTitleText": "",
+			    "enablePullDownRefresh": false,
+				"navigationStyle": "custom",
+				"disableScroll": true
+			}
+		},
+		{
+			"path" : "pages/mine/fiesRecord",
+			"style" : 
+			{
+				"navigationBarTitleText" : "",
+				"enablePullDownRefresh" : false,
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/main/gainReport",
+			"style" : 
+			{
+				"navigationBarTitleText" : "",
+				"enablePullDownRefresh" : false,
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/main/gainReportD",
+			"style" : 
+			{
+				"navigationBarTitleText" : "",
+				"enablePullDownRefresh" : false,
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/main/detectionReport",
+			"style" : 
+			{
+				"navigationBarTitleText" : "",
+				"enablePullDownRefresh" : false,
+				"navigationStyle": "custom"
+			}
+		}
+    ],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "hubspot",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	}
+}

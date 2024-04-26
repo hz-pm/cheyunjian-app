@@ -1,0 +1,442 @@
+<template>
+	<view class="content" @touchmove.stop.prevent="disabledScroll">
+		<cl-header backgroundColor="#00acdd" title="" defaultTextColor="#FFF"></cl-header>
+
+
+		<scroll-view scroll-y="true" height="100vh">
+			<view style="display: flex;
+			flex-direction: column;
+			align-items: center;
+			height: 100vh;">
+				<view style="height: 89rpx;background-color: #00acdd;width: 100%;"></view>
+				<view style="width: 100%;background-image: url('../../static/top-bg.png');background-repeat: no-repeat;
+				background-size: 100% 400rpx;display: flex;flex-direction: column;align-items: center;">
+					<view style="width: 90%;display: flex;flex-direction: row;align-items: center;
+					margin-top: 20rpx;justify-content: space-between;">
+						<view style="width: 62%; display: flex;flex-direction: column;color: #FFF;">
+							<text style="font-size: 38rpx;font-weight: bold;">电易估</text>
+							<text
+								style="font-size: 26rpx;margin-top: 15rpx;">涵盖全类型新能源车，一键查询电池包详情、剩余容量和车辆行驶里程、提供估价参考助力电池回收！</text>
+						</view>
+						<image src="../../static/top-icon2.png" style="width: 220rpx;height: 220rpx;"></image>
+					</view>
+
+					<view class="card" style="margin-top: 20rpx;">
+						<view style="width: 100%;display: flex;flex-direction: row;
+						align-items: center;justify-content: space-between;padding-top: 20rpx;padding-bottom: 20rpx;">
+							<view style="display: flex;flex-direction: row;align-items: center;margin-left: 4%;">
+								<text style="font-size: 30rpx;color: #111;">选择查询类型:</text>
+								<u-text align="center" suffix-icon="arrow-down-fill"
+									:iconStyle="{fontSize:'20rpx',marginLeft:'10rpx',color:'#ff8d1a',marginTop:'8rpx'}" color="#ff8d1a"
+									size="28rpx" :text="companyType" bold style="margin-left: 20rpx;" @click="showTypePop=true">></u-text>
+							</view>
+							<view style="margin-right: 4%;">
+								<u-text align="center" prefix-icon="question-circle"
+									:iconStyle="{fontSize:'30rpx',marginRight:'10rpx',color:'#00acdd',marginTop:'5rpx'}" color="#00acdd"
+									size="28rpx" text="图例"
+									@click="open()"></u-text>
+							</view>
+						</view>
+						<u-line color="#DDD"></u-line>
+						<view style="width: 93%;display: flex;flex-direction: row;
+					align-items: center;justify-content: space-between;padding-top: 20rpx;padding-bottom: 20rpx;">
+							<image src="../../static/icon-search.png" style="width: 45rpx;height: 45rpx;
+							margin-left: 20rpx;margin-right: 20rpx;"></image>
+							<u-input placeholder="请核对查询类型后输入车架号" fontSize="32rpx" color="#111" border="none"></u-input>
+						</view>
+						<u-line color="#DDD"></u-line>
+						<view style="width: 100%;display: flex;flex-direction: row;align-items: center;
+						text-align: center; font-size: 28rpx;">
+							<text url="/pages/mine/fiesRecord" style="width: 49%;color: #ff8d1a;padding-top: 20rpx;padding-bottom: 20rpx;
+							" @click="openSelectItemPop">估价需10积分<span style="font-size: 26rpx;color: #808080;
+							margin-left: 5rpx;font-weight: normal;text-decoration: line-through;">40积分</span></text>
+							<view style="width: 1rpx;height: 35rpx;background-color: #DDD;"></view>
+							<u-text align="center" prefix-icon="camera"
+								:iconStyle="{fontSize:'35rpx',marginRight:'5rpx',color:'#09acc3'}" color="#09acc3" bold
+								size="28rpx" style="width: 49%;padding-top: 20rpx;padding-bottom: 20rpx;" text="车架号图像识别"
+								@click="openImagePage()"></u-text>
+						</view>
+					</view>
+					
+					<text style="width: 90%;font-size: 25rpx;color: #808080;margin-top: 35rpx;">注意：使用整车型号只能查车辆、电池静态数据，vin码和电池包编码可以查看静态数据和电池使用情况，电池包编码查得率较低，建议使用其他查询。</text>
+
+					<u-button text="立即检测" class="btn" color="#FFF" @click="clickSubmit"></u-button>
+
+					<text class="btn-2" style="width: 90%;" @click="openDemoPop">查看检测范例</text>
+
+					<view style="width: 90%;display: flex;flex-direction: row;justify-content: space-between;color: #383838;
+					font-size: 26rpx;margin-top: 30rpx;">
+						<view style="display: flex;flex-direction: row;align-items: center;">
+							<text>积分余额：0</text>
+							<navigator url="/pages/mine/skuList" style="margin-left: 35rpx;">
+								<u-text prefix-icon="../../static/money-rmb.png" text="充值" color="#00acdd"
+									size="26rpx"></u-text>
+							</navigator>
+						</view>
+
+						<navigator url="/pages/mine/question?qType=2">
+							<u-text prefix-icon="../../static/question-circle.png" text="常见问题" color="#383838"
+								size="26rpx" style="margin-left: 35rpx;"></u-text>
+						</navigator>
+					</view>
+					
+					<navigator url="/pages/mine/vipCard" style="width: 100%;display: flex;flex-direction: row;justify-content: center;margin-top: 35rpx;">
+						<image src="../../static/banner-dyg.png" style="width: 90%;height: 160rpx;border-radius: 20rpx;"></image>
+					</navigator>
+
+					<view style="height: 150rpx;"></view>
+				</view>
+			</view>
+		</scroll-view>
+
+		<uni-popup ref="popup" type="bottom" border-radius="15rpx 15rpx 0 0" @close="close" @open="open"
+			background-color="#FFF">
+			<view style="display: flex;flex-direction: column;align-items: center;height: 80vh;">
+				<scroll-view scroll-y="true" style="height: 80vh;">
+					<view style="width: 100%;height: 650rpx;display: flex;flex-direction: column;align-items: center;
+					color: #111;">
+						<text style="font-size: 28rpx;font-weight: bold;margin-top: 35rpx;">如何获得车架号、整车型号、电池包编码</text>
+						<view style="width: 92%;margin-top: 35rpx;display: flex;flex-direction: column;align-items: center;justify-content: center;">
+							<text style="font-size: 28rpx;width: 100%;margin-top: 35rpx;">检测所需的车架号(VIN码)，以及整车型号(公告号)可以通过您的行驶证及车辆铭牌获得，电池包编码可以从电池包铭牌获得，参考以下图例：</text>
+							<image src="../../static/vin-example1.png" style="width: 100%;height: 450rpx;margin-top: 35rpx;"></image>
+							<image src="../../static/vin-example2.png" style="width: 100%;height: 380rpx;margin-top: 35rpx;"></image>
+							<image src="../../static/vin-example3.png" style="width: 100%;height: 220rpx;margin-top: 35rpx;"></image>
+							<view style="height: 80rpx;"></view>
+						</view>
+					</view>
+				</scroll-view>
+			</view>
+		</uni-popup>
+
+		<u-modal :show="showModal" :content='content' confirmText="我知道了" @confirm="confirmModal"></u-modal>
+
+		<uni-popup ref="popup2" type="bottom" border-radius="15rpx 15rpx 0 0" @close="closeDemoPop" @open="openDemoPop"
+			background-color="#FFF">
+			<view style="display: flex;flex-direction: column;align-items: center;height: 80vh;">
+				<view style="width: 80%;display: flex;flex-direction: row;align-items: center;justify-content: space-around;
+				padding-bottom: 10rpx;">
+					<view style="display: flex;flex-direction: column;align-items: center;margin-top: 10rpx;" 
+					:style="curTab === 1?'color: #00acdd':'color: #111'" @click="clickTab(1)">
+						<text style="font-size: 28rpx;font-weight: bold;">静态数据报告样例</text>
+						<text style="font-size: 26rpx;margin-top: 5rpx;">10积分/会员免费</text>
+					</view>
+					<view style="height: 30rpx;width: 2rpx;background-color: #DDD;"></view>
+					<view style="display: flex;flex-direction: column;align-items: center;margin-top: 10rpx;"
+					:style="curTab === 2?'color: #00acdd':'color: #111'" @click="clickTab(2)">
+						<text style="font-size: 28rpx;font-weight: bold;">完整数据报告样例</text>
+						<text style="font-size: 26rpx;margin-top: 5rpx;">追加20积分</text>
+					</view>
+				</view>
+				<scroll-view scroll-y="true" style="height: 80vh;">
+					<view style="width: 100%;display: flex;flex-direction: column;align-items: center;">
+						<image src="../../static/example-m-dyg2-2.png" style="width: 100%;height: 3600rpx;" v-if="curTab===1"></image>
+						<image src="../../static/example-m-dyg2-3.png" style="width: 100%;height: 3900rpx;"  v-if="curTab===2"></image>
+						<view style="height: 80rpx;"></view>
+					</view>
+				</scroll-view>
+			</view>
+		</uni-popup>
+		
+		<u-picker :show="showTypePop" :columns="typeColumns" @confirm="confirmType" @cancel="showTypePop=false"></u-picker>
+	</view>
+</template>
+
+<script>
+	import projectConfig from '@/common/config.js';
+
+	import {
+		getDoOrder,
+	} from '../../apis/modules/user';
+	export default {
+		components: {},
+		data() {
+			return {
+				showPop: false,
+				showModal: false,
+				pic: '',
+				checked: false,
+				cbValue: 'cb1',
+				checkboxList1: [{
+					name: 'cb1',
+					value: 25,
+				}, {
+					name: 'cb2',
+					value: 10,
+				}, {
+					name: 'cb3',
+					value: 30,
+				}, {
+					name: 'cb4',
+					value: 10,
+				}, {
+					name: 'cb5',
+					value: 5,
+				}],
+				checkboxValue1: [],
+				amount: 0,
+				showTypePop: false,
+				typeColumns: [
+					['车架号(VIN)', '电池包编码', '整车型号(公告号)']
+				],
+				companyType: '车架号(VIN)',
+				curTab:1,
+			}
+		},
+		methods: {
+			open() {
+				this.showPop = true
+				this.$refs.popup.open()
+			},
+			close() {
+				this.showPop = false
+				this.$refs.popup.close()
+			},
+			disabledScroll() {
+				if (this.showPop) {
+					return
+				}
+			},
+			clickAddMyCar() {
+				this.showModal = true;
+			},
+			confirmModal() {
+				this.showModal = false;
+				this.openDemoPop()
+			},
+			closeDemoPop() {
+				this.showPop = false
+				this.$refs.popup2.close()
+			},
+			openDemoPop() {
+				this.showPop = true
+				this.$refs.popup2.open()
+			},
+			checkboxChange(n) {
+				console.log('change', n);
+				this.getAmount(n)
+			},
+			checkedCb() {
+				this.checked = !this.checked
+			},
+			argeement(type) {
+				uni.$u.route({
+					url: 'pages/reg/webview',
+					params: {
+						type: type
+					}
+				})
+			},
+			clickAddSubmit() {
+				if (!this.checked) {
+					this.$u.toast('请先阅读并同意协议')
+					return
+				}
+			},
+			openImagePage() {
+				let that = this;
+				uni.chooseImage({
+					count: 1,
+					sizeType: ['compressed'],
+					sourceType: ['album', 'camera'],
+					success: function(res) {
+						uni.showLoading({
+							title: 'Uploading Image'
+						});
+						//上传图片
+						that.uploadImage(res.tempFilePaths)
+					}
+				});
+			},
+			uploadImage(tempFilePaths) {
+				let _this = this;
+				console.log('===***===>' + projectConfig.baseUrl)
+
+				uni.uploadFile({
+					url: projectConfig.baseUrl + '/api.php/common/upload', //接口地址
+					header: {
+						"Token": _this.vuex_token,
+					}, //请求token
+					filePath: tempFilePaths[0],
+					name: 'file',
+					success: (res) => {
+						uni.hideLoading();
+						let data = JSON.parse(res.data);
+						_this.pic = data.data.fullurl
+
+						console.log('===Upload===>' + JSON.stringify(data))
+					}
+				});
+			},
+			clickEditCar(item) {
+				this.showPop = true
+				this.$refs.popup2.open()
+			},
+			openSelectItemPop() {
+				this.showPop = true
+				this.$refs.popup3.open()
+			},
+			closeSelectItemPop() {
+				this.showPop = false
+				this.$refs.popup3.close()
+			},
+			clickSubmitInquire() {
+				this.closeSelectItemPop()
+			},
+			selectAll() {
+				//全选
+				if (this.checkboxValue1.length == 5) {
+					this.checkboxValue1 = []
+				} else {
+					this.checkboxValue1 = []
+					for (var i = 0; i < this.checkboxList1.length; i++) {
+						this.checkboxValue1.push(this.checkboxList1[i].name)
+					}
+				}
+
+				this.getAmount(this.checkboxValue1)
+			},
+			clickSelectOk() {
+				console.log(this.checkboxValue1)
+				if (this.checkboxValue1.includes('cb1') || this.checkboxValue1.includes('cb3')) {
+					console.log('========***========')
+				} else {
+					this.$u.toast('模块1.3中必需选中一项')
+				}
+			},
+			getAmount(list) {
+				let value = 0;
+				for (var i = 0; i < list.length; i++) {
+					for (var j = 0; j < this.checkboxList1.length; j++) {
+						if (list[i] == this.checkboxList1[j].name) {
+							value += this.checkboxList1[j].value
+						}
+					}
+				}
+				this.amount = value
+			},
+			confirmType(e) {
+				console.log('confirm', e)
+				this.showTypePop = false
+				this.companyType = e.value[0]
+				console.log('=====>' + this.companyType)
+			},
+			clickTab(index){
+				this.curTab = index
+				
+			}
+		}
+	}
+</script>
+
+<style lang="scss">
+	page {}
+
+	.content {
+		width: 100vw;
+		height: 100vh;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.input-v {
+		width: 100%;
+		height: 90rpx;
+		background-color: #FFF;
+		border-radius: 20rpx;
+		margin-top: 30rpx;
+		border: 1rpx solid #dcdfe6;
+	}
+
+	.btn {
+		width: 90%;
+		background: linear-gradient(135deg, #00acdd, #47ad13);
+		margin-top: 45rpx;
+		border-radius: 20rpx;
+		margin-bottom: 35rpx;
+	}
+
+	.btn-2 {
+		color: #00acdd;
+		border: 1rpx solid #00acdd;
+		font-size: 30rpx;
+		background: #FFF;
+		border-radius: 20rpx;
+		text-align: center;
+		padding-top: 18rpx;
+		padding-bottom: 18rpx;
+	}
+
+	.btn-org {
+		width: 95%;
+		background: linear-gradient(136.25deg, #ffb300, #ff5833);
+		margin-top: 45rpx;
+		margin-bottom: 65rpx;
+		box-shadow: 0 2rpx 10rpx 0 rgba(145, 92, 0, .3);
+	}
+
+	.card {
+		width: 90%;
+		background-color: #FFF;
+		border-radius: 20rpx;
+		box-shadow: 0 0 40rpx 0 rgba(0, 0, 0, .1);
+		position: relative;
+		margin-top: 20rpx;
+	}
+
+	.item {
+		width: 90%;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		background-color: #FFF;
+		border: 1rpx solid #e5e5e5;
+		border-radius: 20rpx;
+		margin-top: 30rpx;
+		font-size: 26rpx;
+
+		.title {
+			font-weight: bold;
+			color: #383838;
+			margin-left: 30rpx;
+			margin-top: 30rpx;
+			margin-bottom: 30rpx;
+		}
+
+		.right {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			margin-right: 30rpx;
+		}
+	}
+
+	.btn-3 {
+		background: linear-gradient(135deg, #00acdd, #47ad13);
+		text-align: center;
+		padding-top: 10rpx;
+		padding-bottom: 10rpx;
+		padding-left: 20rpx;
+		padding-right: 20rpx;
+		font-size: 26rpx;
+		border-radius: 10rpx;
+		color: #FFF;
+		margin-left: 20rpx;
+		margin-top: 20rpx;
+		margin-bottom: 20rpx;
+	}
+
+	.btn-4 {
+		color: #00acdd;
+		border: 1rpx solid #00acdd;
+		background: #FFF;
+		text-align: center;
+		padding-top: 10rpx;
+		padding-bottom: 10rpx;
+		padding-left: 20rpx;
+		padding-right: 20rpx;
+		font-size: 26rpx;
+		border-radius: 10rpx;
+	}
+</style>
