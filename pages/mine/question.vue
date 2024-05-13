@@ -1,18 +1,21 @@
 <template>
 	<view class="content">
-		<cl-header backgroundColor="#00acdd" title="" defaultTextColor="#FFF"></cl-header>
 		<view style="width: 100%;background-color: #00acdd;">
-			<view style="height: 90rpx;"></view>
 			<image src="../../static/qa-header2.png" style="width: 100%;height: 320rpx;"></image>
 		</view>
-
-		<u-collapse :border="false" style="width: 100%;display: flex;flex-direction: column;align-items: center;">
-			<u-collapse-item v-for="(item,index) in list" :title="item.title" icon="../../static/ic-q.png"
-				class="coll-v">
-				<u-line color="#DDD"></u-line>
-				<text class="coll-item-t" v-for="(item2,index2) in item.content">{{item2}}</text>
-			</u-collapse-item>
-		</u-collapse>
+		
+		<view style="width: 100vw;">
+			<uni-collapse style="width: 100vw;display: flex;flex-direction: column;align-items: center;">
+				<uni-collapse-item v-for="(item,index) in list" :title="item.title" icon="../../static/ic-q.png"
+					class="coll-v" :border="false" title-border="none">
+					<view style="height: 1rpx;width: 100%;background-color: #DDD;"></view>
+					<view class="coll-item-t" v-for="(item2,index2) in item.content">
+						<text style="line-height: 30rpx;">{{item2}}</text>
+					</view>
+				</uni-collapse-item>
+			</uni-collapse>
+		</view>
+		
 
 		<view style="width: 95%;background-color: #f8f8f8;margin-top: 35rpx;
 		display: flex;flex-direction: column;align-items: center;border-radius: 15rpx;">
@@ -33,14 +36,7 @@
 		components: {},
 		data() {
 			return {
-				elId: uni.$u.guid(),
 				isShow: true,
-				animationData: {},
-				// 是否展开状态
-				expanded: false,
-				// 是否动画中，如果是则不允许继续触发点击
-				animating: false,
-				duration: 300,
 				list:[],
 				qList: [{
 						title: '为什么我的车无法评估？',
@@ -193,27 +189,11 @@
 		background-color: #FFF;
 	}
 
-	.u-collapse-item {
-
-		&__content {
-			overflow: hidden;
-			height: 0;
-
-			&__text {
-				padding: 12px 15px;
-				color: #666;
-				font-size: 14px;
-				line-height: 18px;
-			}
-		}
-	}
-
 	.coll-v {
-		width: 95%;
-		background-color: #f5faff;
+		width: 95vw;
 		margin-top: 35rpx;
 		border-radius: 15rpx;
-
+		background-color: #f5faff;
 		.coll-item-t {
 			font-size: 28rpx;
 			color: #413d3c;

@@ -1,10 +1,8 @@
 <template>
 	<view class="content">
-		<cl-header backgroundColor="#00acdd" title="消费账单" defaultTextColor="#FFF"></cl-header>
-		<view style="height: 110rpx;"></view>
 		<text style="width: 95%;font-size: 30rpx;color: #a6a6a6;padding-bottom: 20rpx;
 		">总计获得400积分，已使用400积分</text>
-		<u-line color="#f5f5f5" hairline='false' style="width: 95%;align-self: flex-end;"></u-line>
+		<view style="height: 1rpx;width: 95%;align-self: flex-end;background-color: #f5f5f5;"></view>
 		
 		<view style="width: 95%;display: flex;flex-direction: column;"
 		v-for="(index,item) in list">
@@ -18,7 +16,7 @@
 					<text style="font-size: 28rpx;color: #a6a6a6;margin-top: 10rpx;">剩余168积分</text>
 				</view>
 			</view>
-			<u-line color="#f5f5f5" hairline='false' style="width: 95%;align-self: flex-end;"></u-line>
+			<view style="height: 1rpx;width: 95%;align-self: flex-end;background-color: #f5f5f5;"></view>
 		</view>
 		<u-empty mode="data" icon="../../static/img-nodata.png" text="暂无数据" width="90rpx"
 		style="margin-top: 40rpx;" v-if="isEmpty"></u-empty>
@@ -48,7 +46,6 @@
 
 	.content {
 		width: 100vw;
-		height: 100vh;
 		display: flex;
 		flex-direction: column;
 		align-items: center;

@@ -1,12 +1,10 @@
 <template>
 	<view class="content">
-		<cl-header backgroundColor="#00acdd" title="积分充值" defaultTextColor="#FFF"></cl-header>
 		<scroll-view scroll-y="true" height="100vh">
 			<view style="display: flex;
 			flex-direction: column;
 			align-items: center;
 			height: 100vh;">
-				<view style="height: 89rpx;"></view>
 				<navigator url="/pages/mine/vipCard" style="width: 100%;display: flex;flex-direction: column;align-items: center;
 				background-color: #00acdd;">
 					<image src="../../static/vip-banner.gif" style="width: 90%;height: 110rpx;
@@ -17,29 +15,29 @@
 
 				<view style="width: 100%;display: flex;flex-direction: column;align-items: center;
 				background-color: #FFF;">
-					<u-radio-group v-model="radioValue" style="width: 100%; display: flex;flex-direction: column;align-items: center;"
-							v-for="(item,index) in list">
-							<view class="cell" @click="clickCell(item.qty)">
+					<radio-group style="width: 100%; display: flex;flex-direction: column;align-items: center;"
+							v-for="(item,index) in list" @change="radioChange" :key="item.qty">
+							<view class="cell" @click="clickCell(item.qty,index)">
 								<view class="c-left">
 									<text class="c-jifen" v-if="index!=list.length-1">{{item.qty}}积分</text>
 									<text class="shouchong" v-if="index==0">首单特惠</text>
-									<u-input placeholder="请输入积分数量" v-if="index==list.length-1" border="none"
-										type="number" color="#333" fontSize="32rpx" maxlength="10"></u-input>
+									<input placeholder="请输入积分数量" v-if="index==list.length-1"
+										type="number" color="#333" maxlength="10"></input>
 								</view>
 								<view class="c-right">
 									<text class="c-money">￥{{item.price}}元</text>
-									<u-radio :name="item.qty" size="45rpx"></u-radio>
+									<radio :value="item.qty+''" :checked="index === current"></radio>
 								</view>
 							</view>
 							<view class="line"></view>
-					</u-radio-group>
+					</radio-group>
 					
 					<view style="width: 90%;background-color: #ecfaff;border: 1px solid #d9f5ff;
 					height: 70rpx;border-radius: 10rpx;margin-top: 45rpx;margin-bottom: 30rpx;
-					display: flex;flex-direction: row;justify-content: space-between;">
-						<u-text text="了解更多大客户优惠政策，请联系客服" prefixIcon="info-circle-fill"
-						 color="#00acdd" size="28rpx" :iconStyle="{color:'#00acdd',marginLeft:'20rpx',marginRight:'15rpx'}"></u-text>
-						 <u-icon name="arrow-right" size="28rpx" color="#00acdd" style="margin-right: 20rpx;"></u-icon>
+					display: flex;flex-direction: row;justify-content: space-between;align-items: center;">
+						<uni-icons type="info-filled" size="40rpx" style="color: #00acdd;margin-left: 25rpx;"><span 
+						style="font-size: 30rpx;margin-left: 20rpx;">了解更多大客户优惠政策，请联系客服</span></uni-icons>
+						 <uni-icons type="right" size="40rpx" color="#00acdd" style="margin-right: 20rpx;"></uni-icons>
 					</view>
 				</view>
 				
@@ -52,7 +50,7 @@
 					margin-right: 35rpx;margin-top: 20rpx;margin-bottom: 20rpx;"></image>
 				</view>
 				
-				<u-button text="立即购买" class="btn" color="#FFF"></u-button>
+				<button class="btn">立即购买</button>
 			</view>
 		</scroll-view>
 
@@ -87,12 +85,22 @@
 				}, {
 					qty: 1,
 					price: '0.00'
-				}]
+				}],
+				current:0
 			}
 		},
 		methods: {
-			clickCell(item){
+			clickCell(item,index){
 				this.radioValue = item;
+				this.current = index;
+			},
+			radioChange(res){
+				for (let i = 0; i < this.list.length; i++) {
+					if (this.list[i].qty+'' === res.detail.value) {
+						this.current = i;
+						break;
+					}
+				}
 			}
 		}
 	}
@@ -170,5 +178,7 @@
 		margin-top: 45rpx;
 		border-radius: 20rpx;
 		margin-bottom: 35rpx;
+		color: #FFF;
+		font-size: 32rpx;
 	}
 </style>

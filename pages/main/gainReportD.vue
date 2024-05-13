@@ -1,93 +1,86 @@
 <template>
 	<view class="content" @touchmove.stop.prevent="disabledScroll">
-		<cl-header backgroundColor="#00acdd" title="" defaultTextColor="#FFF"></cl-header>
-
-
-		<scroll-view scroll-y="true" height="100vh">
-			<view style="display: flex;
-			flex-direction: column;
-			align-items: center;
-			height: 100vh;">
-				<view style="height: 89rpx;background-color: #00acdd;width: 100%;"></view>
-				<view style="width: 100%;background-image: url('../../static/top-bg.png');background-repeat: no-repeat;
+		<view style="width: 100%;background-image: url('../../static/top-bg.png');background-repeat: no-repeat;
 				background-size: 100% 400rpx;display: flex;flex-direction: column;align-items: center;">
-					<view style="width: 90%;display: flex;flex-direction: row;align-items: center;
+			<view style="width: 90%;display: flex;flex-direction: row;align-items: center;
 					margin-top: 20rpx;justify-content: space-between;">
-						<view style="width: 62%; display: flex;flex-direction: column;color: #FFF;">
-							<text style="font-size: 38rpx;font-weight: bold;">电易估</text>
-							<text
-								style="font-size: 26rpx;margin-top: 15rpx;">涵盖全类型新能源车，一键查询电池包详情、剩余容量和车辆行驶里程、提供估价参考助力电池回收！</text>
-						</view>
-						<image src="../../static/top-icon2.png" style="width: 220rpx;height: 220rpx;"></image>
-					</view>
+				<view style="width: 62%; display: flex;flex-direction: column;color: #FFF;">
+					<text style="font-size: 38rpx;font-weight: bold;">电易估</text>
+					<text
+						style="font-size: 26rpx;margin-top: 15rpx;">涵盖全类型新能源车，一键查询电池包详情、剩余容量和车辆行驶里程、提供估价参考助力电池回收！</text>
+				</view>
+				<image src="../../static/top-icon2.png" style="width: 220rpx;height: 220rpx;"></image>
+			</view>
 
-					<view class="card" style="margin-top: 20rpx;">
-						<view style="width: 100%;display: flex;flex-direction: row;
+			<view class="card" style="margin-top: 20rpx;">
+				<view style="width: 100%;display: flex;flex-direction: row;
 						align-items: center;justify-content: space-between;padding-top: 20rpx;padding-bottom: 20rpx;">
-							<view style="display: flex;flex-direction: row;align-items: center;margin-left: 4%;">
-								<text style="font-size: 30rpx;color: #111;">选择查询类型:</text>
-								<u-text align="center" suffix-icon="arrow-down-fill"
-									:iconStyle="{fontSize:'20rpx',marginLeft:'10rpx',color:'#ff8d1a',marginTop:'8rpx'}" color="#ff8d1a"
-									size="28rpx" :text="companyType" bold style="margin-left: 20rpx;" @click="showTypePop=true">></u-text>
+					<view style="display: flex;flex-direction: row;align-items: center;margin-left: 4%;">
+						<text style="font-size: 30rpx;color: #111;">选择查询类型:</text>
+						<picker :range="typeColumns" @change="confirmTypeChange">
+							<view style="display: flex;flex-direction: row;align-items: center;">
+								<text
+									style="font-size: 28rpx;font-weight: bold;color: #ff8d1a;margin-left: 20rpx;">{{companyType}}</text>
+								<view class="triangle"></view>
 							</view>
-							<view style="margin-right: 4%;">
-								<u-text align="center" prefix-icon="question-circle"
-									:iconStyle="{fontSize:'30rpx',marginRight:'10rpx',color:'#00acdd',marginTop:'5rpx'}" color="#00acdd"
-									size="28rpx" text="图例"
-									@click="open()"></u-text>
-							</view>
-						</view>
-						<u-line color="#DDD"></u-line>
-						<view style="width: 93%;display: flex;flex-direction: row;
-					align-items: center;justify-content: space-between;padding-top: 20rpx;padding-bottom: 20rpx;">
-							<image src="../../static/icon-search.png" style="width: 45rpx;height: 45rpx;
+						</picker>
+					</view>
+					<view style="margin-right: 4%;">
+						<text class="iconfont icon-question" @click="open()"
+							style="font-size: 28rpx;color: #00acdd;">图例</text>
+					</view>
+				</view>
+				<view style="height: 1rpx;width: 100%;background-color: #DDD;"></view>
+				<view style="width: 93%;display: flex;flex-direction: row;
+					align-items: center;padding-top: 20rpx;padding-bottom: 20rpx;">
+					<image src="../../static/icon-search.png" style="width: 45rpx;height: 45rpx;
 							margin-left: 20rpx;margin-right: 20rpx;"></image>
-							<u-input placeholder="请核对查询类型后输入车架号" fontSize="32rpx" color="#111" border="none"></u-input>
-						</view>
-						<u-line color="#DDD"></u-line>
-						<view style="width: 100%;display: flex;flex-direction: row;align-items: center;
-						text-align: center; font-size: 28rpx;">
-							<text url="/pages/mine/fiesRecord" style="width: 49%;color: #ff8d1a;padding-top: 20rpx;padding-bottom: 20rpx;
+					<input placeholder="请核对查询类型后输入车架号" fontSize="32rpx" color="#111" border="none"></input>
+				</view>
+				<view style="height: 1rpx;width: 100%;background-color: #DDD;"></view>
+				<view style="width: 100%;display: flex;flex-direction: row;align-items: center;
+						text-align: center; font-size: 28rpx;justify-content: space-around;">
+					<text url="/pages/mine/fiesRecord" style="width: 49%;color: #ff8d1a;padding-top: 20rpx;padding-bottom: 20rpx;
 							" @click="openSelectItemPop">估价需10积分<span style="font-size: 26rpx;color: #808080;
-							margin-left: 5rpx;font-weight: normal;text-decoration: line-through;">40积分</span></text>
-							<view style="width: 1rpx;height: 35rpx;background-color: #DDD;"></view>
-							<u-text align="center" prefix-icon="camera"
-								:iconStyle="{fontSize:'35rpx',marginRight:'5rpx',color:'#09acc3'}" color="#09acc3" bold
-								size="28rpx" style="width: 49%;padding-top: 20rpx;padding-bottom: 20rpx;" text="车架号图像识别"
-								@click="openImagePage()"></u-text>
-						</view>
-					</view>
-					
-					<text style="width: 90%;font-size: 25rpx;color: #808080;margin-top: 35rpx;">注意：使用整车型号只能查车辆、电池静态数据，vin码和电池包编码可以查看静态数据和电池使用情况，电池包编码查得率较低，建议使用其他查询。</text>
-
-					<u-button text="立即检测" class="btn" color="#FFF" @click="clickSubmit"></u-button>
-
-					<text class="btn-2" style="width: 90%;" @click="openDemoPop">查看检测范例</text>
-
-					<view style="width: 90%;display: flex;flex-direction: row;justify-content: space-between;color: #383838;
-					font-size: 26rpx;margin-top: 30rpx;">
-						<view style="display: flex;flex-direction: row;align-items: center;">
-							<text>积分余额：0</text>
-							<navigator url="/pages/mine/skuList" style="margin-left: 35rpx;">
-								<u-text prefix-icon="../../static/money-rmb.png" text="充值" color="#00acdd"
-									size="26rpx"></u-text>
-							</navigator>
-						</view>
-
-						<navigator url="/pages/mine/question?qType=2">
-							<u-text prefix-icon="../../static/question-circle.png" text="常见问题" color="#383838"
-								size="26rpx" style="margin-left: 35rpx;"></u-text>
-						</navigator>
-					</view>
-					
-					<navigator url="/pages/mine/vipCard" style="width: 100%;display: flex;flex-direction: row;justify-content: center;margin-top: 35rpx;">
-						<image src="../../static/banner-dyg.webp" style="width: 90%;height: 160rpx;border-radius: 20rpx;"></image>
-					</navigator>
-
-					<view style="height: 150rpx;"></view>
+							font-weight: normal;text-decoration: line-through;">40积分</span></text>
+					<view style="width: 1rpx;height: 35rpx;background-color: #DDD;"></view>
+					<uni-icons type="camera" color="#09acc3" size="35rpx" @click="openImagePage()"
+						style="font-weight: bold;"><span style="font-size: 30rpx;">车架号图像识别</span></uni-icons>
 				</view>
 			</view>
-		</scroll-view>
+
+			<text
+				style="width: 90%;font-size: 25rpx;color: #808080;margin-top: 35rpx;">注意：使用整车型号只能查车辆、电池静态数据，vin码和电池包编码可以查看静态数据和电池使用情况，电池包编码查得率较低，建议使用其他查询。</text>
+
+			<button class="btn" @click="clickSubmit">立即检测</button>
+
+			<text class="btn-2" style="width: 90%;" @click="openDemoPop">查看检测范例</text>
+
+			<view style="width: 90%;display: flex;flex-direction: row;justify-content: space-between;color: #383838;
+					font-size: 26rpx;margin-top: 30rpx;">
+				<view style="display: flex;flex-direction: row;align-items: center;">
+					<text>积分余额：0</text>
+					<navigator url="/pages/mine/skuList" style="margin-left: 35rpx;color: #00acdd;display: flex;
+							flex-direction: row;align-items: center;">
+						<text class="iconfont icon-money"></text><span
+							style="margin-left: 5rpx;font-size: 28rpx;">充值</span>
+					</navigator>
+				</view>
+
+				<navigator url="/pages/mine/question" style="color: #383838;display: flex;
+						flex-direction: row;align-items: center;">
+					<text class="iconfont icon-question" style="margin-left: 5rpx;font-size: 28rpx;">常见问题</text>
+				</navigator>
+			</view>
+
+			<navigator url="/pages/mine/vipCard"
+				style="width: 100%;display: flex;flex-direction: row;justify-content: center;margin-top: 35rpx;">
+				<image src="../../static/banner-dyg.webp" style="width: 90%;height: 160rpx;border-radius: 20rpx;">
+				</image>
+			</navigator>
+
+			<view style="height: 150rpx;"></view>
+		</view>
 
 		<uni-popup ref="popup" type="bottom" border-radius="15rpx 15rpx 0 0" @close="close" @open="open"
 			background-color="#FFF">
@@ -96,11 +89,16 @@
 					<view style="width: 100%;height: 650rpx;display: flex;flex-direction: column;align-items: center;
 					color: #111;">
 						<text style="font-size: 28rpx;font-weight: bold;margin-top: 35rpx;">如何获得车架号、整车型号、电池包编码</text>
-						<view style="width: 92%;margin-top: 35rpx;display: flex;flex-direction: column;align-items: center;justify-content: center;">
-							<text style="font-size: 28rpx;width: 100%;margin-top: 35rpx;">检测所需的车架号(VIN码)，以及整车型号(公告号)可以通过您的行驶证及车辆铭牌获得，电池包编码可以从电池包铭牌获得，参考以下图例：</text>
-							<image src="../../static/vin-example1.webp" style="width: 100%;height: 450rpx;margin-top: 35rpx;"></image>
-							<image src="../../static/vin-example2.webp" style="width: 100%;height: 380rpx;margin-top: 35rpx;"></image>
-							<image src="../../static/vin-example3.webp" style="width: 100%;height: 220rpx;margin-top: 35rpx;"></image>
+						<view
+							style="width: 92%;margin-top: 35rpx;display: flex;flex-direction: column;align-items: center;justify-content: center;">
+							<text
+								style="font-size: 28rpx;width: 100%;margin-top: 35rpx;">检测所需的车架号(VIN码)，以及整车型号(公告号)可以通过您的行驶证及车辆铭牌获得，电池包编码可以从电池包铭牌获得，参考以下图例：</text>
+							<image src="../../static/vin-example1.webp"
+								style="width: 100%;height: 450rpx;margin-top: 35rpx;"></image>
+							<image src="../../static/vin-example2.webp"
+								style="width: 100%;height: 380rpx;margin-top: 35rpx;"></image>
+							<image src="../../static/vin-example3.webp"
+								style="width: 100%;height: 220rpx;margin-top: 35rpx;"></image>
 							<view style="height: 80rpx;"></view>
 						</view>
 					</view>
@@ -108,36 +106,42 @@
 			</view>
 		</uni-popup>
 
-		<u-modal :show="showModal" :content='content' confirmText="我知道了" @confirm="confirmModal"></u-modal>
+		<uni-popup ref="alertDialog" type="dialog">
+			<uni-popup-dialog type="info" confirmText="我知道了" :content='content' @confirm="confirmModal"
+				:showClose="false"></uni-popup-dialog>
+		</uni-popup>
 
 		<uni-popup ref="popup2" type="bottom" border-radius="15rpx 15rpx 0 0" @close="closeDemoPop" @open="openDemoPop"
 			background-color="#FFF">
 			<view style="display: flex;flex-direction: column;align-items: center;height: 80vh;">
 				<view style="width: 80%;display: flex;flex-direction: row;align-items: center;justify-content: space-around;
 				padding-bottom: 10rpx;">
-					<view style="display: flex;flex-direction: column;align-items: center;margin-top: 10rpx;" 
-					:style="curTab === 1?'color: #00acdd':'color: #111'" @click="clickTab(1)">
+					<view style="display: flex;flex-direction: column;align-items: center;margin-top: 10rpx;"
+						:style="curTab === 1?'color: #00acdd':'color: #111'" @click="clickTab(1)">
 						<text style="font-size: 28rpx;font-weight: bold;">静态数据报告样例</text>
 						<text style="font-size: 26rpx;margin-top: 5rpx;">10积分/会员免费</text>
 					</view>
 					<view style="height: 30rpx;width: 2rpx;background-color: #DDD;"></view>
 					<view style="display: flex;flex-direction: column;align-items: center;margin-top: 10rpx;"
-					:style="curTab === 2?'color: #00acdd':'color: #111'" @click="clickTab(2)">
+						:style="curTab === 2?'color: #00acdd':'color: #111'" @click="clickTab(2)">
 						<text style="font-size: 28rpx;font-weight: bold;">完整数据报告样例</text>
 						<text style="font-size: 26rpx;margin-top: 5rpx;">追加20积分</text>
 					</view>
 				</view>
 				<scroll-view scroll-y="true" style="height: 80vh;">
 					<view style="width: 100%;display: flex;flex-direction: column;align-items: center;">
-						<image src="../../static/example-m-dyg2-2.webp" style="width: 100%;height: 3600rpx;" v-if="curTab===1"></image>
-						<image src="../../static/example-m-dyg2-3.webp" style="width: 100%;height: 3900rpx;"  v-if="curTab===2"></image>
+						<image src="../../static/example-m-dyg2-2.webp" style="width: 100%;height: 3600rpx;"
+							v-if="curTab===1"></image>
+						<image src="../../static/example-m-dyg2-3.webp" style="width: 100%;height: 3900rpx;"
+							v-if="curTab===2"></image>
 						<view style="height: 80rpx;"></view>
 					</view>
 				</scroll-view>
 			</view>
 		</uni-popup>
-		
-		<u-picker :show="showTypePop" :columns="typeColumns" @confirm="confirmType" @cancel="showTypePop=false"></u-picker>
+
+		<u-picker :show="showTypePop" :columns="typeColumns" @confirm="confirmType"
+			@cancel="showTypePop=false"></u-picker>
 	</view>
 </template>
 
@@ -175,11 +179,9 @@
 				checkboxValue1: [],
 				amount: 0,
 				showTypePop: false,
-				typeColumns: [
-					['车架号(VIN)', '电池包编码', '整车型号(公告号)']
-				],
+				typeColumns: ['车架号(VIN)', '电池包编码', '整车型号(公告号)'],
 				companyType: '车架号(VIN)',
-				curTab:1,
+				curTab: 1,
 			}
 		},
 		methods: {
@@ -197,10 +199,10 @@
 				}
 			},
 			clickAddMyCar() {
-				this.showModal = true;
+				this.$refs.alertDialog.close()
 			},
 			confirmModal() {
-				this.showModal = false;
+				this.$refs.alertDialog.open()
 				this.openDemoPop()
 			},
 			closeDemoPop() {
@@ -219,11 +221,8 @@
 				this.checked = !this.checked
 			},
 			argeement(type) {
-				uni.$u.route({
-					url: 'pages/reg/webview',
-					params: {
-						type: type
-					}
+				uni.navigateTo({
+					url: 'pages/reg/webview?type=' + type
 				})
 			},
 			clickAddSubmit() {
@@ -320,9 +319,13 @@
 				this.companyType = e.value[0]
 				console.log('=====>' + this.companyType)
 			},
-			clickTab(index){
+			clickTab(index) {
 				this.curTab = index
-				
+
+			},
+			confirmTypeChange(e) {
+				this.companyType = this.typeColumns[e.detail.value]
+				console.log(this.companyType)
 			}
 		}
 	}
@@ -354,6 +357,8 @@
 		margin-top: 45rpx;
 		border-radius: 20rpx;
 		margin-bottom: 35rpx;
+		font-size: 32rpx;
+		color: #FFF;
 	}
 
 	.btn-2 {
@@ -438,5 +443,14 @@
 		padding-right: 20rpx;
 		font-size: 26rpx;
 		border-radius: 10rpx;
+	}
+
+	.triangle {
+		width: 0;
+		height: 0;
+		border-left: 8rpx solid transparent;
+		border-right: 8rpx solid transparent;
+		border-top: 10rpx solid #ff8d1a;
+		margin-left: 10rpx;
 	}
 </style>

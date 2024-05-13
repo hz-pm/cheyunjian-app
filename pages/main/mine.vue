@@ -13,8 +13,8 @@
 							<image src="../../static/ic-default-avatar.png" style="width: 120rpx;height: 120rpx;">
 							</image>
 							<view style="display: flex;flex-direction: column;margin-left: 35rpx;color: #FFF;">
-								<text style="font-size: 30rpx;font-weight: bold;">小程序用户</text>
-								<text style="font-size: 26rpx;margin-top: 10rpx;">ID：946173477174890496</text>
+								<text style="font-size: 30rpx;font-weight: bold;">{{userinfo.nickName}}</text>
+								<text style="font-size: 26rpx;margin-top: 10rpx;">ID：{{userinfo.userId}}</text>
 							</view>
 						</view>
 						<uni-icons type="settings" color="#FFF" size="26" @click="goSetting"></uni-icons>
@@ -23,12 +23,15 @@
 					background-image: url('../../static/vip-menu-bg.png');background-repeat: no-repeat;background-size: 100% 100%;
 					height: 80rpx;margin-top: 40rpx;border-top-left-radius: 15rpx;border-top-right-radius: 15rpx;">
 						<view style="width: 92%; display: flex;flex-direction: row;align-items: center;
-						justify-content: space-between;">
-							<u-text prefix-icon="../../static/ic-VIP.png" text="升级车数万维VIP" size="28rpx" bold
-								iconStyle='margin-right: 10rpx;'></u-text>
-							<u-text suffixIcon="arrow-right" text="最高享全年5折" size="26rpx"
-								iconStyle='margin-left: 5rpx;color:#000;font-size:26rpx;text-align:center;margin-top:8rpx'
-								align="right"></u-text>
+						justify-content: space-between;color: #111;font-size: 30rpx;">
+							<view style="display: flex;flex-direction: row;align-items: center;">
+								<image src="../../static/ic-VIP.png" style="width: 50rpx;height: 50rpx;"></image>
+								<text style="margin-left: 10rpx;font-weight: bold;">升级车数万维VIP</text>
+							</view>
+							<view style="display: flex;flex-direction: row;align-items: center;">
+								<text>最高享全年5折</text>
+								<uni-icons type="right" size="32rpx"></uni-icons>
+							</view>
 						</view>
 					</navigator>
 				</view>
@@ -64,45 +67,41 @@
 				<navigator url="/pages/mine/skuList" class="cell">
 					<view class="cell-1">
 						<view class="cell-1-left">
-							<image src="../../static/ic-money-rmb.png" style="width: 60rpx;height: 60rpx;"></image>
-							<text style="margin-left: 30rpx;">积分充值</text>
+							<text class="iconfont icon-money Licon" ></text>积分充值
 						</view>
-						<u-icon name="arrow-right" color="#a6a6a6"></u-icon>
+						<uni-icons type="right" color="#a6a6a6"></uni-icons>
 					</view>
-					<u-line color="#f5f5f5" style="width: 84%;align-self: flex-end;" :hairline='false'></u-line>
+					<view style="height: 1rpx; width: 84%;align-self: flex-end;background-color: #f5f5f5;"></view>
 				</navigator>
 
 				<navigator url="/pages/mine/recharge" class="cell">
 					<view class="cell-1">
 						<view class="cell-1-left">
-							<image src="../../static/ic-money-rmb.png" style="width: 60rpx;height: 60rpx;"></image>
-							<text style="margin-left: 30rpx;">充值记录</text>
+							<text class="iconfont icon-recharge Licon"></text>充值记录
 						</view>
-						<u-icon name="arrow-right" color="#a6a6a6"></u-icon>
+						<uni-icons type="right" color="#a6a6a6"></uni-icons>
 					</view>
-					<u-line color="#f5f5f5" style="width: 84%;align-self: flex-end;" :hairline='false'></u-line>
+					<view style="height: 1rpx; width: 84%;align-self: flex-end;background-color: #f5f5f5;"></view>
 				</navigator>
 
 				<view style="width: 100%;height: 25rpx;background-color: #f5f5f5;"></view>
 				<navigator url="/pages/mine/carRecord" class="cell">
 					<view class="cell-1">
 						<view class="cell-1-left">
-							<image src="../../static/ic-money-rmb.png" style="width: 60rpx;height: 60rpx;"></image>
-							<text style="margin-left: 30rpx;">车云检记录</text>
+							<text class="iconfont icon-search Licon"></text>车云检记录
 						</view>
-						<u-icon name="arrow-right" color="#a6a6a6"></u-icon>
+						<uni-icons type="right" color="#a6a6a6"></uni-icons>
 					</view>
-					<u-line color="#f5f5f5" style="width: 84%;align-self: flex-end;" :hairline='false'></u-line>
+					<view style="height: 1rpx; width: 84%;align-self: flex-end;background-color: #f5f5f5;"></view>
 				</navigator>
 				<navigator url="/pages/mine/carRecord" class="cell">
 					<view class="cell-1">
 						<view class="cell-1-left">
-							<image src="../../static/ic-money-rmb.png" style="width: 60rpx;height: 60rpx;"></image>
-							<text style="margin-left: 30rpx;">电易估记录</text>
+							<text class="iconfont icon-huishou Licon"></text>电易估记录
 						</view>
-						<u-icon name="arrow-right" color="#a6a6a6"></u-icon>
+						<uni-icons type="right" color="#a6a6a6"></uni-icons>
 					</view>
-					<u-line color="#f5f5f5" style="width: 84%;align-self: flex-end;" :hairline='false'></u-line>
+					<view style="height: 1rpx; width: 84%;align-self: flex-end;background-color: #f5f5f5;"></view>
 				</navigator>
 				<view style="width: 100%;height: 25rpx;background-color: #f5f5f5;"></view>
 
@@ -111,23 +110,23 @@
 					<text style="font-size: 30rpx;color: #333;">客服咨询</text>
 					<text style="font-size: 26rpx;color: #AAA;transform: scale(0.8);">工作日09:00-18:00</text>
 				</view>
-				<u-line color="#f5f5f5" :hairline='false'></u-line>
+				<view style="height: 1rpx;width: 100%;background-color: #f5f5f5;"></view>
 
 				<view style="width: 92%;display: flex;flex-direction: row;align-items: center;justify-content: space-between;
-				margin-top: 25rpx;margin-bottom: 25rpx;">
+				margin-top: 25rpx;margin-bottom: 25rpx;color: #111;font-size: 28rpx;">
 					<view style="width: 50%;display: flex;flex-direction: column;align-items: center;"
 						@click="clickKfPhone">
-						<image src="../../static/ic-call-filled.png" style="width: 55rpx;height: 55rpx;"></image>
-						<text style="font-size: 28rpx;color: #808080;margin-top: 5rpx;">电话咨询</text>
+						<text class="iconfont icon-call" style="color: #00acdd;font-size: 50rpx;"></text>
+						<text style="margin-top: 10rpx;">电话咨询</text>
 					</view>
 					<view style="width: 1rpx;height: 90rpx;background-color: #f5f5f5;"></view>
 					<view style="width: 50%;display: flex;flex-direction: column;align-items: center;"
-					@click="onlineKefu">
-						<image src="../../static/ic-msg.png" style="width: 55rpx;height: 55rpx;"></image>
-						<text style="font-size: 28rpx;color: #808080;margin-top: 5rpx;">在线客服</text>
+						@click="onlineKefu">
+						<text class="iconfont icon-msg" style="color: #00acdd;font-size: 50rpx;"></text>
+						<text style="margin-top: 5rpx;">在线客服</text>
 					</view>
 				</view>
-				<u-line color="#f5f5f5" :hairline='false'></u-line>
+				<view style="height: 1rpx;width: 100%;background-color: #f5f5f5;"></view>
 
 				<view style="height: 150rpx;"></view>
 			</view>
@@ -141,17 +140,20 @@
 		getIndexContent,
 	} from '../../apis/modules/user';
 	export default {
-		components: {
-		},
+		components: {},
 		data() {
 			return {
-				phoneList: ['13316028972', '呼叫']
+				phoneList: ['13316028972', '呼叫'],
+				userinfo: {},
 			}
+		},
+		onLoad() {
+			this.userinfo =  this.vuex_userinfo
 		},
 		methods: {
 			goSetting() {
-				uni.$u.route({
-					url: 'pages/mine/myInfo'
+				uni.navigateTo({
+					url: '/pages/mine/myInfo'
 				})
 			},
 			clickKfPhone() {
@@ -174,8 +176,8 @@
 					}
 				});
 			},
-			onlineKefu(){
-				
+			onlineKefu() {
+
 			}
 		}
 	}
@@ -212,8 +214,18 @@
 				flex-direction: row;
 				align-items: center;
 				justify-content: center;
-				margin-left: 15rpx;
 			}
 		}
 	}
+	.Licon{
+		height: 80rpx;
+		line-height: 80rpx;
+		width: 100rpx;
+		text-align: center;
+		background: linear-gradient(135deg, #00acdd 30%, #47ad13 90%);
+		-webkit-background-clip: text;
+		color: transparent;
+		font-size: 50rpx;
+	}
+
 </style>

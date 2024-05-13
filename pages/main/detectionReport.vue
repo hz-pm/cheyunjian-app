@@ -1,10 +1,7 @@
 <template>
 	<view class="content">
-		<cl-header backgroundColor="#00acdd" title="车云检报告" defaultTextColor="#FFF"></cl-header>
-
 		<view style="width: 100%;background: linear-gradient(180deg,#00acdd,#f7fcff 400%);
 		display: flex;flex-direction: column;align-items: center;">
-			<view style="height: 88rpx;"></view>
 			<view style="width: 92%; display: flex;flex-direction: row;align-items: center;
 			margin-top: 20rpx;margin-bottom: 30rpx;">
 				<image src="../../static/ic-car.png" style="width: 80rpx;height: 80rpx;background-color: #f1f1f1;
@@ -14,14 +11,18 @@
 					<text style="font-size: 26rpx;margin-top: 15rpx;">VIN：SSVUD******022558</text>
 				</view>
 			</view>
-			<u-line color="#ffffff" style="opacity: 0.5;width: 92%;"></u-line>
+			<view style="height: 1rpx; opacity: 0.1;width: 92%;background-color: #FFF;"></view>
 			<text style="width: 92%; font-size: 28rpx;color: #FFF;margin-top: 20rpx;">生成日期：2021-10-10</text>
 			<view style="width: 92%;display: flex;flex-direction: column;align-items: center;margin-top: 30rpx;
 			background-color: #FFF;border-top-right-radius: 20rpx;border-top-left-radius: 20rpx;">
-				<u-divider text="当前参考续航" textColor="#111" lineColor="#DDD" :hairline="false"
-					style="width: 55%;"></u-divider>
-				<u-icon name="question-circle" color="#666"
-					style="align-self: flex-end;margin-right: 10%;margin-top: -50rpx;"></u-icon>
+				<view style="width: 65%;display: flex;flex-direction: row;align-items: center;
+				justify-content: center;margin-top: 30rpx;">
+					<view style="height: 1rpx;width: 90rpx;background-color: #DDD;"></view>
+					<text style="font-size: 30rpx;color: #111;margin-left: 20rpx;margin-right: 20rpx;">当前参考续航</text>
+					<view style="height: 1rpx;width: 90rpx;background-color: #DDD;"></view>
+				</view>
+				<view class="iconfont icon-question" style="align-self: flex-end;margin-right: 10%;margin-top: -50rpx;color: #666;
+				font-size: 40rpx;"></view>
 
 				<view
 					style="width: 88%;display: flex;flex-direction: row;align-items: center;justify-content: center; margin-top: 30rpx;">
@@ -37,7 +38,7 @@
 						<view style="display: flex;flex-direction: row;background-color: #fff9ed;border: 1rpx solid #f3a550;
 						padding-left: 6rpx;padding-right: 6rpx;border-radius: 5rpx;align-items: center;
 						margin-top: 25rpx;justify-content: center;width: 130rpx;">
-							<u-icon name="arrow-downward" color="#f3a550" size="30rpx"></u-icon>
+							<uni-icons type="arrow-down" color="#f3a550" size="30rpx"></uni-icons>
 							<text style="font-size: 30rpx;color: #FFF;color: #f3a550;">20.3%</text>
 						</view>
 					</view>
@@ -50,7 +51,7 @@
 				<text style="margin-top: 30rpx;">表显行驶里程</text>
 				<view style="display: flex;flex-direction: row;align-items: center;margin-top: 10rpx;">
 					<text style="font-size: 38rpx;color: #00acdd;font-weight: bold;">28000 km</text>
-					<u-icon name="question-circle" color="#666" style="margin-left: 5rpx;"></u-icon>
+					<text class="iconfont icon-question" style="margin-left: 5rpx;color: #666;"></text>
 				</view>
 				<text style="font-size: 26rpx;margin-top: 5rpx;margin-bottom: 30rpx;">最后更新于2023-10-30</text>
 			</view>
@@ -64,7 +65,7 @@
 		<view class="i-cell-v">
 			<view class="i-cell-2">
 				<view class="top">
-					<image src="../../static/vip-crown-2-fill.png"></image>
+					<text class="iconfont icon-health" style="font-size: 65rpx;"></text>
 				</view>
 				<text style="font-size: 26rpx;margin-top: 30rpx;">电池健康状况</text>
 				<text style="font-size: 38rpx;color: #53c41a;font-weight: 500;margin-top: 30rpx;">优秀</text>
@@ -74,7 +75,7 @@
 			</view>
 			<view class="i-cell-2" style="background-color: #fef0f0;">
 				<view class="top" style="background-color: #f46c6c;">
-					<image src="../../static/vip-crown-2-fill.png"></image>
+					<text class="iconfont icon-alarm" style="font-size: 65rpx;"></text>
 				</view>
 				<text style="font-size: 26rpx;margin-top: 30rpx;">电池异常信息</text>
 				<text style="font-size: 38rpx;color: #f46c6c;font-weight: 500;margin-top: 30rpx;
@@ -83,7 +84,7 @@
 			</view>
 			<view class="i-cell-2" style="background-color: #fef0f0;">
 				<view class="top" style="background-color: #f46c6c;">
-					<image src="../../static/vip-crown-2-fill.png"></image>
+					<text class="iconfont icon-battery" style="font-size: 65rpx;"></text>
 				</view>
 				<text style="font-size: 26rpx;margin-top: 30rpx;">电池使用习惯</text>
 				<text style="font-size: 38rpx;color: #f46c6c;font-weight: 500;margin-top: 30rpx;">较差</text>
@@ -93,7 +94,8 @@
 			</view>
 		</view>
 		<view style="height: 35rpx;"></view>
-		<u-line color="#AAA" style="width: 95%;"></u-line>
+		
+		<view style="width: 95%;height: 1rpx;background-color: #DDD;"></view>
 		<view class="tab-v">
 			<text class="tab" :class="curIndex==1?'tab-active':''" @click="clickTab(1)">静态数据</text>
 			<text class="tab" :class="curIndex==2?'tab-active':''" @click="clickTab(2)">电池健康</text>
@@ -104,8 +106,9 @@
 		<view style="width: 100%;background-color: #fff9ed;
 		border-top: 1rpx solid #f3a550;border-bottom: 1rpx solid #f3a550;display: flex;flex-direction: column;
 		align-items: center;justify-content: center;">
-			<u-text prefix-icon="info-circle-fill" text="本评估结果仅供参考，对结果不做准确性、完整性承诺" color="#f3a550" size="26rpx"
-				style="width: 90%; margin-top: 20rpx;margin-bottom: 20rpx;" :icon-style="{color:'#f3a550'}"></u-text>
+			<text class="iconfont icon-warning" style="width: 95%; margin-top: 20rpx;margin-bottom: 20rpx;color: #f3a550;
+			font-size: 28rpx;text-align: center;"
+			>本评估结果仅供参考，对结果不做准确性、完整性承诺</text>
 		</view>
 
 		<view class="cell-title">
@@ -114,7 +117,7 @@
 			<text class="t-2">数据更新于2023-11-03</text>
 		</view>
 
-		<u-line color="#EEE" style="width: 92%;"></u-line>
+		<view style="width: 92%;height: 1rpx;background-color: #EEE;"></view>
 		<view class="info-cell" style="background-color: #f7f7f7;">
 			<text class="t-1">电池厂商</text>
 			<text class="t-2">上汽时代动力电池系统有限公司</text>
@@ -158,8 +161,7 @@
 				<text class="t-1">电池健康度</text>
 				<text class="t-2">数据更新于2023-10-03</text>
 			</view>
-			<u-text prefix-icon="../../static/question-circle.png" text="指标定义" color="#666" size="26rpx"
-				align="right"></u-text>
+			<text class="iconfont icon-question" style="color: #666;font-size: 26rpx;">指标定义</text>
 		</view>
 
 		<!-- 雷达图 -->
@@ -182,11 +184,10 @@
 			    </view>
 			</view>
 		</view>
-
-		<u-text prefix-icon="../../static/ic-jiedu.png" text="解读" color="#111" size="28rpx"
-			style="width: 92%;margin-top: 35rpx;" bold :icon-style="{marginRight:'10rpx'}"></u-text>
+		
+		<text class="iconfont icon-notebook" style="width: 92%;margin-top: 35rpx;color: #111;font-size: 28rpx;">解读</text>
 		<text
-			style="font-size: 26rpx;color: #666;margin-top: 15rpx;line-height: 40rpx;">您的车辆电池综合状态优秀，容量损耗低，循环寿命厂。</text>
+			style="font-size: 26rpx;color: #666;margin-top: 15rpx;line-height: 40rpx;width: 92%;">您的车辆电池综合状态优秀，容量损耗低，循环寿命厂。</text>
 
 		<view class="cell-title" style="margin-top: 40rpx;">
 			<view class="line"></view>
@@ -227,8 +228,8 @@
 		</view>
 		<view class="info-cell">
 			<text class="t-1">充电起始电量（高频）</text>
-			<view class="right" style="flex-direction: column;align-self: flex-end;justify-self: flex-end;">
-				<u-text class="t-2" text="20-30%" style="margin-right: 0;" align="right"></u-text>
+			<view class="right" style="flex-direction: column;align-items: flex-end;">
+				<text class="t-2" style="margin-right: 0;text-align: right;">20-30%</text>
 				<text class="status yellow" style="margin-top: 5rpx;text-align: right;">偏低，高频在低电量时充电，建议优化</text>
 			</view>
 		</view>
@@ -239,14 +240,12 @@
 				<text class="status blue">正常</text>
 			</view>
 		</view>
-		<u-text prefix-icon="info-circle-fill" text="注意" color="#111" size="28rpx" style="width: 92%;margin-top: 35rpx;"
-			bold :icon-style="{marginRight:'10rpx',color:'#111'}"></u-text>
+		<text class="iconfont icon-warning" style="color: #111;font-size: 28rpx;width: 95%;margin-top: 35rpx;">注意</text>
 		<text
-			style="width: 92%; font-size: 26rpx;color: #666;margin-top: 15rpx;line-height: 40rpx;">高频将电量用至30%之下，容易导致电池过放，电池加速衰退。</text>
-		<u-text prefix-icon="../../static/ic-safe.png" text="建议" color="#111" size="28rpx"
-			style="width: 92%;margin-top: 35rpx;" bold :icon-style="{marginRight:'10rpx'}"></u-text>
+			style="width: 95%; font-size: 26rpx;color: #666;margin-top: 15rpx;line-height: 40rpx;">高频将电量用至30%之下，容易导致电池过放，电池加速衰退。</text>
+		<text class="iconfont icon-safe" style="color: #111;font-size: 28rpx;width: 95%;margin-top: 35rpx;">建议</text>
 		<text
-			style="width: 92%; font-size: 26rpx;color: #666;margin-top: 15rpx;line-height: 40rpx;">日常尽量让电量不低于30%，保持动力电池浅充浅放状态，有助于延长动力电池寿命。</text>
+			style="width: 95%; font-size: 26rpx;color: #666;margin-top: 15rpx;line-height: 40rpx;">日常尽量让电量不低于30%，保持动力电池浅充浅放状态，有助于延长动力电池寿命。</text>
 
 		<view class="cell-title" style="margin-top: 40rpx;">
 			<view class="line"></view>
@@ -289,10 +288,9 @@
 				<text class="status blue">正常</text>
 			</view>
 		</view>
-		<u-text prefix-icon="info-circle-fill" text="数据说明" color="#111" size="28rpx"
-			style="width: 92%;margin-top: 35rpx;" bold :icon-style="{marginRight:'10rpx',color:'#111'}"></u-text>
+		<text class="iconfont icon-info" style="width: 95%;margin-top: 35rpx;color: #111;">数据说明</text>
 		<text
-			style="width: 92%; font-size: 26rpx;color: #666;margin-top: 15rpx;line-height: 40rpx;">数值说明”偏高或偏低“，均会减低电池综合性能；</text>
+			style="width: 95%; font-size: 26rpx;color: #666;margin-top: 15rpx;line-height: 40rpx;">数值说明”偏高或偏低“，均会减低电池综合性能；</text>
 
 		<view class="cell-title" style="margin-top: 40rpx;">
 			<view class="line"></view>
@@ -343,36 +341,36 @@
 			<text class="t-1">其他管理水平</text>
 			<text class="status green">优秀，观测期内无异常</text>
 		</view>
-		<u-text prefix-icon="../../static/ic-jiedu.png" text="解读" color="#111" size="28rpx"
-			style="width: 92%;margin-top: 35rpx;" bold :icon-style="{marginRight:'10rpx'}"></u-text>
+		
+		<text class="iconfont icon-notebook" style="width: 95%;margin-top: 35rpx;color: #111;font-size: 28rpx;">解读</text>
 		<text
-			style="width: 92%; font-size: 26rpx;color: #666;margin-top: 15rpx;line-height: 40rpx;">该车辆电量管理水平较差，SOC低/SOC过高/SOC跳变异常是同车型的5.33倍。</text>
-		<u-text prefix-icon="info-circle-fill" text="异常情况说明" color="#111" size="28rpx"
-			style="width: 92%;margin-top: 35rpx;" bold :icon-style="{marginRight:'10rpx',color:'#111'}"></u-text>
-		<text style="width: 92%; font-size: 26rpx;color: #666;margin-top: 15rpx;line-height: 40rpx;">依据GB/T
-			32960-2016《电动汽车远程服务与管理系统技术规范》，一级故障是指不影响车辆正常行驶的故障；二级故障是指影响车性能需驾驶员限制行驶的故障；三级故障是指驾驶员应停车处理或者请求救援的故障。</text>
+			style="width: 95%; font-size: 26rpx;color: #666;margin-top: 15rpx;line-height: 40rpx;">该车辆电量管理水平较差，SOC低/SOC过高/SOC跳变异常是同车型的5.33倍。</text>
+		<text class="iconfont icon-info" style="width: 95%;margin-top: 35rpx;color: #111;font-size: 28rpx;">异常情况说明</text>
+		<text style="width: 95%; font-size: 26rpx;color: #666;margin-top: 15rpx;line-height: 40rpx;">依据GB/T32960-2016《电动汽车远程服务与管理系统技术规范》，一级故障是指不影响车辆正常行驶的故障；二级故障是指影响车性能需驾驶员限制行驶的故障；三级故障是指驾驶员应停车处理或者请求救援的故障。</text>
 		<text
-			style="width: 92%; font-size: 26rpx;color: #666;margin-top: 15rpx;line-height: 40rpx;">”正常“表示监测期间内无相关异常。</text>
-		<u-text prefix-icon="../../static/ic-safe.png" text="评估方:福建常岳新能源科技有限公司" color="#111" size="28rpx"
-			style="width: 92%;margin-top: 35rpx;" bold :icon-style="{marginRight:'10rpx'}"></u-text>
-		<u-text prefix-icon="info-circle-fill" text="免责申明" color="#111" size="28rpx"
-			style="width: 92%;margin-top: 35rpx;" bold :icon-style="{marginRight:'10rpx',color:'#111'}"></u-text>
+			style="width: 95%; font-size: 26rpx;color: #666;margin-top: 15rpx;line-height: 40rpx;">”正常“表示监测期间内无相关异常。</text>
+		<text class="iconfont icon-safe" style="width: 95%;margin-top: 35rpx;color: #111;">评估方:福建常岳新能源科技有限公司</text>
+		<text class="iconfont icon-info" style="width: 95%;margin-top: 35rpx;color: #111;">免责申明</text>
 		<text
-			style="width: 92%; font-size: 26rpx;color: #666;margin-top: 15rpx;line-height: 40rpx;">本评估报告提供的所有内容及判断仅截至到评估日期收集的相关数据信息，所有数据信息均来自第三方。关于此车辆的部分数据如可能被采集或收录。本报告仅是交易参考资料之一，请您结合实车检测结果和乘车试驾体验，做出更精准的决策。</text>
-
+			style="width: 95%; font-size: 26rpx;color: #666;margin-top: 15rpx;line-height: 40rpx;">本评估报告提供的所有内容及判断仅截至到评估日期收集的相关数据信息，所有数据信息均来自第三方。关于此车辆的部分数据如可能被采集或收录。本报告仅是交易参考资料之一，请您结合实车检测结果和乘车试驾体验，做出更精准的决策。</text>
 
 		<view style="height: 35rpx;"></view>
 
 		<view style="width: 100%;display: flex;flex-direction: column;align-items: center;
 		background-color: #FFF;">
-			<u-line color="#EEE"></u-line>
+			<view style="height: 1rpx;width: 100%;background-color: #EEE;"></view>
 			<view style="width: 95%; display: flex;flex-direction: row;align-items: center;justify-content: space-between;
 			margin-top: 30rpx;margin-bottom: 30rpx;">
-				<u-text prefix-icon="../../static/ic-pg-time.png" text="评估时间:2023-12-02" color="#111" size="28rpx"
-					style="width: 92%;" :icon-style="{marginRight:'10rpx',width:'40rpx',height:'40rpx'}"></u-text>
+				<view style="width: 60%;display: flex;flex-direction: row;align-items: center;">
+					<text class="iconfont icon-history" style="font-size: 35rpx;color: #00acdd;"></text>
+					<text style="color: #111;margin-left: 5rpx;font-size: 28rpx;">评估时间:2023-12-02</text>
+				</view>
 				<view style="display: flex;flex-direction: row;align-items: center;">
 					<text class="btn-4" @click="clickRefreash">刷新</text>
-					<text class="btn-3" @click="clickExport">导出</text>
+					<view class="btn-3" style="display: flex;flex-direction: row;align-items: center;">
+						<text class="iconfont icon-export" style="font-size: 28rpx;"></text>
+						<text @click="clickExport">导出</text>
+					</view>
 				</view>
 			</view>
 		</view>
@@ -550,21 +548,21 @@
 			},
 			drawHalfCircleProgress() {
 				const ctx = uni.createCanvasContext('progressCanvas', this);
-				const x = uni.$u.getPx('280rpx'); // 圆心x坐标
-				const y = uni.$u.getPx('290rpx'); // 圆心y坐标
-				const radius = uni.$u.getPx('250rpx'); // 半圆的半径
+				const x = this.getPx('280rpx'); // 圆心x坐标
+				const y = this.getPx('290rpx'); // 圆心y坐标
+				const radius = this.getPx('250rpx'); // 半圆的半径
 
 				// 绘制底色半圆
 				ctx.beginPath();
 				ctx.arc(x, y, radius, Math.PI, 0, false);
-				ctx.setLineWidth(uni.$u.getPx('40rpx')); // 进度条宽度
+				ctx.setLineWidth(this.getPx('40rpx')); // 进度条宽度
 				ctx.setStrokeStyle('#e5e5e5'); // 进度条底色
 				ctx.stroke();
 
 				// 绘制颜色半圆
 				ctx.beginPath();
 				ctx.arc(x, y, radius, Math.PI, Math.PI * (1 + (this.percentage / 100)), false);
-				ctx.setLineWidth(uni.$u.getPx('40rpx')); // 进度条宽度
+				ctx.setLineWidth(this.getPx('40rpx')); // 进度条宽度
 				ctx.setStrokeStyle('#00acdd'); // 进度条颜色
 				ctx.stroke();
 
@@ -574,9 +572,9 @@
 					ctx.moveTo(x, y);
 					// 设置角度为从 0 到 π，让射线朝上
 					const angle = Math.PI + (-Math.PI / (this.lines - 1)) * i;
-					const extendedRadius = radius - uni.$u.getPx('20rpx');
+					const extendedRadius = radius - this.getPx('20rpx');
 					ctx.lineTo(x + extendedRadius * Math.cos(angle), y - extendedRadius * Math.sin(angle));
-					ctx.setLineWidth(uni.$u.getPx('1rpx'));
+					ctx.setLineWidth(this.getPx('1rpx'));
 					ctx.setStrokeStyle('#e8f2fb'); // 线条颜色
 					ctx.stroke();
 				}
@@ -584,8 +582,8 @@
 				// 绘制多个半圆形成网状
 				for (let j = 1; j <= this.circles; j++) {
 					ctx.beginPath();
-					ctx.arc(x, y, ((radius / this.circles) - uni.$u.getPx('24rpx')) * j, Math.PI, 0, false);
-					ctx.setLineWidth(uni.$u.getPx('1rpx'));
+					ctx.arc(x, y, ((radius / this.circles) - this.getPx('24rpx')) * j, Math.PI, 0, false);
+					ctx.setLineWidth(this.getPx('1rpx'));
 					ctx.setStrokeStyle('#e8f2fb'); // 线条颜色
 					ctx.stroke();
 				}
@@ -599,6 +597,19 @@
 
 				// 指定尺寸
 				// this.$refs.chart.resize({width: '375rpx', height: '375rpx'})
+			},
+			getPx(value, unit = false) {
+				if (this.number(value)) {
+					return unit ? `${value}px` : Number(value)
+				}
+				// 如果带有rpx，先取出其数值部分，再转为px值
+				if (/(rpx|upx)$/.test(value)) {
+					return unit ? `${uni.upx2px(parseInt(value))}px` : Number(uni.upx2px(parseInt(value)))
+				}
+				return unit ? `${parseInt(value)}px` : parseInt(value)
+			},
+			number(value) {
+			    return /^[\+-]?(\d+\.?\d*|\.\d+|\d\.\d+e\+\d+)$/.test(value)
 			}
 		}
 	}
@@ -616,7 +627,7 @@
 	}
 
 	.tab-v {
-		width: 92%;
+		width: 95%;
 		display: flex;
 		flex-direction: row;
 		align-items: center;
@@ -625,7 +636,7 @@
 		margin-bottom: 15rpx;
 
 		.tab {
-			font-size: 30rpx;
+			font-size: 28rpx;
 			color: #333;
 			line-height: 70rpx;
 			font-weight: bold;
@@ -639,7 +650,7 @@
 	}
 
 	.i-cell-v {
-		width: 92%;
+		width: 95%;
 		display: flex;
 		flex-direction: row;
 		align-items: center;
@@ -670,25 +681,21 @@
 
 			.top {
 				width: 100%;
+				height: 130rpx;
 				display: flex;
-				flex-direction: column;
+				flex-direction: row;
 				align-items: center;
+				justify-content: center;
+				color: #FFF;
 				background-color: #53c41a;
 				border-top-right-radius: 15rpx;
 				border-top-left-radius: 15rpx;
-
-				image {
-					width: 80rpx;
-					height: 60rpx;
-					margin-top: 35rpx;
-					margin-bottom: 35rpx;
-				}
 			}
 		}
 	}
 
 	.info-cell {
-		width: 92%;
+		width: 95%;
 		border-bottom: 1rpx solid #EEE;
 		display: flex;
 		flex-direction: row;
@@ -751,7 +758,7 @@
 	}
 
 	.cell-title {
-		width: 92%;
+		width: 95%;
 		display: flex;
 		flex-direction: row;
 		align-items: center;
@@ -804,7 +811,7 @@
 	}
 
 	.progress-canvas {
-		width: 92%;
+		width: 95%;
 		height: 280rpx;
 	}
 </style>

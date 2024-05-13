@@ -1,15 +1,15 @@
 <template>
 	<view class="content">
-		<cl-header backgroundColor="#00acdd" title="充值记录" defaultTextColor="#FFF"></cl-header>
 
-		<view style="height: 89rpx;"></view>
 		<view style="width: 100%;display: flex;flex-direction: row;background-color: #FFF;">
-			<u-search placeholder="搜索订单号" shape="square" style="margin: 20rpx 30rpx;"></u-search>
+			<uni-search-bar style="width: 100%;" @confirm="search" :focus="true" v-model="searchValue" 
+			placeholder="搜索订单号" cancelButton="auto">
+			</uni-search-bar>
 		</view>
 		<view style="width: 100%;display: flex;flex-direction: column;background-color: #FFF;margin-top: 30rpx;">
 			<text style="font-size: 28rpx;color: #a6a6a6;width: 95%;
 					align-self: flex-end;margin-top: 20rpx;margin-bottom: 20rpx;">共有条充值记录，总计充值600元，共16800积分</text>
-			<u-line color="#f5f5f5" hairline='false' style="width: 95%;align-self: flex-end;"></u-line>
+			<view style="height: 1rpx; width: 95%;align-self: flex-end;background-color: #f5f5f5;"></view>
 
 			<view style="width: 100%;display: flex;flex-direction: column;align-items: center;"
 			v-for="(index,item) in list" @click="clickItem(item)">
@@ -24,10 +24,10 @@
 							<text style="font-size: 32rpx;color: #dc4144;font-weight: bold;">￥60</text>
 							<text style="font-size: 28rpx;color: #0da665;margin-top: 10rpx;">+168积分</text>
 						</view>
-						<u-icon name="arrow-right" color="#a6a6a6" size="35rpx"></u-icon>
+						<uni-icons type="right" color="#a6a6a6" size="35rpx"></uni-icons>
 					</view>
 				</view>
-				<u-line color="#f5f5f5" hairline='false' style="width: 95%;align-self: flex-end;"></u-line>
+				<view style="height: 1rpx; width: 95%;align-self: flex-end;background-color: #f5f5f5;"></view>
 			</view>
 
 			<u-empty mode="data" icon="../../static/img-nodata.png" text="暂无数据" width="90rpx"
@@ -49,8 +49,14 @@
 		},
 		methods: {
 			clickItem(item){
-				uni.$u.route({
+				uni.navigateTo({
 					url:'pages/mine/rechargeDetails'
+				})
+			},
+			search(res) {
+				uni.showToast({
+					title: '搜索：' + res.value,
+					icon: 'none'
 				})
 			}
 		}
@@ -62,7 +68,6 @@
 
 	.content {
 		width: 100vw;
-		height: 100vh;
 		display: flex;
 		flex-direction: column;
 		align-items: center;

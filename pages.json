@@ -20,9 +20,8 @@
             "path" : "pages/main/main",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
                 "enablePullDownRefresh": false,
-				"navigationStyle": "custom"
+				"navigationStyle": "default"
             }
             
         }
@@ -30,9 +29,8 @@
             "path" : "pages/main/queryTramFiles",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
                 "enablePullDownRefresh": false,
-				"navigationStyle": "custom"
+				"navigationStyle": "default"
             }
             
         }
@@ -40,63 +38,63 @@
             "path" : "pages/main/mine",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "我的",
                 "enablePullDownRefresh": false,
-        		"navigationStyle": "custom"
+        		"navigationStyle": "default"
             }
             
         },{
             "path" : "pages/mine/myInfo",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "个人设置",
                 "enablePullDownRefresh": false,
-				"navigationStyle": "custom"
+				"navigationStyle": "default"
             }
             
         },{
             "path" : "pages/mine/baseCompany",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "企业认证",
                 "enablePullDownRefresh": false,
-				"navigationStyle": "custom"
+				"navigationStyle": "default"
             }
             
         },{
             "path" : "pages/mine/vipCard",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "购买会员权益",
                 "enablePullDownRefresh": false,
-				"navigationStyle": "custom"
+				"navigationStyle": "default"
             }
             
         },{
             "path" : "pages/mine/skuList",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "积分充值",
                 "enablePullDownRefresh": false,
-				"navigationStyle": "custom"
+				"navigationStyle": "default"
             }
             
         },{
             "path" : "pages/mine/recharge",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "充值记录",
                 "enablePullDownRefresh": false,
-				"navigationStyle": "custom"
+				"navigationStyle": "default"
             }
             
         },{
             "path" : "pages/mine/rechargeDetails",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "订单详情",
                 "enablePullDownRefresh": false,
-				"navigationStyle": "custom"
+				"navigationStyle": "default"
             }
             
         },
@@ -104,72 +102,71 @@
         	"path" : "pages/reg/webView",
         	"style" : 
         	{
-        	    "navigationBarTitleText": "",
         	    "enablePullDownRefresh": false,
-        		"navigationStyle": "custom"
+        		"navigationStyle": "default"
         	}
         },
         {
         	"path" : "pages/reg/register",
         	"style" : 
         	{
-        	    "navigationBarTitleText": "",
+        	    "navigationBarTitleText": "注册车数万维",
         	    "enablePullDownRefresh": false,
-        		"navigationStyle": "custom"
+        		"navigationStyle": "default"
         	}
         },
         {
         	"path" : "pages/reg/updatePassword",
         	"style" : 
         	{
-        	    "navigationBarTitleText": "",
+        	    "navigationBarTitleText": "修改密码",
         	    "enablePullDownRefresh": false,
-        		"navigationStyle": "custom"
+        		"navigationStyle": "default"
         	}
         },
 		{
 			"path" : "pages/mine/bill",
 			"style" : 
 			{
-			    "navigationBarTitleText": "",
+			    "navigationBarTitleText": "消费账单",
 			    "enablePullDownRefresh": false,
-				"navigationStyle": "custom"
+				"navigationStyle": "default"
 			}
 		},
 		{
 			"path" : "pages/mine/carRecord",
 			"style" : 
 			{
-			    "navigationBarTitleText": "",
+			    "navigationBarTitleText": "车云检记录",
 			    "enablePullDownRefresh": false,
-				"navigationStyle": "custom"
+				"navigationStyle": "default"
 			}
 		},
 		{
 			"path" : "pages/mine/appraiseRecord",
 			"style" : 
 			{
-			    "navigationBarTitleText": "",
+			    "navigationBarTitleText": "电易估记录",
 			    "enablePullDownRefresh": false,
-				"navigationStyle": "custom"
+				"navigationStyle": "default"
 			}
 		},
 		{
 			"path" : "pages/mine/question",
 			"style" : 
 			{
-			    "navigationBarTitleText": "",
+			    "navigationBarTitleText": "常见问题",
 			    "enablePullDownRefresh": false,
-				"navigationStyle": "custom"
+				"navigationStyle": "default"
 			}
 		},
 		{
 			"path" : "pages/mine/fiesRecord",
 			"style" : 
 			{
-				"navigationBarTitleText" : "",
+				"navigationBarTitleText" : "车智驾记录",
 				"enablePullDownRefresh" : false,
-				"navigationStyle": "custom"
+				"navigationStyle": "default"
 			}
 		},
 		{
@@ -178,7 +175,7 @@
 			{
 				"navigationBarTitleText" : "",
 				"enablePullDownRefresh" : false,
-				"navigationStyle": "custom"
+				"navigationStyle": "default"
 			}
 		},
 		{
@@ -187,24 +184,25 @@
 			{
 				"navigationBarTitleText" : "",
 				"enablePullDownRefresh" : false,
-				"navigationStyle": "custom"
+				"navigationStyle": "default"
 			}
 		},
 		{
 			"path" : "pages/main/detectionReport",
 			"style" : 
 			{
-				"navigationBarTitleText" : "",
+				"navigationBarTitleText" : "车云检报告",
 				"enablePullDownRefresh" : false,
-				"navigationStyle": "custom"
+				"navigationStyle": "default"
 			}
 		}
     ],
 	"globalStyle": {
-		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "hubspot",
-		"navigationBarBackgroundColor": "#FFF",
-		"backgroundColor": "#FFF"
+		"navigationBarTextStyle": "white",
+		"navigationBarTitleText": "车数万维",
+		"navigationStyle": "default",
+		"navigationBarBackgroundColor": "#00acdd",
+		"backgroundColor": "#f7fafa"
 	},
 	"tabBar": {
 		"color": "#a2a2a2",

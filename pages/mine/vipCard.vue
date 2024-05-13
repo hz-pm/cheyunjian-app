@@ -92,7 +92,13 @@
 					<view style="height: 60rpx;"></view>
 				</view>
 				
-				<u-button text="立即购买" class="btn" color="#FFF"></u-button>
+				<button class="btn">立即购买</button>
+				<checkbox-group style="display: flex;flex-direction: row;align-items: center;font-size: 26rpx;"
+					@change="checkboxChange">
+					<checkbox value="cb1" :checked="checked"></checkbox>
+					<text @click="checkedCb" style="color: #111;font-size: 30rpx;">我已阅读并同意<span 
+					style="color: #00acdd;" @click="argeement(1)">《VIP会员服务协议》</span></text>
+				</checkbox-group>
 				
 			</view>
 		</scroll-view>
@@ -108,7 +114,8 @@
 		components: {},
 		data() {
 			return {
-				vipIndex: 0
+				vipIndex: 0,
+				checked:false
 			}
 		},
 		methods: {
@@ -119,7 +126,11 @@
 			},
 			clickItem(index) {
 				this.vipIndex = index;
-			}
+			},
+			checkboxChange(e){
+				console.log(e)
+				this.checked = e.detail.value.indexOf('cb1') !== -1
+			},
 		}
 	}
 </script>
@@ -258,5 +269,7 @@
 		margin-top: 45rpx;
 		border-radius: 20rpx;
 		margin-bottom: 35rpx;
+		color: #FFF;
+		font-size: 32rpx;
 	}
 </style>

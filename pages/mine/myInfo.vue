@@ -1,42 +1,41 @@
 <template>
 	<view class="content">
-		<cl-header backgroundColor="#00acdd" title="个人设置" defaultTextColor="#FFF"></cl-header>
 		<scroll-view scroll-y="true" height="100vh">
 			<view style="display: flex;
 			flex-direction: column;
 			align-items: center;
 			height: 100vh;">
-				<view style="height: 115rpx;"></view>
+				<view style="height: 30rpx;"></view>
 				<view class="cell-v" style="padding-top: 20rpx;padding-bottom: 20rpx;">
 					<image src="../../static/ic-default-avatar.png"
 						style="width: 80rpx;height: 80rpx;margin-left: 45rpx;"></image>
 					<view style="display: flex;flex-direction: column;align-items: flex-end;
 					margin-right: 45rpx;">
-						<text style="font-size: 30rpx;color: #333;">小程序用户</text>
-						<text style="font-size: 26rpx;color: #808080;margin-top: 10rpx;">ID:946173477174890496</text>
+						<text style="font-size: 30rpx;color: #333;">{{userinfo.nickName}}</text>
+						<text style="font-size: 26rpx;color: #808080;margin-top: 10rpx;">ID:{{userinfo.userId}}</text>
 					</view>
 				</view>
 
-				<view class="cell-v" style="margin-top: 25rpx;" @click="showBindPhonePop=true">
+				<view class="cell-v" style="margin-top: 25rpx;" @click="$refs.showBindPhonePop.open()">
 					<text class="title">电话号码</text>
 					<view class="right">
-						<text>176****4564</text>
-						<u-icon name="arrow-right" color="#888" size="28rpx" style="margin-left: 10rpx;"></u-icon>
+						<text>{{userinfo.phonenumber}}</text>
+						<uni-icons type="right" color="#888" size="28rpx" style="margin-left: 10rpx;"></uni-icons>
 					</view>
 				</view>
-				<view class="cell-v" style="margin-top: 2rpx;" @click="showBindEmailPop=true">
+				<view class="cell-v" style="margin-top: 2rpx;" @click="$refs.showBindEmailPop.open()">
 					<text class="title">电子邮箱</text>
 					<view class="right">
-						<text></text>
-						<u-icon name="arrow-right" color="#888" size="28rpx" style="margin-left: 10rpx;"></u-icon>
+						<text>{{userinfo.email}}</text>
+						<uni-icons type="right" color="#888" size="28rpx" style="margin-left: 10rpx;"></uni-icons>
 					</view>
 				</view>
 				<view class="cell-v" style="margin-top: 25rpx;">
 					<text class="title">企业名称</text>
 					<view class="right">
-						<text></text>
-						<u-icon name="arrow-right" color="#888" size="28rpx" style="margin-left: 10rpx;"
-							v-if="false"></u-icon>
+						<text>{{userinfo.enterpriseCertification}}</text>
+						<uni-icons type="right" color="#888" size="28rpx" style="margin-left: 10rpx;"
+							v-if="false"></uni-icons>
 					</view>
 				</view>
 				<navigator url="/pages/mine/baseCompany" class="cell-v" style="margin-top: 2rpx;">
@@ -44,64 +43,64 @@
 					<view class="right">
 						<text style="background-color: #fff8ed;color: #f3a54f;border-color: rgba(243,165,79,.3);
 						padding: 4rpx 8rpx;border-radius: 4rpx;font-size: 24rpx;border: 2rpx solid #ddd;">未认证</text>
-						<u-icon name="arrow-right" color="#888" size="28rpx" style="margin-left: 10rpx;"></u-icon>
+						<uni-icons type="right" color="#888" size="28rpx" style="margin-left: 10rpx;"></uni-icons>
 					</view>
 				</navigator>
 
 				<navigator url="/pages/reg/updatePassword" class="cell-v" style="margin-top: 25rpx;justify-content: center;">
 					<text class="title" style="color: #333;">修改密码</text>
 				</navigator>
-				<view class="cell-v" style="margin-top: 25rpx;justify-content: center;" @click="show=true">
+				<view class="cell-v" style="margin-top: 25rpx;justify-content: center;" @click="$refs.alertDialog.open()">
 					<text class="title" style="color: #333;">退出登录</text>
 				</view>
 			</view>
 		</scroll-view>
-
-		<u-popup :show="showBindPhonePop" @close="closeBindPhonePop" mode="bottom">
+		
+		<uni-popup ref="showBindPhonePop" @close="closeBindPhonePop" type="bottom">
 			<view class="pop-v">
 				<view class="title-v">
 					<text class="title">绑定新手机</text>
-					<u-icon name="close-circle-fill" size="38rpx" color="#AAA" style="margin-right: 30rpx;"
-						@click="showBindPhonePop=false"></u-icon>
+					<uni-icons type="closeempty" size="38rpx" color="#AAA" style="margin-right: 30rpx;"
+						@click="showBindEmailPop"></uni-icons>
 				</view>
 				<view class="pop-content">
 					<text class="info">
 						<image></image>应国家法律规定账号实名制的要求，请尽快绑定您的手机号码完成验证。
 					</text>
 					<view class="pop-input-v">
-						<u-input placeholder="请填写手机号" border="none" font-size="30rpx" type="number"
-							maxlength="11"></u-input>
+						<input placeholder="请填写手机号" border="none" font-size="30rpx" type="number"
+							maxlength="11"></input>
 					</view>
 					<view class="pop-input-v" style="display: flex;flex-direction: row;justify-content: space-between;
 				padding-right: 20rpx;">
-						<u-input placeholder="请输入验证码" border="none" font-size="30rpx" type="number"
-							maxlength="6"></u-input>
+						<input placeholder="请输入验证码" border="none" font-size="30rpx" type="number"
+							maxlength="6"></input>
 						<text style="font-size: 30rpx;color: #00acdd;">获取验证码</text>
 					</view>
-					<u-button text="确认提交" class="btn" color="#FFF"></u-button>
+					<button text="确认提交" class="btn"></button>
 				</view>
 			</view>
-		</u-popup>
+		</uni-popup>
 		
-		<u-popup :show="showBindEmailPop" @close="closeBindEmailPop" mode="bottom">
+		<uni-popup ref="showBindEmailPop" @close="closeBindEmailPop" type="bottom">
 			<view class="pop-v">
 				<view class="title-v">
 					<text class="title">设置邮箱</text>
-					<u-icon name="close-circle-fill" size="38rpx" color="#AAA" style="margin-right: 30rpx;"
-						@click="showBindEmailPop=false"></u-icon>
+					<uni-icons type="closeempty" size="38rpx" color="#AAA" style="margin-right: 30rpx;"
+						@click="showBindEmailPop"></uni-icons>
 				</view>
 				<view class="pop-content">
 					<view class="pop-input-v" style="margin-top: 0rpx;">
-						<u-input placeholder="请输入电子邮箱" border="none" font-size="30rpx"></u-input>
+						<input placeholder="请输入电子邮箱" border="none" font-size="30rpx"></input>
 					</view>
-					<u-button text="确认提交" class="btn" color="#FFF"></u-button>
+					<button class="btn">确认提交</button>
 				</view>
 			</view>
-		</u-popup>
+		</uni-popup>
 		
-		
-		<u-modal :show="show" :title="title" :content='content' closeOnClickOverlay
-		showConfirmButton showCancelButton @cancel="show=false" @confirm="confirmModal" @close="show=false"></u-modal>
+		<uni-popup ref="alertDialog" type="dialog">
+			<uni-popup-dialog type="info" confirmText="确定" :content='content' @confirm="confirmModal"></uni-popup-dialog>
+		</uni-popup>
 	</view>
 </template>
 
@@ -114,24 +113,28 @@
 		components: {},
 		data() {
 			return {
-				showBindPhonePop: false,
-				showBindEmailPop:false,
+				showBindPhonePop: '',
+				showBindEmailPop:'',
 				title:'提示',
 				content:'确定要退出登录吗？',
-				show:false
+				show:false,
+				userinfo: {},
 			}
+		},
+		onLoad() {
+			this.userinfo =  this.vuex_userinfo
 		},
 		methods: {
 			closeBindPhonePop() {
-				this.showBindPhonePop = false
+				this.$refs.showBindPhonePop.close()
 			},
 			closeBindEmailPop(){
-				this.showBindEmailPop = false
+				this.$refs.showBindEmailPop.close()
 			},
 			confirmModal(){
-				this.show = false
-				uni.$u.route({
-					url:'pages/login/login'
+				this.$refs.alertDialog.close()
+				uni.navigateTo({
+					url: '/pages/login/login'
 				})
 			}
 		}
@@ -229,6 +232,8 @@
 				margin-top: 45rpx;
 				border-radius: 20rpx;
 				margin-bottom: 35rpx;
+				color: #FFF;
+				font-size: 30rpx;
 			}
 		}
 	}

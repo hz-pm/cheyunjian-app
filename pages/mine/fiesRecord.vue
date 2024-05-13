@@ -1,7 +1,5 @@
 <template>
 	<view class="content">
-		<cl-header backgroundColor="#00acdd" title="车智驾记录" defaultTextColor="#FFF"></cl-header>
-		<view style="height: 89rpx;"></view>
 		<view style="width: 100%;background: linear-gradient(180deg,#00acdd,#47ad13 150%);">
 			<view style="display: flex;flex-direction: row;align-items: center;
 			margin-left: 35rpx;margin-top: 20rpx;margin-bottom: 30rpx;">
@@ -35,7 +33,7 @@
 					<text style="font-size: 28rpx;color: #a6a6a6;margin-top: 10rpx;">剩余168积分</text>
 				</view>
 			</view>
-			<u-line color="#f5f5f5" hairline='false' style="width: 95%;align-self: flex-end;"></u-line>
+			<view style="height: 1rpx;width: 95%;align-self: flex-end;background-color: #f5f5f5;"></view>
 		</view>
 		<u-empty mode="data" icon="../../static/img-nodata.png" text="暂无数据" width="90rpx"
 		style="margin-top: 40rpx;" v-if="isEmpty"></u-empty>
@@ -68,7 +66,6 @@
 
 	.content {
 		width: 100vw;
-		height: 100vh;
 		display: flex;
 		flex-direction: column;
 		align-items: center;

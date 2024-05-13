@@ -2,7 +2,6 @@ import Vue from 'vue'
 import App from './App'
 import store from '@/store';
 
-
 import * as filters from '@/common/filters.js';
 
 // 注入全局过滤器
@@ -14,12 +13,22 @@ Object.keys(filters).forEach(key => {
 import {router,RouterMount} from './common/router.js';
 Vue.use(router);
 
+if (!uni.$u) {
+  uni.$u = {};
+  Vue.prototype.$u = uni.$u
+}
+
 // 全局引入vuex
 let vuexStore = require("@/store/$u.mixin.js");
 Vue.mixin(vuexStore);
 
 // 引入扩展方法
 import '@/common/extend.js';
+
+//-----------------请求方法封装----------------------
+import http from '@/apis/http.interceptor.js'
+//全局挂载引入，配置相关在该index.js文件里修改
+Vue.prototype.$http = http
 
 Vue.config.productionTip = false
 App.mpType = 'app'
@@ -31,10 +40,6 @@ const app = new Vue({
 
 import installPlugin from 'pages/components/jj-messagebox/messageView/index.js'
 installPlugin(Vue)
-
-// http拦截器，将此部分放在new Vue()和app.$mount()之间，才能App.vue中正常使用
-import httpInterceptor from '@/apis/http.interceptor.js'
-Vue.use(httpInterceptor, app)
 
 // http接口API集中管理引入部分
 import httpApi from '@/apis/http.api.js'

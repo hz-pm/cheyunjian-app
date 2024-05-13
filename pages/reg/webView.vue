@@ -1,7 +1,6 @@
 <template>
 	<view class="content">
-		<cl-header backgroundColor="#00acdd" title="" defaultTextColor="#FFF"></cl-header>
-		<web-view :src="url" style="margin-top: 90rpx;"></web-view>
+		<web-view :src="url"></web-view>
 	</view>
 </template>
 
@@ -29,7 +28,6 @@
 
 	.content {
 		width: 100vw;
-		height: 100vh;
 		display: flex;
 		flex-direction: column;
 		align-items: center;

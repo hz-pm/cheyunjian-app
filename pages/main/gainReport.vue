@@ -1,81 +1,68 @@
 <template>
 	<view class="content" @touchmove.stop.prevent="disabledScroll">
-		<cl-header backgroundColor="#00acdd" title="" defaultTextColor="#FFF"></cl-header>
-
-
-		<scroll-view scroll-y="true" height="100vh">
-			<view style="display: flex;
-			flex-direction: column;
-			align-items: center;
-			height: 100vh;">
-				<view style="height: 89rpx;background-color: #00acdd;width: 100%;"></view>
-				<view style="width: 100%;background-image: url('../../static/top-bg.png');background-repeat: no-repeat;
+		<view style="width: 100%;background-image: url('../../static/top-bg.png');background-repeat: no-repeat;
 				background-size: 100% 400rpx;display: flex;flex-direction: column;align-items: center;">
-					<view style="width: 90%;display: flex;flex-direction: row;align-items: center;
+			<view style="width: 90%;display: flex;flex-direction: row;align-items: center;
 					margin-top: 20rpx;justify-content: space-between;">
-						<view style="width: 62%; display: flex;flex-direction: column;color: #FFF;">
-							<text style="font-size: 38rpx;font-weight: bold;">车云检</text>
-							<text
-								style="font-size: 28rpx;opacity: 0.8;margin-top: 15rpx;">快速查询车辆五项核心数据报告提供专业准确的车辆使用养护建议及风险提示。</text>
-						</view>
-						<image src="../../static/top-icon1.png" style="width: 220rpx;height: 220rpx;"></image>
-					</view>
+				<view style="width: 62%; display: flex;flex-direction: column;color: #FFF;">
+					<text style="font-size: 38rpx;font-weight: bold;">车云检</text>
+					<text
+						style="font-size: 28rpx;opacity: 0.8;margin-top: 15rpx;">快速查询车辆五项核心数据报告提供专业准确的车辆使用养护建议及风险提示。</text>
+				</view>
+				<image src="../../static/top-icon1.png" style="width: 220rpx;height: 220rpx;"></image>
+			</view>
 
-					<view class="card" @click="openImagePage" style="height: 300rpx;">
-						<image src="../../static/vin-bg.png" style="width: 100%;height: 80%;"></image>
-						<view style="display: flex;flex-direction: column;align-items: center;position: absolute;
+			<view class="card" @click="openImagePage" style="height: 300rpx;">
+				<image src="../../static/vin-bg.png" style="width: 100%;height: 80%;"></image>
+				<view style="display: flex;flex-direction: column;align-items: center;position: absolute;
 						top: 33%;left: 32%;">
-							<u-icon name="camera" color="#00acdd" size="80rpx"></u-icon>
-							<text style="font-size: 26rpx;font-weight: bold;color: #00acdd;">上传您的行驶证照片</text>
-						</view>
-						<image style="width: 96%;height: 96%;position: absolute;
+					<uni-icons type="camera" color="#00acdd" size="80rpx"></uni-icons>
+					<text style="font-size: 26rpx;font-weight: bold;color: #00acdd;">上传您的行驶证照片</text>
+				</view>
+				<image style="width: 96%;height: 96%;position: absolute;
 						left: 2%;top: 2%;" :src="pic"></image>
-					</view>
+			</view>
 
-					<view class="card" style="margin-top: 30rpx;">
-						<view style="width: 93%;display: flex;flex-direction: row;
-					align-items: center;justify-content: space-between;padding-top: 20rpx;padding-bottom: 20rpx;">
-							<image src="../../static/icon-search.png" style="width: 45rpx;height: 45rpx;
+			<view class="card" style="margin-top: 30rpx;">
+				<view style="width: 93%;display: flex;flex-direction: row;
+					align-items: center;padding-top: 20rpx;padding-bottom: 20rpx;">
+					<image src="../../static/icon-search.png" style="width: 45rpx;height: 45rpx;
 							margin-left: 20rpx;margin-right: 20rpx;"></image>
-							<u-input placeholder="请输入17位VIN车架号" fontSize="32rpx" color="#111" border="none"></u-input>
-						</view>
-						<u-line color="#DDD"></u-line>
-						<view style="width: 100%;display: flex;flex-direction: row;align-items: center;
-						text-align: center; font-size: 26rpx;">
-							<text url="/pages/mine/fiesRecord" style="width: 49%;color: #ff8d1a;padding-top: 20rpx;padding-bottom: 20rpx;
+					<input placeholder="请输入17位VIN车架号" fontSize="32rpx" color="#111" border="none"></input>
+				</view>
+				<view style="height: 1rpx;width: 100%;background-color: #DDD;"></view>
+				<view style="width: 100%;display: flex;flex-direction: row;align-items: center;
+						text-align: center; font-size: 26rpx;justify-content: space-between;">
+					<text url="/pages/mine/fiesRecord" style="width: 49%;color: #ff8d1a;padding-top: 20rpx;padding-bottom: 20rpx;
 							font-weight: bold;" @click="openSelectItemPop">请选择检测模块<span style="font-size: 10px;">▼</span></text>
-							<view style="width: 1rpx;height: 35rpx;background-color: #DDD;"></view>
-							<u-text align="center" prefix-icon="question-circle"
-								:iconStyle="{fontSize:'35rpx',marginRight:'10rpx',color:'#00acdd'}" color="#00acdd"
-								size="26rpx" style="width: 49%;padding-top: 20rpx;padding-bottom: 20rpx;" text="如何找到车架号"
-								@click="open()"></u-text>
-						</view>
-					</view>
-
-					<u-button text="立即检测" class="btn" color="#FFF" @click="clickSubmit"></u-button>
-
-					<text class="btn-2" style="width: 90%;" @click="openDemoPop">查看检测范例</text>
-
-					<view style="width: 90%;display: flex;flex-direction: row;justify-content: space-between;color: #383838;
-					font-size: 26rpx;margin-top: 30rpx;">
-						<view style="display: flex;flex-direction: row;align-items: center;">
-							<text>积分余额：0</text>
-							<navigator url="/pages/mine/skuList" style="margin-left: 35rpx;">
-								<u-text prefix-icon="../../static/money-rmb.png" text="充值" color="#00acdd"
-									size="26rpx"></u-text>
-							</navigator>
-						</view>
-
-						<navigator url="/pages/mine/question">
-							<u-text prefix-icon="../../static/question-circle.png" text="常见问题" color="#383838"
-								size="26rpx" style="margin-left: 35rpx;"></u-text>
-						</navigator>
-					</view>
-
-					<view style="height: 150rpx;"></view>
+					<view style="width: 1rpx;height: 35rpx;background-color: #DDD;"></view>
+					<text class="iconfont icon-question" style="width: 49%;font-size: 26rpx;color: #00acdd;" @click="open()">如何找到车架号</text>
 				</view>
 			</view>
-		</scroll-view>
+
+			<button class="btn" @click="clickSubmit">立即检测</button>
+
+			<text class="btn-2" style="width: 90%;" @click="openDemoPop">查看检测范例</text>
+
+			<view style="width: 90%;display: flex;flex-direction: row;justify-content: space-between;color: #383838;
+					font-size: 26rpx;margin-top: 30rpx;">
+				<view style="display: flex;flex-direction: row;align-items: center;">
+					<text>积分余额：0</text>
+					<navigator url="/pages/mine/skuList" style="margin-left: 35rpx;color: #00acdd;display: flex;
+							flex-direction: row;align-items: center;">
+						<text class="iconfont icon-money"></text><span
+							style="margin-left: 5rpx;font-size: 28rpx;">充值</span>
+					</navigator>
+				</view>
+
+				<navigator url="/pages/mine/question" style="color: #383838;display: flex;
+						flex-direction: row;align-items: center;">
+					<text class="iconfont icon-question" style="margin-left: 5rpx;font-size: 28rpx;">常见问题</text>
+				</navigator>
+			</view>
+
+			<view style="height: 150rpx;"></view>
+		</view>
 
 		<uni-popup ref="popup" type="bottom" border-radius="15rpx 15rpx 0 0" @close="close" @open="open"
 			background-color="#FFF">
@@ -87,8 +74,11 @@
 				</scroll-view>
 			</view>
 		</uni-popup>
-
-		<u-modal :show="showModal" :content='content' confirmText="我知道了" @confirm="confirmModal"></u-modal>
+		
+		<uni-popup ref="alertDialog" type="dialog">
+			<uni-popup-dialog type="info" confirmText="我知道了" :content='content' @confirm="confirmModal"
+				:showClose="false"></uni-popup-dialog>
+		</uni-popup>
 
 		<uni-popup ref="popup2" type="bottom" border-radius="15rpx 15rpx 0 0" @close="closeDemoPop" @open="openDemoPop"
 			background-color="#FFF">
@@ -109,49 +99,49 @@
 				<scroll-view scroll-y="true">
 					<view style="width: 100%;display: flex;flex-direction: column;align-items: center;
 					background-color: #f5f5f5;">
-						<u-checkbox-group style="width: 100%;display: flex;flex-direction: column;align-items: center;"
-						@change="checkboxChange" v-model="checkboxValue1">
+						<checkbox-group style="width: 100%;display: flex;flex-direction: column;align-items: center;"
+							@change="checkboxChange" v-model="checkboxValue1">
 							<view class="item">
 								<text class="title">1.电池健康度评估</text>
 								<view class="right">
 									<text style="color: #ff8d1a;font-weight: bold;">25积分</text>
-									<u-checkbox color="#00acdd" style="margin-left: 30rpx;" shape="circle" size="30rpx"
-										 :name="checkboxList1[0].name"></u-checkbox>
+									<checkbox color="#00acdd" style="margin-left: 30rpx;" shape="circle" size="30rpx"
+										:value="checkboxList1[0].name"></checkbox>
 								</view>
 							</view>
 							<view class="item">
 								<text class="title">2.车辆电池静态数据</text>
 								<view class="right">
 									<text style="color: #ff8d1a;font-weight: bold;">10积分</text>
-									<u-checkbox color="#00acdd" style="margin-left: 30rpx;" shape="circle" size="30rpx"
-										:name="checkboxList1[1].name"></u-checkbox>
+									<checkbox color="#00acdd" style="margin-left: 30rpx;" shape="circle" size="30rpx"
+										:value="checkboxList1[1].name"></checkbox>
 								</view>
 							</view>
 							<view class="item">
 								<text class="title">3.车辆行驶数据评估（调表识别）</text>
 								<view class="right">
 									<text style="color: #ff8d1a;font-weight: bold;">30积分</text>
-									<u-checkbox color="#00acdd" style="margin-left: 30rpx;" shape="circle" size="30rpx"
-										:name="checkboxList1[2].name"></u-checkbox>
+									<checkbox color="#00acdd" style="margin-left: 30rpx;" shape="circle" size="30rpx"
+										:value="checkboxList1[2].name"></checkbox>
 								</view>
 							</view>
 							<view class="item">
 								<text class="title">4.车辆充放电数据评估</text>
 								<view class="right">
 									<text style="color: #ff8d1a;font-weight: bold;">10积分</text>
-									<u-checkbox color="#00acdd" style="margin-left: 30rpx;" shape="circle" size="30rpx"
-										:name="checkboxList1[3].name"></u-checkbox>
+									<checkbox color="#00acdd" style="margin-left: 30rpx;" shape="circle" size="30rpx"
+										:value="checkboxList1[3].name"></checkbox>
 								</view>
 							</view>
 							<view class="item">
 								<text class="title">5.电池异常报警状况评估</text>
 								<view class="right">
 									<text style="color: #ff8d1a;font-weight: bold;">5积分</text>
-									<u-checkbox color="#00acdd" style="margin-left: 30rpx;" shape="circle" size="30rpx"
-										:name="checkboxList1[4].name"></u-checkbox>
+									<checkbox color="#00acdd" style="margin-left: 30rpx;" shape="circle" size="30rpx"
+										:value="checkboxList1[4].name"></checkbox>
 								</view>
 							</view>
-						</u-checkbox-group>
+						</checkbox-group>
 						<view style="width: 100%;background-color: #FFF;display: flex;flex-direction: row;align-items: center;
 						justify-content: space-between;margin-top: 35rpx;">
 							<text style="color: #ff8d1a;font-size: 26rpx;font-weight: bold;
@@ -186,22 +176,23 @@
 				cbValue: 'cb1',
 				checkboxList1: [{
 					name: 'cb1',
-					value:25,
+					value: 25,
 				}, {
 					name: 'cb2',
-					value:10,
+					value: 10,
 				}, {
 					name: 'cb3',
-					value:30,
+					value: 30,
 				}, {
 					name: 'cb4',
-					value:10,
+					value: 10,
 				}, {
 					name: 'cb5',
-					value:5,
+					value: 5,
 				}],
-				checkboxValue1:[],
-				amount:0
+				checkboxValue1: [],
+				amount: 0,
+				content:''
 			}
 		},
 		methods: {
@@ -219,10 +210,10 @@
 				}
 			},
 			clickAddMyCar() {
-				this.showModal = true;
+				this.$refs.alertDialog.close()
 			},
 			confirmModal() {
-				this.showModal = false;
+				this.$refs.alertDialog.open()
 				this.openDemoPop()
 			},
 			closeDemoPop() {
@@ -304,32 +295,32 @@
 			clickSubmitInquire() {
 				this.closeSelectItemPop()
 			},
-			selectAll(){
+			selectAll() {
 				//全选
-				if(this.checkboxValue1.length == 5){
+				if (this.checkboxValue1.length == 5) {
 					this.checkboxValue1 = []
-				}else{
+				} else {
 					this.checkboxValue1 = []
 					for (var i = 0; i < this.checkboxList1.length; i++) {
 						this.checkboxValue1.push(this.checkboxList1[i].name)
 					}
 				}
-				
+
 				this.getAmount(this.checkboxValue1)
 			},
-			clickSelectOk(){
+			clickSelectOk() {
 				console.log(this.checkboxValue1)
-				if(this.checkboxValue1.includes('cb1') || this.checkboxValue1.includes('cb3')){
+				if (this.checkboxValue1.includes('cb1') || this.checkboxValue1.includes('cb3')) {
 					console.log('========***========')
-				}else{
+				} else {
 					this.$u.toast('模块1.3中必需选中一项')
 				}
 			},
-			getAmount(list){
+			getAmount(list) {
 				let value = 0;
 				for (var i = 0; i < list.length; i++) {
 					for (var j = 0; j < this.checkboxList1.length; j++) {
-						if(list[i] == this.checkboxList1[j].name){
+						if (list[i] == this.checkboxList1[j].name) {
 							value += this.checkboxList1[j].value
 						}
 					}
@@ -345,7 +336,6 @@
 
 	.content {
 		width: 100vw;
-		height: 100vh;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -366,6 +356,8 @@
 		margin-top: 45rpx;
 		border-radius: 20rpx;
 		margin-bottom: 35rpx;
+		fons-size: 30rpx;
+		color: #FFF;
 	}
 
 	.btn-2 {
