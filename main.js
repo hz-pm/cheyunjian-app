@@ -10,8 +10,8 @@ Object.keys(filters).forEach(key => {
 })
 
 // 引入路由
-import {router,RouterMount} from './common/router.js';
-Vue.use(router);
+// import {router,RouterMount} from './common/router.js';
+// Vue.use(router);
 
 if (!uni.$u) {
   uni.$u = {};
@@ -38,8 +38,8 @@ const app = new Vue({
     ...App
 })
 
-import installPlugin from 'pages/components/jj-messagebox/messageView/index.js'
-installPlugin(Vue)
+// import installPlugin from 'pages/components/jj-messagebox/messageView/index.js'
+// installPlugin(Vue)
 
 // http接口API集中管理引入部分
 import httpApi from '@/apis/http.api.js'
@@ -48,11 +48,10 @@ Vue.use(httpApi, app)
 import tools from '@/common/tools.js';
 Vue.use(tools, app)
 
-//v1.3.5起 H5端 你应该去除原有的app.$mount();使用路由自带的渲染方式
-// #ifdef H5
-	RouterMount(app,router,'#app')
-// #endif
-
-// #ifndef H5
 	app.$mount(); //为了兼容小程序及app端必须这样写才有效果
-// #endif
+//v1.3.5起 H5端 你应该去除原有的app.$mount();使用路由自带的渲染方式
+// // #ifdef H5
+// 	RouterMount(app,router,'#app')
+// // #endif
+// // #ifndef H5
+//// #endif

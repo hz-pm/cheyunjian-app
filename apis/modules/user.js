@@ -61,3 +61,28 @@ export function addMyCar(params){
 export function editCarInfo(params){
 	return http.post('/car/info/updateInfo', params)
 }
+
+//绑定手机号
+export function bindPhoneNumber(params1){
+	return http.post('/sms/bindPhoneNumber',{},{params:params1})
+}
+
+//绑定手机号
+export function bindEmail(params1){
+	return http.post('/index/user/bindEmail',{},{params:params1})
+}
+
+//认证企业
+export function certifiedEnterprise(params){
+	return http.post('/index/enterprise/certified',params)
+}
+
+//获取认证信息
+export function getUserEnterprise(params){
+	return http.get('/index/enterprise/getUserEnterprise',params)
+}
+
+//获取消费记录
+export function pointsRecordList(params){
+	return http.get('/index/points/pointsRecordList',params)
+}

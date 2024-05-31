@@ -66,14 +66,14 @@
 					style="height: 124rpx;width: 100%;position: absolute;bottom: 0;left: 0;
 						background-image: url('../../static/bg-home-vip-bg.png'); background-size: 100% 100%; background-repeat: no-repeat;">
 				</image>
-				<navigator url="/pages/mine/vipCard" style="width: 50%;height: 100%;display: flex;flex-direction: column;align-items: center;
+				<navigator url="/pagesA/mine/vipCard" style="width: 50%;height: 100%;display: flex;flex-direction: column;align-items: center;
 						position: relative;justify-content: center;border-right: 1px solid #e3eeee;">
 					<text style="font-size: 35rpx;font-weight: bold;">VIP会员</text>
 					<text style="color: #808080;margin-top: 5rpx;">最高享全年<span style="color: #ff8d1a;">5折优惠</span></text>
 					<text style="width: 165rpx;color: #FFF;background: linear-gradient(136.25deg,#ffb300,#ff5833);
 							border-radius: 65rpx;line-height: 65rpx;height: 65rpx;text-align: center;margin-top: 15rpx;">升级会员</text>
 				</navigator>
-				<navigator url="/pages/mine/skuList" style="width: 50%;height: 100%;display: flex;flex-direction: column;align-items: center;
+				<navigator url="/pagesA/mine/skuList" style="width: 50%;height: 100%;display: flex;flex-direction: column;align-items: center;
 						position: relative;justify-content: center;">
 					<text style="font-size: 35rpx;font-weight: bold;">积分充值</text>
 					<text style="color: #808080;margin-top: 5rpx;">积分可抵用全平台服务</text>
@@ -82,7 +82,7 @@
 				</navigator>
 			</view>
 
-			<image src="../../static/img-home-bottom.webp" style="width: 92%;height: 720rpx;border-radius: 20rpx;
+			<image src="https://api.xinnengyuanyunjian.top/profile/upload/2024/05/27/img-home-bottom.webp" style="width: 92%;height: 720rpx;border-radius: 20rpx;
 					margin-top: 35rpx;"></image>
 
 			<text
@@ -91,9 +91,10 @@
 			<view style="height: 180rpx;"></view>
 		</view>
 		
-		<navigator url="/pages/mine/baseCompany" style="width: 100%;height: 74rpx;color: #f3a54f;background: #fff8ed;position: fixed;
+		<navigator url="/pagesA/mine/baseCompany" style="width: 100%;height: 74rpx;color: #f3a54f;background: #fff8ed;position: fixed;
 				left: 0;right: 0;bottom: 0rpx;text-align: center;font-size: 28rpx;z-index: 99;display: flex;flex-direction: column;
-				justify-content: center;align-items: center;border-top: 1rpx solid #ffac52;" @click="goBaseCompany">
+				justify-content: center;align-items: center;border-top: 1rpx solid #ffac52;" @click="goBaseCompany"
+				v-if="userinfo.enterpriseCertification != 1">
 			<view style="display: flex;flex-direction: row;align-items: center;">
 				<image src="../../static/safety_fill.png" style="width: 35rpx;height: 35rpx;"></image>
 				<text style="font-size: 28rpx;margin-left: 5rpx;">申请企业认证，即可获得80积分</text>
@@ -113,11 +114,11 @@
 			return {
 				current: 0,
 				list5: [{
-						img: '../../static/img-banner.webp',
+						img: 'https://api.xinnengyuanyunjian.top/profile/upload/2024/05/27/img-banner.webp',
 						color: '#0298fe'
 					},
 					{
-						img: '../../static/img-banner-2.webp',
+						img: 'https://api.xinnengyuanyunjian.top/profile/upload/2024/05/27/img-banner-2.webp',
 						color: '#f8ce95'
 					}
 				],
@@ -173,7 +174,7 @@
 				console.log('========>' + index)
 				if (index == 0) {
 					uni.navigateTo({
-						url: '/pages/main/gainReport',
+						url: '/pagesB/main/gainReport',
 					})
 				} else if (index == 1) {
 					uni.switchTab({
@@ -181,7 +182,7 @@
 					})
 				} else if (index == 3) {
 					uni.navigateTo({
-						url: '/pages/main/gainReportD',
+						url: '/pagesB/main/gainReportD',
 					})
 				}
 			},

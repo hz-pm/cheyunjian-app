@@ -30,7 +30,7 @@
 					<view style="height: 1rpx;width: 100%;background-color: #DDD;"></view>
 					<view style="width: 100%;display: flex;flex-direction: row;align-items: center;
 							text-align: center; font-size: 28rpx;font-weight: bold;">
-						<navigator url="/pages/mine/fiesRecord"
+						<navigator url="/pagesA/mine/fiesRecord"
 							style="width: 49%;color: #808080;padding-top: 20rpx;padding-bottom: 20rpx;">历史记录</navigator>
 						<view style="width: 1rpx;height: 35rpx;background-color: #DDD;"></view>
 						<text style="width: 49%;color: #ff8d1a;padding-top: 20rpx;padding-bottom: 20rpx;"
@@ -55,7 +55,7 @@
 					font-size: 26rpx;margin-top: 30rpx;">
 				<view style="display: flex;flex-direction: row;align-items: center;">
 					<text>积分余额：{{vuex_points_info.realityQty}}</text>
-					<navigator url="/pages/mine/skuList" style="margin-left: 35rpx;color: #00acdd;display: flex;
+					<navigator url="/pagesA/mine/skuList" style="margin-left: 35rpx;color: #00acdd;display: flex;
 							flex-direction: row;align-items: center;">
 						<text class="iconfont icon-money"></text><span
 							style="margin-left: 5rpx;font-size: 28rpx;">充值</span>
@@ -63,7 +63,7 @@
 				</view>
 
 				<view style="display: flex;flex-direction: row;align-items: center;">
-					<navigator url="/pages/mine/question" style="color: #383838;display: flex;
+					<navigator url="/pagesA/mine/question" style="color: #383838;display: flex;
 							flex-direction: row;align-items: center;">
 						<text class="iconfont icon-question" style="margin-left: 5rpx;font-size: 28rpx;">常见问题</text>
 					</navigator>
@@ -195,7 +195,7 @@
 <script>
 	import projectConfig from '@/common/config.js';
 	const citysList = require('@/data/citysList.json')
-	import test from '../../utils/test.js'
+	import test from '../../utils/test/test.js'
 
 	import {
 		getCarInfoList,
@@ -204,7 +204,7 @@
 	} from '../../apis/modules/user';
 	export default {
 		components: {
-			test
+			
 		},
 		data() {
 			return {
@@ -274,7 +274,7 @@
 			},
 			argeement(type) {
 				uni.navigateTo({
-					url: '/pages/reg/webview?type=' + type
+					url: '/pagesB/reg/webView?type=' + type
 				})
 			},
 			clickAddSubmit() {
@@ -385,6 +385,9 @@
 					sizeType: ['compressed'],
 					sourceType: ['album', 'camera'],
 					success: function(res) {
+						uni.showLoading({
+							title: 'Loading...'
+						});
 						//上传图片
 						that.uploadImage(res.tempFilePaths)
 					}
@@ -393,10 +396,6 @@
 			uploadImage(tempFilePaths) {
 				let _this = this;
 				console.log('===***===>' + projectConfig.baseUrl)
-				
-				uni.showLoading({
-					title: 'Loading...'
-				});
 				uni.uploadFile({
 					url: projectConfig.baseUrl + '/index/user/uploadImg', //接口地址
 					header: {
@@ -408,11 +407,6 @@
 						uni.hideLoading();
 						let data = JSON.parse(res.data);
 						if(data.code == 200){
-							uni.showToast({
-								title: '上传成功',
-								icon: 'none'
-							})
-							
 							_this.pic = data.data
 						}
 						console.log('===Upload===>' + JSON.stringify(res))

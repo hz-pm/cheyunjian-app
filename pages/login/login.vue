@@ -33,8 +33,8 @@
 
 			<view style="width: 90%;display: flex;flex-direction: row;align-items: center;justify-content: space-between;
 			color: #00acdd;font-size: 26rpx;margin-top: 35rpx;align-self: center;" v-if="selectTab == 1">
-				<navigator url="/pages/reg/updatePassword">忘记密码</navigator>
-				<navigator url="/pages/reg/register">注册新账号</navigator>
+				<navigator url="/pagesB/reg/updatePassword">忘记密码</navigator>
+				<navigator url="/pagesB/reg/register">注册新账号</navigator>
 			</view>
 
 			<button class="btn"@click="login">登录</button>
@@ -55,7 +55,7 @@
 </template>
 
 <script>
-	import test from '../../utils/test.js'
+	import test from '../../utils/test/test.js'
 	import {
 		userLogin,
 		loginByCode,
@@ -64,14 +64,14 @@
 	} from '../../apis/modules/user';
 	export default {
 		components: {
-			test,
+			
 		},
 		data() {
 			return {
 				phone: '17673040529',
 				pwd: '123456',
 				code: '',
-				selectTab: 0,
+				selectTab: 1,
 				tips: '获取验证码',
 				cbValue: 'cb1',
 				checked: true,
@@ -137,7 +137,8 @@
 								icon: 'none'
 							})
 							//保存token
-							that.$u.vuex('vuex_token',res.token)
+							// that.$u.vuex('vuex_token',res.token)
+							uni.setStorageSync('TOKEN',res.token)
 							//获取用户信息
 							that.getUserInfo2()
 						}else{
@@ -159,8 +160,8 @@
 								icon: 'none'
 							})
 							//保存token
-							that.$u.vuex('vuex_token',res.token)
-							// uni.setStorageSync('TOKEN',res.token)
+							// that.$u.vuex('vuex_token',res.token)
+							uni.setStorageSync('TOKEN',res.token)
 							//获取用户信息
 							that.getUserInfo2()
 						}else{
@@ -259,7 +260,7 @@
 			},
 			argeement(type) {
 				uni.navigateTo({
-					url:'/pages/reg/webview?type='+type,
+					url:'/pagesB/reg/webView?type='+type,
 				})
 			}
 		}

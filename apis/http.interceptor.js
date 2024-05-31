@@ -61,7 +61,8 @@ http.interceptors.request.use((config) => {
 	config.header = {
 		...config.header,
 		//权限标识
-		'Authorization':getApp().vuex_token,
+		// 'Authorization':getApp().vuex_token,
+		'Authorization':uni.getStorageSync("TOKEN"),
 		//客户端标识
 		platform:setting.PLATFORM
 	}

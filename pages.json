@@ -6,197 +6,184 @@
 
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
-            "path" : "pages/login/login",
+			"path": "pages/login/login",
 			"name": "login",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "登录车数万维",
-                "enablePullDownRefresh": false,
-				"navigationStyle": "default"
-            }
-            
-        }
-        ,{
-            "path" : "pages/main/main",
-            "style" :                                                                                    
-            {
-                "enablePullDownRefresh": false,
-				"navigationStyle": "default"
-            }
-            
-        }
-        ,{
-            "path" : "pages/main/queryTramFiles",
-            "style" :                                                                                    
-            {
-                "enablePullDownRefresh": false,
-				"navigationStyle": "default"
-            }
-            
-        }
-        ,{
-            "path" : "pages/main/mine",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "我的",
-                "enablePullDownRefresh": false,
-        		"navigationStyle": "default"
-            }
-            
-        },{
-            "path" : "pages/mine/myInfo",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "个人设置",
-                "enablePullDownRefresh": false,
-				"navigationStyle": "default"
-            }
-            
-        },{
-            "path" : "pages/mine/baseCompany",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "企业认证",
-                "enablePullDownRefresh": false,
-				"navigationStyle": "default"
-            }
-            
-        },{
-            "path" : "pages/mine/vipCard",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "购买会员权益",
-                "enablePullDownRefresh": false,
-				"navigationStyle": "default"
-            }
-            
-        },{
-            "path" : "pages/mine/skuList",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "积分充值",
-                "enablePullDownRefresh": false,
-				"navigationStyle": "default"
-            }
-            
-        },{
-            "path" : "pages/mine/recharge",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "充值记录",
-                "enablePullDownRefresh": false,
-				"navigationStyle": "default"
-            }
-            
-        },{
-            "path" : "pages/mine/rechargeDetails",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "订单详情",
-                "enablePullDownRefresh": false,
-				"navigationStyle": "default"
-            }
-            
-        },
-        {
-        	"path" : "pages/reg/webView",
-        	"style" : 
-        	{
-        	    "enablePullDownRefresh": false,
-        		"navigationStyle": "default"
-        	}
-        },
-        {
-        	"path" : "pages/reg/register",
-        	"style" : 
-        	{
-        	    "navigationBarTitleText": "注册车数万维",
-        	    "enablePullDownRefresh": false,
-        		"navigationStyle": "default"
-        	}
-        },
-        {
-        	"path" : "pages/reg/updatePassword",
-        	"style" : 
-        	{
-        	    "navigationBarTitleText": "修改密码",
-        	    "enablePullDownRefresh": false,
-        		"navigationStyle": "default"
-        	}
-        },
-		{
-			"path" : "pages/mine/bill",
-			"style" : 
-			{
-			    "navigationBarTitleText": "消费账单",
-			    "enablePullDownRefresh": false,
+			"style": {
+				"navigationBarTitleText": "登录车数万维",
+				"enablePullDownRefresh": false,
 				"navigationStyle": "default"
 			}
-		},
-		{
-			"path" : "pages/mine/carRecord",
-			"style" : 
-			{
-			    "navigationBarTitleText": "车云检记录",
-			    "enablePullDownRefresh": false,
+
+		}, {
+			"path": "pages/main/main",
+			"style": {
+				"enablePullDownRefresh": false,
 				"navigationStyle": "default"
 			}
-		},
-		{
-			"path" : "pages/mine/appraiseRecord",
-			"style" : 
-			{
-			    "navigationBarTitleText": "电易估记录",
-			    "enablePullDownRefresh": false,
+
+		}, {
+			"path": "pages/main/queryTramFiles",
+			"style": {
+				"enablePullDownRefresh": false,
 				"navigationStyle": "default"
 			}
-		},
-		{
-			"path" : "pages/mine/question",
-			"style" : 
-			{
-			    "navigationBarTitleText": "常见问题",
-			    "enablePullDownRefresh": false,
+
+		}, {
+			"path": "pages/main/mine",
+			"style": {
+				"navigationBarTitleText": "我的",
+				"enablePullDownRefresh": false,
 				"navigationStyle": "default"
 			}
-		},
-		{
-			"path" : "pages/mine/fiesRecord",
-			"style" : 
-			{
-				"navigationBarTitleText" : "车智驾记录",
-				"enablePullDownRefresh" : false,
-				"navigationStyle": "default"
-			}
-		},
-		{
-			"path" : "pages/main/gainReport",
-			"style" : 
-			{
-				"navigationBarTitleText" : "",
-				"enablePullDownRefresh" : false,
-				"navigationStyle": "default"
-			}
-		},
-		{
-			"path" : "pages/main/gainReportD",
-			"style" : 
-			{
-				"navigationBarTitleText" : "",
-				"enablePullDownRefresh" : false,
-				"navigationStyle": "default"
-			}
-		},
-		{
-			"path" : "pages/main/detectionReport",
-			"style" : 
-			{
-				"navigationBarTitleText" : "车云检报告",
-				"enablePullDownRefresh" : false,
-				"navigationStyle": "default"
-			}
+
 		}
-    ],
+	],
+	"subPackages": [
+		{
+		"root": "pagesA",
+		"pages": [{
+				"path": "mine/bill",
+				"style": {
+					"navigationBarTitleText": "消费账单",
+					"enablePullDownRefresh": false,
+					"navigationStyle": "default"
+				}
+			},
+			{
+				"path": "mine/carRecord",
+				"style": {
+					"navigationBarTitleText": "车云检记录",
+					"enablePullDownRefresh": false,
+					"navigationStyle": "default"
+				}
+			},
+			{
+				"path": "mine/appraiseRecord",
+				"style": {
+					"navigationBarTitleText": "电易估记录",
+					"enablePullDownRefresh": false,
+					"navigationStyle": "default"
+				}
+			},
+			{
+				"path": "mine/question",
+				"style": {
+					"navigationBarTitleText": "常见问题",
+					"enablePullDownRefresh": false,
+					"navigationStyle": "default"
+				}
+			},
+			{
+				"path": "mine/fiesRecord",
+				"style": {
+					"navigationBarTitleText": "车智驾记录",
+					"enablePullDownRefresh": false,
+					"navigationStyle": "default"
+				}
+			},
+			{
+				"path": "mine/myInfo",
+				"style": {
+					"navigationBarTitleText": "个人设置",
+					"enablePullDownRefresh": false,
+					"navigationStyle": "default"
+				}
+			
+			}, {
+				"path": "mine/baseCompany",
+				"style": {
+					"navigationBarTitleText": "企业认证",
+					"enablePullDownRefresh": false,
+					"navigationStyle": "default"
+				}
+			
+			}, {
+				"path": "mine/vipCard",
+				"style": {
+					"navigationBarTitleText": "购买会员权益",
+					"enablePullDownRefresh": false,
+					"navigationStyle": "default"
+				}
+			
+			}, {
+				"path": "mine/skuList",
+				"style": {
+					"navigationBarTitleText": "积分充值",
+					"enablePullDownRefresh": false,
+					"navigationStyle": "default"
+				}
+			
+			}, {
+				"path": "mine/recharge",
+				"style": {
+					"navigationBarTitleText": "充值记录",
+					"enablePullDownRefresh": false,
+					"navigationStyle": "default"
+				}
+			
+			}, {
+				"path": "mine/rechargeDetails",
+				"style": {
+					"navigationBarTitleText": "订单详情",
+					"enablePullDownRefresh": false,
+					"navigationStyle": "default"
+				}
+			
+			}
+		]
+	},{
+		"root":"pagesB",
+		"pages": [
+			{
+				"path": "reg/webView",
+				"style": {
+					"enablePullDownRefresh": false,
+					"navigationStyle": "default"
+				}
+			},
+			{
+				"path": "reg/register",
+				"style": {
+					"navigationBarTitleText": "注册车数万维",
+					"enablePullDownRefresh": false,
+					"navigationStyle": "default"
+				}
+			},
+			{
+				"path": "reg/updatePassword",
+				"style": {
+					"navigationBarTitleText": "修改密码",
+					"enablePullDownRefresh": false,
+					"navigationStyle": "default"
+				}
+			},
+			{
+				"path": "main/detectionReport",
+				"style": {
+					"navigationBarTitleText": "车云检报告",
+					"enablePullDownRefresh": false,
+					"navigationStyle": "default"
+				}
+			},
+			{
+				"path": "main/gainReport",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false,
+					"navigationStyle": "default"
+				}
+			},
+			{
+				"path": "main/gainReportD",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false,
+					"navigationStyle": "default"
+				}
+			}
+		]
+	}
+	],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "车数万维",

@@ -19,7 +19,7 @@
 						</view>
 						<uni-icons type="settings" color="#FFF" size="26" @click="goSetting"></uni-icons>
 					</view>
-					<navigator url="/pages/mine/vipCard" style="width: 92%;display: flex;flex-direction: row;align-items: center;justify-content: center;
+					<navigator url="/pagesA/mine/vipCard" style="width: 92%;display: flex;flex-direction: row;align-items: center;justify-content: center;
 					background-image: url('../../static/vip-menu-bg.png');background-repeat: no-repeat;background-size: 100% 100%;
 					height: 80rpx;margin-top: 40rpx;border-top-left-radius: 15rpx;border-top-right-radius: 15rpx;">
 						<view style="width: 92%; display: flex;flex-direction: row;align-items: center;
@@ -35,8 +35,9 @@
 						</view>
 					</navigator>
 				</view>
-				<navigator url="/pages/mine/baseCompany" style="width: 100%;height: 74rpx;color: #f3a54f;background: #fff8ed;text-align: center;font-size: 28rpx;z-index: 99;display: flex;flex-direction: column;
-				justify-content: center;align-items: center;border-bottom: 1px solid rgba(243,165,79,.5);">
+				<navigator url="/pagesA/mine/baseCompany" style="width: 100%;height: 74rpx;color: #f3a54f;background: #fff8ed;text-align: center;font-size: 28rpx;z-index: 99;display: flex;flex-direction: column;
+				justify-content: center;align-items: center;border-bottom: 1px solid rgba(243,165,79,.5);"
+				v-if="userinfo.enterpriseCertification != 1">
 					<view style="display: flex;flex-direction: row;align-items: center;">
 						<image src="../../static/safety_fill.png" style="width: 35rpx;height: 35rpx;"></image>
 						<text style="font-size: 28rpx;margin-left: 5rpx;">申请企业认证，即可获得80积分</text>
@@ -46,25 +47,25 @@
 
 				<view style="width: 92%;display: flex;flex-direction: row;align-items: center;justify-content: space-between;
 				margin-top: 25rpx;margin-bottom: 25rpx;">
-					<navigator url="/pages/mine/bill" style="width: 33%;display: flex;flex-direction: column;align-items: center;
+					<navigator url="/pagesA/mine/bill" style="width: 33%;display: flex;flex-direction: column;align-items: center;
 					border-right: 0.5px solid rgba(0,0,0,.1);">
-						<text style="font-size: 32rpx;font-weight: bold;color: #00acdd;">13205</text>
+						<text style="font-size: 32rpx;font-weight: bold;color: #00acdd;">{{pointsInfo.realityQty}}</text>
 						<text style="font-size: 28rpx;color: #808080;margin-top: 5rpx;">剩余积分</text>
 					</navigator>
-					<navigator url="/pages/mine/bill" style="width: 33%;display: flex;flex-direction: column;align-items: center;
+					<navigator url="/pagesA/mine/bill" style="width: 33%;display: flex;flex-direction: column;align-items: center;
 					border-right: 0.5px solid rgba(0,0,0,.1);">
-						<text style="font-size: 32rpx;font-weight: bold;color: #00acdd;">61790</text>
+						<text style="font-size: 32rpx;font-weight: bold;color: #00acdd;">{{pointsInfo.useQty}}</text>
 						<text style="font-size: 28rpx;color: #808080;margin-top: 5rpx;">已使用积分</text>
 					</navigator>
-					<navigator url="/pages/mine/recharge"
+					<navigator url="/pagesA/mine/recharge"
 						style="width: 33%;display: flex;flex-direction: column;align-items: center;">
-						<text style="font-size: 32rpx;font-weight: bold;color: #00acdd;">32416.5</text>
+						<text style="font-size: 32rpx;font-weight: bold;color: #00acdd;">{{pointsInfo.rechargeAmount}}</text>
 						<text style="font-size: 28rpx;color: #808080;margin-top: 5rpx;">总充值金额</text>
 					</navigator>
 				</view>
 				<view style="width: 100%;height: 25rpx;background-color: #f5f5f5;"></view>
 
-				<navigator url="/pages/mine/skuList" class="cell">
+				<navigator url="/pagesA/mine/skuList" class="cell">
 					<view class="cell-1">
 						<view class="cell-1-left">
 							<text class="iconfont icon-money Licon" ></text>积分充值
@@ -74,7 +75,7 @@
 					<view style="height: 1rpx; width: 84%;align-self: flex-end;background-color: #f5f5f5;"></view>
 				</navigator>
 
-				<navigator url="/pages/mine/recharge" class="cell">
+				<navigator url="/pagesA/mine/recharge" class="cell">
 					<view class="cell-1">
 						<view class="cell-1-left">
 							<text class="iconfont icon-recharge Licon"></text>充值记录
@@ -85,7 +86,7 @@
 				</navigator>
 
 				<view style="width: 100%;height: 25rpx;background-color: #f5f5f5;"></view>
-				<navigator url="/pages/mine/carRecord" class="cell">
+				<navigator url="/pagesA/mine/carRecord" class="cell">
 					<view class="cell-1">
 						<view class="cell-1-left">
 							<text class="iconfont icon-search Licon"></text>车云检记录
@@ -94,7 +95,7 @@
 					</view>
 					<view style="height: 1rpx; width: 84%;align-self: flex-end;background-color: #f5f5f5;"></view>
 				</navigator>
-				<navigator url="/pages/mine/carRecord" class="cell">
+				<navigator url="/pagesA/mine/carRecord" class="cell">
 					<view class="cell-1">
 						<view class="cell-1-left">
 							<text class="iconfont icon-huishou Licon"></text>电易估记录
@@ -137,7 +138,7 @@
 <script>
 	import projectConfig from '@/common/config.js';
 	import {
-		getIndexContent,
+		getUserInfo
 	} from '../../apis/modules/user';
 	export default {
 		components: {},
@@ -145,15 +146,34 @@
 			return {
 				phoneList: ['13316028972', '呼叫'],
 				userinfo: {},
+				pointsInfo: {}
 			}
 		},
 		onLoad() {
+			
+		},
+		onShow() {
+			this.pointsInfo =  this.vuex_points_info
 			this.userinfo =  this.vuex_userinfo
+			
+			//获取用户信息
+			getUserInfo().then((res) => {
+				console.log('getuserInfo', res)
+				if(res.code === 200){
+					this.$u.vuex('vuex_userinfo',res.data)
+					this.userinfo = res.data
+				}else{
+					uni.showToast({
+						title: res.msg,
+						icon: 'none'
+					})
+				}
+			})
 		},
 		methods: {
 			goSetting() {
 				uni.navigateTo({
-					url: '/pages/mine/myInfo'
+					url: '/pagesA/mine/myInfo'
 				})
 			},
 			clickKfPhone() {
