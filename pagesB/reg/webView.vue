@@ -13,9 +13,9 @@
 		},
 		onLoad(op) {
 			if(op.type == 1){
-				this.url = 'https://doc.fjcyxny.cn/csww/user-agreement.html?v=2024328'
+				this.url = 'https://xinnengyuanyunjian.top/user-agreement.html'
 			}else if(op.type == 2){
-				this.url = 'https://doc.fjcyxny.cn/csww/privacy-policies.html?v=2024329'
+				this.url = 'https://xinnengyuanyunjian.top/privacy-policies.html'
 			}
 		},
 		methods: {

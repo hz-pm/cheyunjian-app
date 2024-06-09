@@ -4,7 +4,7 @@
 		<view style="width: 100%;">
 			<view style="width: 100%;height: 90rpx;
 					display: flex;flex-direction: row;align-items: center;justify-content: center;"
-				:style="'background-color: '+list5[current].color">
+				:style="'background-color: '+list5[current].color" v-if="false">
 				<image src="../../static/logo.png" style="width: 280rpx;height: 60rpx;"></image>
 			</view>
 			<swiper class="swiper" circular :indicator-dots="true" :autoplay="true" interval="4000" duration="500"
@@ -32,7 +32,7 @@
 					<view style="display: flex;flex-direction: column;margin-left: 30rpx;">
 						<text style="font-size: 30rpx;color: #111;font-weight: bold;">{{userinfo.userName}}</text>
 						<text style="font-size: 28rpx;color: #808080;
-								margin-top: 8rpx;">您好，欢迎使用车数万维～</text>
+								margin-top: 8rpx;">您好，欢迎使用新能源云检～</text>
 					</view>
 				</view>
 				<view style="display: flex;flex-direction: column;align-items: center;">
@@ -82,12 +82,12 @@
 				</navigator>
 			</view>
 
-			<image src="https://api.xinnengyuanyunjian.top/profile/upload/2024/05/27/img-home-bottom.webp" style="width: 92%;height: 720rpx;border-radius: 20rpx;
+			<image src="../../static/img-home-bottom.webp" style="width: 92%;height: 720rpx;border-radius: 20rpx;
 					margin-top: 35rpx;"></image>
 
 			<text
 				style="width: 92%;font-size: 28rpx;transform: scale(0.8); color: #808080;text-align: center;margin-top: 35rpx;">Copyright
-				© 2022 福建常岳新能源科技有限公司</text>
+				© 2024 株洲云检新能源科技有限公司</text>
 			<view style="height: 180rpx;"></view>
 		</view>
 		
@@ -114,11 +114,11 @@
 			return {
 				current: 0,
 				list5: [{
-						img: 'https://api.xinnengyuanyunjian.top/profile/upload/2024/05/27/img-banner.webp',
+						img: '../../static/img-banner.webp',
 						color: '#0298fe'
 					},
 					{
-						img: 'https://api.xinnengyuanyunjian.top/profile/upload/2024/05/27/img-banner-2.webp',
+						img: '../../static/img-banner-2.webp',
 						color: '#f8ce95'
 					}
 				],

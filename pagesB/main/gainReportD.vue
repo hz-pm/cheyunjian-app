@@ -130,10 +130,9 @@
 				</view>
 				<scroll-view scroll-y="true" style="height: 80vh;">
 					<view style="width: 100%;display: flex;flex-direction: column;align-items: center;">
-						<!-- <image src="../../static/example-m-dyg2-2.webp" style="width: 100%;height: 3600rpx;" -->
-						<image src="https://api.xinnengyuanyunjian.top/profile/upload/2024/05/27/example-m-dyg2-2.webp" style="width: 100%;height: 3600rpx;"
+						<image src="../../static/example-m-dyg2-2.webp" style="width: 100%;height: 3600rpx;"
 							v-if="curTab===1"></image>
-						<image src="https://api.xinnengyuanyunjian.top/profile/upload/2024/05/27/example-m-dyg2-3.webp" style="width: 100%;height: 3900rpx;"
+						<image src="../../static/example-m-dyg2-3.webp" style="width: 100%;height: 3900rpx;"
 							v-if="curTab===2"></image>
 						<view style="height: 80rpx;"></view>
 					</view>
@@ -183,6 +182,8 @@
 				typeColumns: ['车架号(VIN)', '电池包编码', '整车型号(公告号)'],
 				companyType: '车架号(VIN)',
 				curTab: 1,
+				img1:'',
+				img1:'',
 			}
 		},
 		methods: {

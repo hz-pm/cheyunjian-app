@@ -20,7 +20,7 @@
 		<view style="width: 95%;background-color: #f8f8f8;margin-top: 35rpx;
 		display: flex;flex-direction: column;align-items: center;border-radius: 15rpx;">
 			<view style="font-size: 26rpx;color: #413d3c;width: 95%;
-			margin-top: 20rpx;margin-top: 20rpx;">若您对车数万维提供的“新能源汽车价值评估服务”服务仍有疑问，您可以随时通过公众号或小程序联系相关经纪人或客服等多种方式与我们联系沟通。</view>
+			margin-top: 20rpx;margin-top: 20rpx;">若您对新能源云检提供的“新能源汽车价值评估服务”服务仍有疑问，您可以随时通过公众号或小程序联系相关经纪人或客服等多种方式与我们联系沟通。</view>
 		</view>
 
 	</view>

@@ -1,5 +1,5 @@
 <template>
-	<view class="content" @touchmove.stop.prevent="disabledScroll">
+	<view class="content">
 		<view style="width: 100%;background-image: url('../../static/top-bg.png');background-repeat: no-repeat;
 				background-size: 100% 400rpx;display: flex;flex-direction: column;align-items: center;">
 			<view style="width: 90%;display: flex;flex-direction: row;align-items: center;
@@ -462,8 +462,6 @@
 </script>
 
 <style lang="scss">
-	page {}
-
 	.content {
 		width: 100vw;
 		display: flex;

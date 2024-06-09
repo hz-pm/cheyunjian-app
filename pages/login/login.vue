@@ -1,7 +1,5 @@
 <template>
 	<view class="content">
-		
-		
 		<view class="top-v">
 			<view style="height: 180rpx;"></view>
 			<image src="../../static/logo-login.png" style="width: 200rpx;height: 220rpx;"></image>

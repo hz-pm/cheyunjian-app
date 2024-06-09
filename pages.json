@@ -9,7 +9,7 @@
 			"path": "pages/login/login",
 			"name": "login",
 			"style": {
-				"navigationBarTitleText": "登录车数万维",
+				"navigationBarTitleText": "登录新能源云检",
 				"enablePullDownRefresh": false,
 				"navigationStyle": "default"
 			}
@@ -144,7 +144,7 @@
 			{
 				"path": "reg/register",
 				"style": {
-					"navigationBarTitleText": "注册车数万维",
+					"navigationBarTitleText": "注册新能源云检",
 					"enablePullDownRefresh": false,
 					"navigationStyle": "default"
 				}
@@ -186,7 +186,7 @@
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
-		"navigationBarTitleText": "车数万维",
+		"navigationBarTitleText": "新能源云检",
 		"navigationStyle": "default",
 		"navigationBarBackgroundColor": "#00acdd",
 		"backgroundColor": "#f7fafa"

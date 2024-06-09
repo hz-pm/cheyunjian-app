@@ -10,8 +10,10 @@
 					<view style="width: 92%;display: flex;flex-direction: row;align-items: center;margin-top: 40rpx;
 					justify-content: space-between;">
 						<view style="display: flex;flex-direction: row;align-items: center;">
-							<image src="../../static/ic-default-avatar.png" style="width: 120rpx;height: 120rpx;">
-							</image>
+							<view style="width: 110rpx;">
+								<image src="../../static/ic-default-avatar.png" style="width: 110rpx;height: 110rpx;">
+								</image>
+							</view>
 							<view style="display: flex;flex-direction: column;margin-left: 35rpx;color: #FFF;">
 								<text style="font-size: 30rpx;font-weight: bold;">{{userinfo.nickName}}</text>
 								<text style="font-size: 26rpx;margin-top: 10rpx;">ID：{{userinfo.userId}}</text>
@@ -26,7 +28,7 @@
 						justify-content: space-between;color: #111;font-size: 30rpx;">
 							<view style="display: flex;flex-direction: row;align-items: center;">
 								<image src="../../static/ic-VIP.png" style="width: 50rpx;height: 50rpx;"></image>
-								<text style="margin-left: 10rpx;font-weight: bold;">升级车数万维VIP</text>
+								<text style="margin-left: 10rpx;font-weight: bold;">升级新能源云检VIP</text>
 							</view>
 							<view style="display: flex;flex-direction: row;align-items: center;">
 								<text>最高享全年5折</text>
