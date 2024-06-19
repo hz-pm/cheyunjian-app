@@ -16,6 +16,8 @@
 				this.url = 'https://xinnengyuanyunjian.top/user-agreement.html'
 			}else if(op.type == 2){
 				this.url = 'https://xinnengyuanyunjian.top/privacy-policies.html'
+			}else if(op.type == 3){
+				this.url = 'https://xinnengyuanyunjian.top/vip-policies.html'
 			}
 		},
 		methods: {

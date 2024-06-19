@@ -12,8 +12,8 @@
 							<image src="../../static/ic-default-avatar.png" style="width: 120rpx;height: 120rpx;">
 							</image>
 							<view style="display: flex;flex-direction: column;margin-left: 35rpx;color: #FFF;">
-								<text style="font-size: 30rpx;font-weight: bold;">小程序用户</text>
-								<text style="font-size: 26rpx;margin-top: 10rpx;">ID：946173477174890496</text>
+								<text style="font-size: 30rpx;font-weight: bold;">{{userinfo.nickName}}</text>
+								<text style="font-size: 26rpx;margin-top: 10rpx;">ID：{{userinfo.userId}}</text>
 							</view>
 						</view>
 					</view>
@@ -31,9 +31,9 @@
 				</view>
 
 				<view class="vip-v">
-					<view class="item-v" :class="vipIndex == 0?'item-select':''" @click="clickItem(0)">
+					<view class="item-v" :class="vipIndex == 1?'item-select':''" @click="clickItem(1)">
 						<view class="top">
-							<image :src="vipIndex==0?'../../static/f-vip2.png':'../../static/f-vip2-grey.png'"
+							<image :src="vipIndex==1?'../../static/f-vip2.png':'../../static/f-vip2-grey.png'"
 								style="width: 35rpx;height: 35rpx;"></image>
 							<text class="top-t">VIP会员</text>
 						</view>
@@ -47,10 +47,10 @@
 						</view>
 					</view>
 
-					<view class="item-v" :class="vipIndex == 1?'item-select':''" @click="clickItem(1)">
+					<view class="item-v" :class="vipIndex == 2?'item-select':''" @click="clickItem(2)">
 						<view class="top">
 							<image
-								:src="vipIndex==1?'../../static/vip-crown-2-fill.png':'../../static/vip-crown-2-fill-grey.png'"
+								:src="vipIndex==2?'../../static/vip-crown-2-fill.png':'../../static/vip-crown-2-fill-grey.png'"
 								style="width: 35rpx;height: 35rpx;"></image>
 							<text class="top-t">SVIP会员</text>
 						</view>
@@ -92,14 +92,14 @@
 					<view style="height: 60rpx;"></view>
 				</view>
 				
-				<button class="btn">立即购买</button>
+				<button class="btn" @click="clickPay">立即购买</button>
 				<checkbox-group style="display: flex;flex-direction: row;align-items: center;font-size: 26rpx;"
 					@change="checkboxChange">
 					<checkbox value="cb1" :checked="checked"></checkbox>
 					<text @click="checkedCb" style="color: #111;font-size: 30rpx;">我已阅读并同意<span 
-					style="color: #00acdd;" @click="argeement(1)">《VIP会员服务协议》</span></text>
+					style="color: #00acdd;" @click="argeement(3)">《VIP会员服务协议》</span></text>
 				</checkbox-group>
-				
+				<view style="height: 80rpx;"></view>
 			</view>
 		</scroll-view>
 	</view>
@@ -107,16 +107,21 @@
 
 <script>
 	import projectConfig from '@/common/config.js';
+	import test from '../../utils/test/test.js'
 	import {
-		getIndexContent,
+		getVip,
 	} from '../../apis/modules/user';
 	export default {
 		components: {},
 		data() {
 			return {
-				vipIndex: 0,
-				checked:false
+				vipIndex: 1,
+				checked:false,
+				userinfo: {},
 			}
+		},
+		onLoad() {
+			this.userinfo =  this.vuex_userinfo
 		},
 		methods: {
 			goSetting() {
@@ -128,9 +133,39 @@
 				this.vipIndex = index;
 			},
 			checkboxChange(e){
-				console.log(e)
-				this.checked = e.detail.value.indexOf('cb1') !== -1
+				if (n.detail.value.length > 0) {
+					this.checked = true
+				} else {
+					this.checked = false
+				}
 			},
+			checkedCb() {
+				this.checked = !this.checked
+			},
+			argeement(type) {
+				uni.navigateTo({
+					url: '/pagesB/reg/webView?type=' + type
+				})
+			},
+			clickPay(){
+				if (!this.checked) {
+					uni.showToast({
+						title: '请先阅读并同意VIP会员协议',
+						icon: 'none'
+					})
+					return
+				}
+				getVip({
+					type:this.vipIndex
+				}).then((res) => {
+					console.log(res)
+					
+					uni.showToast({
+						title:'购买成功！',
+						icon:'success'
+					})
+				})
+			}
 		}
 	}
 </script>

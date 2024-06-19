@@ -3,56 +3,56 @@
 		<view class="cell">
 			<view class="cell-1">
 				<text style="color: #a6a6a6;">订单编号</text>
-				<text style="color: #111;">B883517127928565760</text>
+				<text style="color: #111;">{{detail.rechargeId}}</text>
 			</view>
 			<view class="line"></view>
 		</view>
 		<view class="cell">
 			<view class="cell-1">
 				<text style="color: #a6a6a6;">购买积分</text>
-				<text style="color: #111;">100</text>
+				<text style="color: #111;">{{detail.qty}}</text>
 			</view>
 			<view class="line"></view>
 		</view>
 		<view class="cell">
 			<view class="cell-1">
 				<text style="color: #a6a6a6;">应付金额</text>
-				<text style="color: #111;">30元</text>
+				<text style="color: #111;">{{detail.payable}}元</text>
 			</view>
 			<view class="line"></view>
 		</view>
 		<view class="cell">
 			<view class="cell-1">
 				<text style="color: #a6a6a6;">实付金额</text>
-				<text style="color: #111;">30元</text>
+				<text style="color: #111;">{{detail.actuallyPaid}}元</text>
 			</view>
 			<view class="line"></view>
 		</view>
 		<view class="cell">
 			<view class="cell-1">
 				<text style="color: #a6a6a6;">优惠金额</text>
-				<text style="color: #111;">0元</text>
+				<text style="color: #111;">{{detail.discount}}元</text>
 			</view>
 			<view class="line"></view>
 		</view>
 		<view class="cell">
 			<view class="cell-1">
 				<text style="color: #a6a6a6;">支付方式</text>
-				<text style="color: #111;">微信支付</text>
+				<text style="color: #111;">{{detail.payWay}}</text>
 			</view>
 			<view class="line"></view>
 		</view>
 		<view class="cell">
 			<view class="cell-1">
 				<text style="color: #a6a6a6;">支付单号</text>
-				<text style="color: #111;">4200001814202307319324.</text>
+				<text style="color: #111;">{{detail.payNo}}</text>
 			</view>
 			<view class="line"></view>
 		</view>
 		<view class="cell">
 			<view class="cell-1">
 				<text style="color: #a6a6a6;">支付时间</text>
-				<text style="color: #111;">2023-07-31 22:22:44</text>
+				<text style="color: #111;">{{detail.createTime}}</text>
 			</view>
 			<view class="line"></view>
 		</view>
@@ -67,9 +67,14 @@
 		components: {},
 		data() {
 			return {
-				list: ['', '', '', '', '', ''],
-				isEmpty: false
+				detail:{},
 			}
+		},
+		onLoad() {
+			let that = this
+			uni.$once('details', (data) => {
+			      that.detail = data;
+			    });
 		},
 		methods: {
 

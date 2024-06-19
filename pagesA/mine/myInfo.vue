@@ -107,6 +107,7 @@
 
 <script>
 	import projectConfig from '@/common/config.js';
+	import test from '../../utils/test/test.js'
 	import {
 		sendSms,
 		bindPhoneNumber,
@@ -137,8 +138,8 @@
 		onLoad() {
 			this.userinfo =  this.vuex_userinfo
 			if(this.userinfo){
-				this.phone = userinfo.phonenumber
-				this.email = userinfo.email
+				this.phone = this.userinfo.phonenumber
+				this.email = this.userinfo.email
 			}
 			
 			// this.getUserInfo()

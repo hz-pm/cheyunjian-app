@@ -1,7 +1,6 @@
 <template>
 	<view class="content" @touchmove.stop.prevent="disabledScroll">
-		<view style="width: 100%;background-image: url('../../static/top-bg.png');background-repeat: no-repeat;
-				background-size: 100% 400rpx;display: flex;flex-direction: column;align-items: center;">
+		<view class="top-bg">
 			<view style="width: 90%;display: flex;flex-direction: row;align-items: center;
 					margin-top: 20rpx;justify-content: space-between;">
 				<view style="width: 62%; display: flex;flex-direction: column;color: #FFF;">
@@ -75,7 +74,7 @@
 
 			<navigator url="/pagesA/mine/vipCard"
 				style="width: 100%;display: flex;flex-direction: row;justify-content: center;margin-top: 35rpx;">
-				<image src="../../static/banner-dyg.webp" style="width: 90%;height: 160rpx;border-radius: 20rpx;">
+				<image :src="baseImageUrl+'banner-dyg.webp'" style="width: 90%;height: 160rpx;border-radius: 20rpx;">
 				</image>
 			</navigator>
 
@@ -93,11 +92,11 @@
 							style="width: 92%;margin-top: 35rpx;display: flex;flex-direction: column;align-items: center;justify-content: center;">
 							<text
 								style="font-size: 28rpx;width: 100%;margin-top: 35rpx;">检测所需的车架号(VIN码)，以及整车型号(公告号)可以通过您的行驶证及车辆铭牌获得，电池包编码可以从电池包铭牌获得，参考以下图例：</text>
-							<image src="../../static/vin-example1.webp"
+							<image :src="baseImageUrl+'vin-example1.webp'"
 								style="width: 100%;height: 450rpx;margin-top: 35rpx;"></image>
-							<image src="../../static/vin-example2.webp"
+							<image :src="baseImageUrl+'vin-example2.webp'"
 								style="width: 100%;height: 380rpx;margin-top: 35rpx;"></image>
-							<image src="../../static/vin-example3.webp"
+							<image :src="baseImageUrl+'vin-example3.webp'"
 								style="width: 100%;height: 220rpx;margin-top: 35rpx;"></image>
 							<view style="height: 80rpx;"></view>
 						</view>
@@ -130,9 +129,9 @@
 				</view>
 				<scroll-view scroll-y="true" style="height: 80vh;">
 					<view style="width: 100%;display: flex;flex-direction: column;align-items: center;">
-						<image src="../../static/example-m-dyg2-2.webp" style="width: 100%;height: 3600rpx;"
+						<image :src="baseImageUrl+'example-m-dyg2-2.webp'" style="width: 100%;height: 3600rpx;"
 							v-if="curTab===1"></image>
-						<image src="../../static/example-m-dyg2-3.webp" style="width: 100%;height: 3900rpx;"
+						<image :src="baseImageUrl+'example-m-dyg2-3.webp'" style="width: 100%;height: 3900rpx;"
 							v-if="curTab===2"></image>
 						<view style="height: 80rpx;"></view>
 					</view>
@@ -184,6 +183,7 @@
 				curTab: 1,
 				img1:'',
 				img1:'',
+				baseImageUrl:projectConfig.baseImageUrl
 			}
 		},
 		methods: {
@@ -454,5 +454,14 @@
 		border-right: 8rpx solid transparent;
 		border-top: 10rpx solid #ff8d1a;
 		margin-left: 10rpx;
+	}
+	.top-bg{
+		width: 100%;
+		background-image: url('../../static/top-bg.png');
+		background-repeat: no-repeat;
+		background-size: 100% 400rpx;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 	}
 </style>

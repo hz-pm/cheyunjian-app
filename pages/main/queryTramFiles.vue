@@ -1,7 +1,6 @@
 <template>
 	<view class="content">
-		<view style="width: 100%;background-image: url('../../static/top-bg.png');background-repeat: no-repeat;
-				background-size: 100% 400rpx;display: flex;flex-direction: column;align-items: center;">
+		<view class="top-bg">
 			<view style="width: 90%;display: flex;flex-direction: row;align-items: center;
 					margin-top: 40rpx;justify-content: space-between;">
 				<view style="width: 62%; display: flex;flex-direction: column;color: #FFF;">
@@ -83,7 +82,7 @@
 					style="font-size: 30rpx;color: #111;font-weight: bold;margin-top: 15rpx;margin-bottom: 15rpx;">版本区别</text>
 				<scroll-view scroll-y="true" style="height: 80vh;">
 					<view style="width: 100%;height: 1500rpx;display: flex;flex-direction: column;align-items: center;">
-						<image src="../../static/img-v-q.webp" style="width: 700rpx;height: 1500rpx;"></image>
+						<image :src="baseImageUrl+'img-v-q.webp'" style="width: 700rpx;height: 1500rpx;"></image>
 					</view>
 				</scroll-view>
 			</view>
@@ -220,7 +219,8 @@
 				brand: '',
 				phone: '',
 				curItem: {},
-				addBtnText: '确认添加'
+				addBtnText: '确认添加',
+				baseImageUrl:projectConfig.baseImageUrl
 			}
 		},
 		onLoad() {
@@ -494,5 +494,14 @@
 		margin-bottom: 65rpx;
 		box-shadow: 0 2rpx 10rpx 0 rgba(145, 92, 0, .3);
 		color: #FFF;
+	}
+	.top-bg{
+		width: 100%;
+		background-image: url('../../static/top-bg.png');
+		background-repeat: no-repeat;
+		background-size: 100% 400rpx;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 	}
 </style>

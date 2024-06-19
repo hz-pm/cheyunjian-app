@@ -1,7 +1,7 @@
 <template>
 	<view class="content">
 		<text style="width: 95%;font-size: 30rpx;color: #a6a6a6;padding-bottom: 20rpx;
-		">总计获得{{pointsInfo.totalQty}}积分，已使用{{pointsInfo.useQty}}积分</text>
+		margin-top: 20rpx;">总计获得{{pointsInfo.totalQty}}积分，已使用{{pointsInfo.useQty}}积分</text>
 		<view style="height: 1rpx;width: 95%;align-self: flex-end;background-color: #f5f5f5;"></view>
 		
 		<view style="width: 95%;display: flex;flex-direction: column;"
@@ -13,13 +13,15 @@
 				</view>
 				<view style="display: flex;flex-direction: column;justify-content: flex-end;align-items: flex-end;">
 					<text style="font-size: 32rpx;color: #dc4144;font-weight: bold;">{{item.consumptionQty}}</text>
-					<text style="font-size: 28rpx;color: #a6a6a6;margin-top: 10rpx;">剩余{{item.consumptionQty}}积分</text>
+					<text style="font-size: 28rpx;color: #a6a6a6;margin-top: 10rpx;">剩余{{item.realityQty}}积分</text>
 				</view>
 			</view>
 			<view style="height: 1rpx;width: 95%;align-self: flex-end;background-color: #f5f5f5;"></view>
 		</view>
-		<u-empty mode="data" icon="../../static/img-nodata.png" text="暂无数据" width="90rpx"
-		style="margin-top: 40rpx;" v-if="isEmpty"></u-empty>
+		<view style="width: 90%;height: 50vh;display: flex;flex-direction: column;align-items: center;
+		justify-content: center;" v-if="isEmpty">
+			<text style="font-size: 32rpx;color: #888;">暂无数据</text>
+		</view>
 	</view>
 </template>
 
@@ -32,18 +34,25 @@
 		components: {},
 		data() {
 			return {
-				isEmpty:false,
+				isEmpty:true,
 				list:[],
 				pointsInfo:''
 			}
 		},
-		onLoad() {
-			pointsRecordList().then((res) =>{
-				console.log('>>>>',res)
-				if(res.code === 200){
-					this.list = res.data
-				}
-			})
+		onLoad(op) {
+			if(op){
+				pointsRecordList({
+					type:op.type
+				}).then((res) =>{
+					console.log('>>>>',res)
+					if(res.code === 200){
+						this.list = res.data
+						if(this.length === 0){
+							this.isEmpty = true
+						}
+					}
+				})
+			}
 			
 			this.pointsInfo =  this.vuex_points_info
 		},

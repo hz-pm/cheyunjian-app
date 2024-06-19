@@ -8,21 +8,21 @@
 		</view>
 		<view style="width: 100%;display: flex;flex-direction: column;background-color: #FFF;margin-top: 30rpx;">
 			<text style="font-size: 28rpx;color: #a6a6a6;width: 95%;
-					align-self: flex-end;margin-top: 20rpx;margin-bottom: 20rpx;">共有条充值记录，总计充值600元，共16800积分</text>
+					align-self: flex-end;margin-top: 20rpx;margin-bottom: 20rpx;" v-if="false">共有条充值记录，总计充值600元，共16800积分</text>
 			<view style="height: 1rpx; width: 95%;align-self: flex-end;background-color: #f5f5f5;"></view>
 
 			<view style="width: 100%;display: flex;flex-direction: column;align-items: center;"
-			v-for="(index,item) in list" @click="clickItem(item)">
+			v-for="(item,index) in list" @click="clickItem(item)">
 				<view style="width: 95%;display: flex;flex-direction: row;align-items: center;justify-content: space-between;">
 					<view style="display: flex;flex-direction: column;margin-top: 30rpx;margin-bottom: 30rpx;">
-						<text style="font-size: 32rpx;color: #111;">B883517127928565760</text>
-						<text style="font-size: 28rpx;color: #a6a6a6;margin-top: 10rpx;">2023-12-03 09:36:55</text>
+						<text style="font-size: 32rpx;color: #111;">{{item.rechargeId}}</text>
+						<text style="font-size: 28rpx;color: #a6a6a6;margin-top: 10rpx;">{{item.createTime}}</text>
 					</view>
 					<view style="display: flex;flex-direction: row;align-items: center;">
 						<view style="display: flex;flex-direction: column;justify-content: flex-end;align-items: flex-end;
 						margin-right: 10rpx;">
-							<text style="font-size: 32rpx;color: #dc4144;font-weight: bold;">￥60</text>
-							<text style="font-size: 28rpx;color: #0da665;margin-top: 10rpx;">+168积分</text>
+							<text style="font-size: 32rpx;color: #dc4144;font-weight: bold;">￥{{item.payable}}</text>
+							<text style="font-size: 28rpx;color: #0da665;margin-top: 10rpx;">+{{item.qty}}积分</text>
 						</view>
 						<uni-icons type="right" color="#a6a6a6" size="35rpx"></uni-icons>
 					</view>
@@ -38,20 +38,33 @@
 
 <script>
 	import projectConfig from '@/common/config.js';
-	import {} from '../../apis/modules/user';
+	import {
+		getRechargeRecordList
+	} from '../../apis/modules/user';
 	export default {
 		components: {},
 		data() {
 			return {
-				list:['','','','','',''],
-				isEmpty:false
+				list:[],
+				isEmpty:false,
+				searchValue:''
 			}
+		},
+		onLoad() {
+			getRechargeRecordList().then((res) => {
+				if(res.code == 200){
+					this.list = res.data
+				}
+			})
 		},
 		methods: {
 			clickItem(item){
 				uni.navigateTo({
-					url:'pages/mine/rechargeDetails'
+					url:'/pagesA/mine/rechargeDetails'
 				})
+				setTimeout(() => {
+					uni.$emit('details', item);
+				}, 300);
 			},
 			search(res) {
 				uni.showToast({

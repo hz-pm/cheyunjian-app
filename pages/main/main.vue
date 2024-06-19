@@ -43,14 +43,14 @@
 
 			<view style="width: 93%;display: flex;flex-direction: column;align-items: center; margin-top: 35rpx;">
 				<view style="width: 100%;display: flex;flex-direction: row;align-items: center;
-						justify-content: space-between;height: 180rpx;">
+						justify-content: space-between;height: 190rpx;">
 					<image src="../../static/home-menu1.png" style="width: 50%;height: 100%;
 							border-radius: 20rpx;" @click="clickGrid(0)"></image>
 					<image src="../../static/home-menu4.png" style="width: 50%;height: 100%;
 							border-radius: 20rpx;margin-left: 25rpx;" @click="clickGrid(1)"></image>
 				</view>
 				<view style="width: 100%;display: flex;flex-direction: row;align-items: center;
-						justify-content: space-between;margin-top: 25rpx;height: 180rpx;">
+						justify-content: space-between;margin-top: 25rpx;height: 190rpx;">
 					<image src="../../static/home-menu3.png" style="width: 50%;height: 100%;
 							border-radius: 20rpx;" @click="clickGrid(2)" v-if="false"></image>
 					<image src="../../static/home-menu2.png" style="width: 50%;height: 100%;
@@ -63,8 +63,7 @@
 					height: 248rpx;border-radius: 20rpx;justify-content: center;align-items: center;margin-top: 35rpx;
 					font-size: 28rpx;">
 				<image
-					style="height: 124rpx;width: 100%;position: absolute;bottom: 0;left: 0;
-						background-image: url('../../static/bg-home-vip-bg.png'); background-size: 100% 100%; background-repeat: no-repeat;">
+					class="vip-bg">
 				</image>
 				<navigator url="/pagesA/mine/vipCard" style="width: 50%;height: 100%;display: flex;flex-direction: column;align-items: center;
 						position: relative;justify-content: center;border-right: 1px solid #e3eeee;">
@@ -82,9 +81,8 @@
 				</navigator>
 			</view>
 
-			<image src="../../static/img-home-bottom.webp" style="width: 92%;height: 720rpx;border-radius: 20rpx;
+			<image :src="baseImageUrl+'img-home-bottom.webp'" style="width: 92%;height: 720rpx;border-radius: 20rpx;
 					margin-top: 35rpx;"></image>
-
 			<text
 				style="width: 92%;font-size: 28rpx;transform: scale(0.8); color: #808080;text-align: center;margin-top: 35rpx;">Copyright
 				© 2024 株洲云检新能源科技有限公司</text>
@@ -105,6 +103,7 @@
 </template>
 
 <script>
+	import projectConfig from '@/common/config.js';
 	import {
 		getPointsInfo,
 	} from '../../apis/modules/user';
@@ -114,16 +113,18 @@
 			return {
 				current: 0,
 				list5: [{
-						img: '../../static/img-banner.webp',
+						// img: '../../static/img-banner.webp',
+						img: projectConfig.baseImageUrl+'img-banner.webp',
 						color: '#0298fe'
 					},
 					{
-						img: '../../static/img-banner-2.webp',
+						img: projectConfig.baseImageUrl+'img-banner-2.webp',
 						color: '#f8ce95'
 					}
 				],
 				userinfo: {},
-				pointsInfo:{}
+				pointsInfo:{},
+				baseImageUrl:projectConfig.baseImageUrl
 			}
 		},
 		onShow() {
@@ -222,5 +223,16 @@
 				background-color: #ffffff;
 			}
 		}
+	}
+	
+	.vip-bg{
+		height: 124rpx;
+		width: 100%;
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		background-image: url('../../static/bg-home-vip-bg.png'); 
+		background-size: 100% 100%; 
+		background-repeat: no-repeat;
 	}
 </style>

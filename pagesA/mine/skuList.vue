@@ -7,7 +7,7 @@
 			height: 100vh;">
 				<navigator url="/pagesA/mine/vipCard" style="width: 100%;display: flex;flex-direction: column;align-items: center;
 				background-color: #00acdd;">
-					<image src="../../static/vip-banner.gif" style="width: 90%;height: 110rpx;
+					<image :src="baseImageUrl+'vip-banner.gif'" style="width: 90%;height: 110rpx;
 					margin-top: 20rpx;"></image>
 				</navigator>
 				<text style="width: 90%; font-size: 30rpx;color: #a6a6a6;
@@ -22,7 +22,8 @@
 									<text class="c-jifen" v-if="index!=list.length-1">{{item.qty}}积分</text>
 									<text class="shouchong" v-if="index==0">首单特惠</text>
 									<input placeholder="请输入积分数量" v-if="index==list.length-1"
-										type="number" color="#333" maxlength="10"></input>
+										type="number" color="#333" maxlength="10" v-model="inputPoints"
+										@input="inputChange"></input>
 								</view>
 								<view class="c-right">
 									<text class="c-money">￥{{item.price}}元</text>
@@ -35,9 +36,9 @@
 					<view style="width: 90%;background-color: #ecfaff;border: 1px solid #d9f5ff;
 					height: 70rpx;border-radius: 10rpx;margin-top: 45rpx;margin-bottom: 30rpx;
 					display: flex;flex-direction: row;justify-content: space-between;align-items: center;">
-						<uni-icons type="info-filled" size="40rpx" style="color: #00acdd;margin-left: 25rpx;"><span 
-						style="font-size: 30rpx;margin-left: 20rpx;">了解更多大客户优惠政策，请联系客服</span></uni-icons>
-						 <uni-icons type="right" size="40rpx" color="#00acdd" style="margin-right: 20rpx;"></uni-icons>
+						<uni-icons type="info-filled" size="40rpx" color="#00acdd" style="margin-left: 25rpx;"></uni-icons>
+						<text style="font-size: 30rpx;margin-left: 10rpx;color: #00acdd;">了解更多大客户优惠政策，请联系客服</text>
+						<uni-icons type="right" size="40rpx" color="#00acdd" style="margin-right: 20rpx;"></uni-icons>
 					</view>
 				</view>
 				
@@ -50,7 +51,7 @@
 					margin-right: 35rpx;margin-top: 20rpx;margin-bottom: 20rpx;"></image>
 				</view>
 				
-				<button class="btn">立即购买</button>
+				<button class="btn" @click="clickPay">立即购买</button>
 			</view>
 		</scroll-view>
 
@@ -59,8 +60,9 @@
 
 <script>
 	import projectConfig from '@/common/config.js';
+	import test from '../../utils/test/test.js'
 	import {
-		getDoOrder,
+		rechargePoints,
 	} from '../../apis/modules/user';
 	export default {
 		components: {},
@@ -83,10 +85,12 @@
 					qty: 2000,
 					price: '1560.00'
 				}, {
-					qty: 1,
+					qty: '',
 					price: '0.00'
 				}],
-				current:0
+				current:0,
+				baseImageUrl:projectConfig.baseImageUrl,
+				inputPoints:''
 			}
 		},
 		methods: {
@@ -101,6 +105,50 @@
 						break;
 					}
 				}
+			},
+			inputChange(e){
+				if(test.isEmpty(e.detail.value)){
+					this.list[5].price = "0.00"
+				}else{
+					this.list[5].price = e.detail.value
+				}
+				console.log(e)
+			},
+			clickPay(){
+				let qty = this.list[this.current].qty
+				if(this.current === 5){
+					if(test.isEmpty(this.inputPoints)){
+						uni.showToast({
+							title: '请输入充值积分数',
+							icon: 'none'
+						})
+						return
+					}
+					qty = this.inputPoints
+				}
+				
+				
+				rechargePoints({
+					prodNo:'0001',
+					qty:qty,
+					payable:this.list[this.current].price,
+					discount:'0',
+					actuallyPaid:this.list[this.current].price,
+				}).then((res) => {
+					console.log(res)
+					if(res.code === 200){
+						uni.showToast({
+							title: res.msg,
+							icon: 'success'
+						})
+						
+						setTimeout(() =>{
+							uni.navigateBack()
+						},1000)
+					}
+				})
+				
+				console.log('======='+this.current+">>>"+this.list[this.current].price)
 			}
 		}
 	}

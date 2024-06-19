@@ -83,6 +83,26 @@ export function getUserEnterprise(params){
 }
 
 //获取消费记录
-export function pointsRecordList(params){
-	return http.get('/index/points/pointsRecordList',params)
+export function pointsRecordList(params1){
+	return http.get('/index/points/pointsRecordList',{params:params1})
+}
+
+//充值积分
+export function rechargePoints(params){
+	return http.post('/Wx/pay',params)
+}
+
+//充值记录
+export function getRechargeRecordList(params){
+	return http.get('/index/rechargeRecord/getRechargeList',params)
+}
+
+//购买vip
+export function getVip(params){
+	return http.post('/Wx/getVip',params)
+}
+
+//获取车云检记录
+export function cloudRecordList(params){
+	return http.get('/index/cloudRecord/list',params)
 }

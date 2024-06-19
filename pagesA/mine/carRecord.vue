@@ -38,7 +38,9 @@
 
 <script>
 	import projectConfig from '@/common/config.js';
-	import {} from '../../apis/modules/user';
+	import {
+		cloudRecordList
+	} from '../../apis/modules/user';
 	export default {
 		components: {},
 		data() {
@@ -46,6 +48,12 @@
 				list:['','','','','',''],
 				isEmpty:false
 			}
+		},
+		onLoad() {
+			cloudRecordList().then((res) => {
+				console.log(res)
+				this.list = res.data
+			})
 		},
 		methods: {
 			clickItem(item){

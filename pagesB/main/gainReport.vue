@@ -1,7 +1,6 @@
 <template>
 	<view class="content" @touchmove.stop.prevent="disabledScroll">
-		<view style="width: 100%;background-image: url('../../static/top-bg.png');background-repeat: no-repeat;
-				background-size: 100% 400rpx;display: flex;flex-direction: column;align-items: center;">
+		<view class="top-bg">
 			<view style="width: 90%;display: flex;flex-direction: row;align-items: center;
 					margin-top: 20rpx;justify-content: space-between;">
 				<view style="width: 62%; display: flex;flex-direction: column;color: #FFF;">
@@ -69,7 +68,7 @@
 			<view style="display: flex;flex-direction: column;align-items: center;height: 80vh;">
 				<scroll-view scroll-y="true" style="height: 80vh;">
 					<view style="width: 100%;height: 650rpx;display: flex;flex-direction: column;align-items: center;">
-						<image src="../../static/img-rhhdcj.webp" style="width: 700rpx;height: 1500rpx;"></image>
+						<image :src="baseImageUrl+'img-rhhdcj.webp'" style="width: 700rpx;height: 1500rpx;"></image>
 					</view>
 				</scroll-view>
 			</view>
@@ -85,7 +84,7 @@
 			<view style="display: flex;flex-direction: column;align-items: center;height: 80vh;">
 				<scroll-view scroll-y="true" style="height: 80vh;">
 					<view style="width: 100%;height: 6000rpx;display: flex;flex-direction: column;align-items: center;">
-						<image src="../../static/img-jc-demo.webp" style="width: 100%;height: 6000rpx;"></image>
+						<image :src="baseImageUrl+'img-jc-demo.webp'" style="width: 100%;height: 6000rpx;"></image>
 					</view>
 				</scroll-view>
 			</view>
@@ -192,7 +191,8 @@
 				}],
 				checkboxValue1: [],
 				amount: 0,
-				content:''
+				content:'',
+				baseImageUrl:projectConfig.baseImageUrl
 			}
 		},
 		methods: {
@@ -440,5 +440,13 @@
 		padding-right: 20rpx;
 		font-size: 26rpx;
 		border-radius: 10rpx;
+	}
+	.top-bg{
+		width: 100%;
+		background-image: url('../../static/top-bg.png');
+		background-repeat: no-repeat;
+		background-size: 100% 400rpx;
+		display: flex;flex-direction: column;
+		align-items: center;
 	}
 </style>

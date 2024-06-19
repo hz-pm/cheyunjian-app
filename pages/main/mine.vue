@@ -21,9 +21,7 @@
 						</view>
 						<uni-icons type="settings" color="#FFF" size="26" @click="goSetting"></uni-icons>
 					</view>
-					<navigator url="/pagesA/mine/vipCard" style="width: 92%;display: flex;flex-direction: row;align-items: center;justify-content: center;
-					background-image: url('../../static/vip-menu-bg.png');background-repeat: no-repeat;background-size: 100% 100%;
-					height: 80rpx;margin-top: 40rpx;border-top-left-radius: 15rpx;border-top-right-radius: 15rpx;">
+					<navigator url="/pagesA/mine/vipCard" class="vip-bg-top">
 						<view style="width: 92%; display: flex;flex-direction: row;align-items: center;
 						justify-content: space-between;color: #111;font-size: 30rpx;">
 							<view style="display: flex;flex-direction: row;align-items: center;">
@@ -49,12 +47,12 @@
 
 				<view style="width: 92%;display: flex;flex-direction: row;align-items: center;justify-content: space-between;
 				margin-top: 25rpx;margin-bottom: 25rpx;">
-					<navigator url="/pagesA/mine/bill" style="width: 33%;display: flex;flex-direction: column;align-items: center;
+					<navigator url="/pagesA/mine/bill?type=0" style="width: 33%;display: flex;flex-direction: column;align-items: center;
 					border-right: 0.5px solid rgba(0,0,0,.1);">
 						<text style="font-size: 32rpx;font-weight: bold;color: #00acdd;">{{pointsInfo.realityQty}}</text>
 						<text style="font-size: 28rpx;color: #808080;margin-top: 5rpx;">剩余积分</text>
 					</navigator>
-					<navigator url="/pagesA/mine/bill" style="width: 33%;display: flex;flex-direction: column;align-items: center;
+					<navigator url="/pagesA/mine/bill?type=1" style="width: 33%;display: flex;flex-direction: column;align-items: center;
 					border-right: 0.5px solid rgba(0,0,0,.1);">
 						<text style="font-size: 32rpx;font-weight: bold;color: #00acdd;">{{pointsInfo.useQty}}</text>
 						<text style="font-size: 28rpx;color: #808080;margin-top: 5rpx;">已使用积分</text>
@@ -140,7 +138,8 @@
 <script>
 	import projectConfig from '@/common/config.js';
 	import {
-		getUserInfo
+		getUserInfo,
+		getPointsInfo
 	} from '../../apis/modules/user';
 	export default {
 		components: {},
@@ -160,7 +159,7 @@
 			
 			//获取用户信息
 			getUserInfo().then((res) => {
-				console.log('getuserInfo', res)
+				// console.log('getuserInfo', res)
 				if(res.code === 200){
 					this.$u.vuex('vuex_userinfo',res.data)
 					this.userinfo = res.data
@@ -169,6 +168,15 @@
 						title: res.msg,
 						icon: 'none'
 					})
+				}
+			})
+			
+			//获取用户积分信息
+			getPointsInfo().then((res) => {
+				// console.log('=======>', res)
+				if (res.code == 200) {
+					this.pointsInfo = res.data
+					this.$u.vuex('vuex_points_info',res.data)
 				}
 			})
 		},
@@ -249,5 +257,19 @@
 		color: transparent;
 		font-size: 50rpx;
 	}
-
+	
+	.vip-bg-top{
+		width: 92%;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		background-image: url('../../static/vip-menu-bg.png');
+		background-repeat: no-repeat;
+		background-size: 100% 100%;
+		height: 80rpx;
+		margin-top: 40rpx;
+		border-top-left-radius: 15rpx;
+		border-top-right-radius: 15rpx;
+	}
 </style>

@@ -43,7 +43,7 @@ http.setConfig((config) => {
 		// Loading中是否遮罩
 		LoadingMask: true,
 		// Loading文本
-		// LoadingText: vm.$tc('logding.t'),
+		LoadingText: 'Loading...',
 		//错误提示框
 		toast:true,
 		catch: true,
