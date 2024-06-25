@@ -35,7 +35,8 @@
 					<text url="/pagesA/mine/fiesRecord" style="width: 49%;color: #ff8d1a;padding-top: 20rpx;padding-bottom: 20rpx;
 							font-weight: bold;" @click="openSelectItemPop">请选择检测模块<span style="font-size: 10px;">▼</span></text>
 					<view style="width: 1rpx;height: 35rpx;background-color: #DDD;"></view>
-					<text class="iconfont icon-question" style="width: 49%;font-size: 26rpx;color: #00acdd;" @click="open()">如何找到车架号</text>
+					<text class="iconfont icon-question" style="width: 49%;font-size: 26rpx;color: #00acdd;"
+						@click="open()">如何找到车架号</text>
 				</view>
 			</view>
 
@@ -73,7 +74,7 @@
 				</scroll-view>
 			</view>
 		</uni-popup>
-		
+
 		<uni-popup ref="alertDialog" type="dialog">
 			<uni-popup-dialog type="info" confirmText="我知道了" :content='content' @confirm="confirmModal"
 				:showClose="false"></uni-popup-dialog>
@@ -98,49 +99,16 @@
 				<scroll-view scroll-y="true">
 					<view style="width: 100%;display: flex;flex-direction: column;align-items: center;
 					background-color: #f5f5f5;">
-						<checkbox-group style="width: 100%;display: flex;flex-direction: column;align-items: center;"
-							@change="checkboxChange" v-model="checkboxValue1">
-							<view class="item">
-								<text class="title">1.电池健康度评估</text>
-								<view class="right">
-									<text style="color: #ff8d1a;font-weight: bold;">25积分</text>
-									<checkbox color="#00acdd" style="margin-left: 30rpx;" shape="circle" size="30rpx"
-										:value="checkboxList1[0].name"></checkbox>
-								</view>
-							</view>
-							<view class="item">
-								<text class="title">2.车辆电池静态数据</text>
-								<view class="right">
-									<text style="color: #ff8d1a;font-weight: bold;">10积分</text>
-									<checkbox color="#00acdd" style="margin-left: 30rpx;" shape="circle" size="30rpx"
-										:value="checkboxList1[1].name"></checkbox>
-								</view>
-							</view>
-							<view class="item">
-								<text class="title">3.车辆行驶数据评估（调表识别）</text>
-								<view class="right">
-									<text style="color: #ff8d1a;font-weight: bold;">30积分</text>
-									<checkbox color="#00acdd" style="margin-left: 30rpx;" shape="circle" size="30rpx"
-										:value="checkboxList1[2].name"></checkbox>
-								</view>
-							</view>
-							<view class="item">
-								<text class="title">4.车辆充放电数据评估</text>
-								<view class="right">
-									<text style="color: #ff8d1a;font-weight: bold;">10积分</text>
-									<checkbox color="#00acdd" style="margin-left: 30rpx;" shape="circle" size="30rpx"
-										:value="checkboxList1[3].name"></checkbox>
-								</view>
-							</view>
-							<view class="item">
-								<text class="title">5.电池异常报警状况评估</text>
-								<view class="right">
-									<text style="color: #ff8d1a;font-weight: bold;">5积分</text>
-									<checkbox color="#00acdd" style="margin-left: 30rpx;" shape="circle" size="30rpx"
-										:value="checkboxList1[4].name"></checkbox>
-								</view>
-							</view>
-						</checkbox-group>
+						<checkbox-group class="checkbox-group" @change="checkboxChange">
+						    <view class="item" v-for="(item, index) in checkboxList1" :key="item.name">
+						      <text class="title">{{ index + 1 }}.{{ item.title }}</text>
+						      <view class="right">
+						        <text style="color: #ff8d1a;font-weight: bold;">{{ item.value }}积分</text>
+						        <checkbox color="#00acdd" style="margin-left: 30rpx;" shape="circle" size="30rpx"
+						                  :value="item.name" :checked="checkboxValue1.includes(item.name)"></checkbox>
+						      </view>
+						    </view>
+						  </checkbox-group>
 						<view style="width: 100%;background-color: #FFF;display: flex;flex-direction: row;align-items: center;
 						justify-content: space-between;margin-top: 35rpx;">
 							<text style="color: #ff8d1a;font-size: 26rpx;font-weight: bold;
@@ -162,7 +130,7 @@
 	import projectConfig from '@/common/config.js';
 
 	import {
-		getDoOrder,
+		checkCar,
 	} from '../../apis/modules/user';
 	export default {
 		components: {},
@@ -172,27 +140,36 @@
 				showModal: false,
 				pic: '',
 				checked: false,
-				cbValue: 'cb1',
-				checkboxList1: [{
-					name: 'cb1',
-					value: 25,
-				}, {
-					name: 'cb2',
-					value: 10,
-				}, {
-					name: 'cb3',
-					value: 30,
-				}, {
-					name: 'cb4',
-					value: 10,
-				}, {
-					name: 'cb5',
-					value: 5,
-				}],
 				checkboxValue1: [],
+				checkboxList1: [{
+						name: 'cb1',
+						title: '电池健康度评估',
+						value: 25
+					},
+					{
+						name: 'cb2',
+						title: '车辆电池静态数据',
+						value: 10
+					},
+					{
+						name: 'cb3',
+						title: '车辆行驶数据评估（调表识别）',
+						value: 30
+					},
+					{
+						name: 'cb4',
+						title: '车辆充放电数据评估',
+						value: 10
+					},
+					{
+						name: 'cb5',
+						title: '电池异常报警状况评估',
+						value: 5
+					}
+				],
 				amount: 0,
-				content:'',
-				baseImageUrl:projectConfig.baseImageUrl
+				content: '',
+				baseImageUrl: projectConfig.baseImageUrl
 			}
 		},
 		methods: {
@@ -209,9 +186,6 @@
 					return
 				}
 			},
-			clickAddMyCar() {
-				this.$refs.alertDialog.close()
-			},
 			confirmModal() {
 				this.$refs.alertDialog.open()
 				this.openDemoPop()
@@ -223,24 +197,6 @@
 			openDemoPop() {
 				this.showPop = true
 				this.$refs.popup2.open()
-			},
-			checkboxChange(n) {
-				console.log('change', n);
-				this.getAmount(n)
-			},
-			checkedCb() {
-				this.checked = !this.checked
-			},
-			argeement(type) {
-				uni.navigateTo({
-					url:'/pagesB/reg/webView'
-				})
-			},
-			clickAddSubmit() {
-				if (!this.checked) {
-					this.$u.toast('请先阅读并同意协议')
-					return
-				}
 			},
 			openImagePage() {
 				let that = this;
@@ -292,37 +248,50 @@
 			clickSubmitInquire() {
 				this.closeSelectItemPop()
 			},
+			 checkboxChange(event) {
+				// console.log('change', event);
+				const values = event.detail.value;
+				this.checkboxValue1 = values; // 更新 checkboxValue1
+				this.checked = values.length > 0;
+				this.getAmount(values);
+			},
 			selectAll() {
-				//全选
+				// 全选
 				if (this.checkboxValue1.length == 5) {
-					this.checkboxValue1 = []
+					this.checkboxValue1 = [];
 				} else {
-					this.checkboxValue1 = []
-					for (var i = 0; i < this.checkboxList1.length; i++) {
-						this.checkboxValue1.push(this.checkboxList1[i].name)
-					}
+					this.checkboxValue1 = this.checkboxList1.map(item => item.name);
 				}
-
-				this.getAmount(this.checkboxValue1)
+				this.getAmount(this.checkboxValue1);
 			},
 			clickSelectOk() {
-				console.log(this.checkboxValue1)
 				if (this.checkboxValue1.includes('cb1') || this.checkboxValue1.includes('cb3')) {
-					console.log('========***========')
+					console.log('========***========');
+					//车云检
+					checkCar({
+						vinCode:'VSVSVSVSVSVSV123456',
+						points:20
+					}).then((res) => {
+						
+					})
+					
 				} else {
-					this.$u.toast('模块1.3中必需选中一项')
+					uni.showToast({
+						title: '模块1.3中必需选中一项',
+						icon: 'none'
+					});
 				}
 			},
 			getAmount(list) {
 				let value = 0;
-				for (var i = 0; i < list.length; i++) {
-					for (var j = 0; j < this.checkboxList1.length; j++) {
+				for (let i = 0; i < list.length; i++) {
+					for (let j = 0; j < this.checkboxList1.length; j++) {
 						if (list[i] == this.checkboxList1[j].name) {
-							value += this.checkboxList1[j].value
+							value += this.checkboxList1[j].value;
 						}
 					}
 				}
-				this.amount = value
+				this.amount = value;
 			}
 		}
 	}
@@ -441,12 +410,37 @@
 		font-size: 26rpx;
 		border-radius: 10rpx;
 	}
-	.top-bg{
+
+	.top-bg {
 		width: 100%;
 		background-image: url('../../static/top-bg.png');
 		background-repeat: no-repeat;
 		background-size: 100% 400rpx;
-		display: flex;flex-direction: column;
+		display: flex;
+		flex-direction: column;
 		align-items: center;
+	}
+
+	.checkbox-group {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.item {
+		display: flex;
+		justify-content: space-between;
+		width: 100%;
+		padding: 10px 0;
+	}
+
+	.right {
+		display: flex;
+		align-items: center;
+	}
+
+	.title {
+		flex: 1;
 	}
 </style>

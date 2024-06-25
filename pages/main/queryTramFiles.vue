@@ -1,4 +1,5 @@
 <template>
+	<page-meta :page-style="'overflow:'+(show?'hidden':'visible')"></page-meta>
 	<view class="content">
 		<view class="top-bg">
 			<view style="width: 90%;display: flex;flex-direction: row;align-items: center;
@@ -96,7 +97,7 @@
 
 		<uni-popup ref="popup2" type="bottom" border-radius="15rpx 15rpx 0 0" @close="closeAddCar" @open="openAddCar"
 			background-color="#FFF">
-			<view style="height: 90vh;">
+			<view>
 				<scroll-view scroll-y="true" style="height: 80vh;">
 					<view style="width: 100%;display: flex;flex-direction: column;align-items: center;">
 						<view style="width: 100%;background-color: #FFF;display: flex;flex-direction: row;align-items: center;
@@ -157,28 +158,25 @@
 			</view>
 		</uni-popup>
 
-		<uni-popup ref="popup3" type="bottom" border-radius="15rpx 15rpx 0 0" @close="closeInquirePop"
-			@open="openInquirePop" background-color="#FFF">
+		<uni-popup ref="popup3" type="bottom" @close="closeInquirePop"
+			@open="openInquirePop" background-color="#FFF" safe-area:true @change="change">
 			<view style="display: flex;flex-direction: column;align-items: center;">
 				<text
 					style="font-size: 30rpx;color: #111;font-weight: bold;margin-top: 25rpx;margin-bottom: 25rpx;">选择报告查询模式</text>
-				<scroll-view scroll-y="true">
-					<view style="width: 100%;display: flex;flex-direction: column;align-items: center;">
-						<view style="width: 95%;display: flex;flex-direction: row;align-items: center;justify-content: space-between;
-						background-color: #fffdf0;border: 2px solid #ff8d1a;border-radius: 20rpx;height: 80rpx;margin-top: 20rpx;
-						margin-bottom: 35rpx;">
-							<text
-								style="font-size: 30rpx;font-weight: bold;color: #111;margin-left: 30rpx;">专业版单次查询</text>
-							<view style="display: flex;flex-direction: row;align-items: center;
-							margin-right: 30rpx;">
-								<text style="background-color: #fff8ed;color: #f3a54f;
-								font-size: 26rpx;padding:5rpx 10rpx;border: 1rpx solid;border-radius: 5rpx;">80积分</text>
-								<radio color="#FF8D1A" style="margin-left: 30rpx;" checked></radio>
-							</view>
-						</view>
-						<button class="btn-org" @click="clickSubmitInquire" shape="circle">确认提交</button>
+				<view style="width: 90%;display: flex;flex-direction: row;align-items: center;justify-content: space-between;
+				background-color: #fffdf0;border: 2px solid #ff8d1a;border-radius: 20rpx;height: 80rpx;margin-top: 20rpx;
+				margin-bottom: 35rpx;">
+					<text
+						style="font-size: 30rpx;font-weight: bold;color: #111;margin-left: 30rpx;">专业版单次查询</text>
+					<view style="display: flex;flex-direction: row;align-items: center;
+					margin-right: 30rpx;">
+						<text style="background-color: #fff8ed;color: #f3a54f;
+						font-size: 26rpx;padding:5rpx 10rpx;border: 1rpx solid;border-radius: 5rpx;">80积分</text>
+						<radio color="#FF8D1A" style="margin-left: 30rpx;" checked></radio>
 					</view>
-				</scroll-view>
+				</view>
+				<button class="btn-org" @click="clickSubmitInquire" shape="circle">确认提交</button>
+				<view style="height: 150rpx;"></view>
 			</view>
 		</uni-popup>
 
@@ -195,11 +193,12 @@
 	import projectConfig from '@/common/config.js';
 	const citysList = require('@/data/citysList.json')
 	import test from '../../utils/test/test.js'
-
+	
 	import {
 		getCarInfoList,
 		addMyCar,
-		editCarInfo
+		editCarInfo,
+		submitGetMyCarReport
 	} from '../../apis/modules/user';
 	export default {
 		components: {
@@ -220,7 +219,8 @@
 				phone: '',
 				curItem: {},
 				addBtnText: '确认添加',
-				baseImageUrl:projectConfig.baseImageUrl
+				baseImageUrl:projectConfig.baseImageUrl,
+				show:false
 			}
 		},
 		onLoad() {
@@ -434,6 +434,9 @@
 			},
 			clickSubmitInquire() {
 				this.closeInquirePop()
+				//提交查询
+				
+				
 			},
 			selectAddress() {
 				this.$refs.cityPicker.show()
@@ -456,6 +459,9 @@
 					}
 					console.log('==>' + JSON.stringify(res))
 				})
+			},
+			change(e) {
+				this.show = e.show
 			}
 		}
 	}
@@ -488,12 +494,11 @@
 	}
 
 	.btn-org {
-		width: 95%;
+		width: 90%;
 		background: linear-gradient(136.25deg, #ffb300, #ff5833);
-		margin-top: 45rpx;
-		margin-bottom: 65rpx;
 		box-shadow: 0 2rpx 10rpx 0 rgba(145, 92, 0, .3);
 		color: #FFF;
+		margin-top: 35rpx;
 	}
 	.top-bg{
 		width: 100%;

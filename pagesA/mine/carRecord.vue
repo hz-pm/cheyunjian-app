@@ -19,9 +19,9 @@
 						<image src="../../static/img-car-jili.png" style="width: 110rpx;height: 110rpx;border-radius: 10rpx;"></image>
 						<view style="display: flex;flex-direction: column;justify-content: flex-end;
 						margin-left: 20rpx;">
-							<text style="font-size: 32rpx;color: #111;">吉利汽车</text>
-							<text style="font-size: 30rpx;color: #111;margin-top: 10rpx;">B378******185641</text>
-							<text style="font-size: 26rpx;color: #a6a6a6;margin-top: 10rpx;">2023-12-05 17:04:56</text>
+							<text style="font-size: 32rpx;color: #111;">{{item.brand}}</text>
+							<text style="font-size: 30rpx;color: #111;margin-top: 10rpx;">{{item.vinCode}}</text>
+							<text style="font-size: 26rpx;color: #a6a6a6;margin-top: 10rpx;">{{item.createTime}}</text>
 						</view>
 					</view>
 					
@@ -30,8 +30,10 @@
 				<view style="width: 95%;align-self: flex-end;height: 1rpx;background-color: #f5f5f5;"></view>
 			</view>
 			
-			<empty mode="data" icon="../../static/img-nodata.png" text="暂无数据" width="90rpx"
-				style="margin-top: 40rpx;" v-if="isEmpty"></empty>
+			<view style="width: 90%;height: 50vh;display: flex;flex-direction: column;align-items: center;
+			justify-content: center;" v-if="isEmpty">
+				<text style="font-size: 32rpx;color: #888;">暂无数据</text>
+			</view>
 		</view>
 	</view>
 </template>
@@ -45,14 +47,20 @@
 		components: {},
 		data() {
 			return {
-				list:['','','','','',''],
-				isEmpty:false
+				list:[],
+				isEmpty:false,
+				searchValue:''
 			}
 		},
 		onLoad() {
 			cloudRecordList().then((res) => {
 				console.log(res)
-				this.list = res.data
+				if(res.code === 200){
+					this.list = res.data
+					if(this.list.length === 0){
+						this.isEmpty = true
+					}
+				}
 			})
 		},
 		methods: {

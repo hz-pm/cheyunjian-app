@@ -106,3 +106,19 @@ export function getVip(params){
 export function cloudRecordList(params){
 	return http.get('/index/cloudRecord/list',params)
 }
+
+//获取已绑定车辆的报告
+export function submitGetMyCarReport(params){
+	return http.post('/car/info/submitGetMyCarReport',params)
+}
+
+//车云检
+export function checkCar(params){
+	return http.post('/index/cloud/checkCar',params)
+}
+
+//积分购买列表
+export function getPointsSkuList(params){
+	return http.get('/index/points/pointsSkuList',params)
+}
+

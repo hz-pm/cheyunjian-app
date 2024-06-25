@@ -21,7 +21,7 @@
 						</view>
 						<uni-icons type="settings" color="#FFF" size="26" @click="goSetting"></uni-icons>
 					</view>
-					<navigator url="/pagesA/mine/vipCard" class="vip-bg-top">
+					<view class="vip-bg-top" @click="goVipInfo">
 						<view style="width: 92%; display: flex;flex-direction: row;align-items: center;
 						justify-content: space-between;color: #111;font-size: 30rpx;">
 							<view style="display: flex;flex-direction: row;align-items: center;">
@@ -33,7 +33,7 @@
 								<uni-icons type="right" size="32rpx"></uni-icons>
 							</view>
 						</view>
-					</navigator>
+					</view>
 				</view>
 				<navigator url="/pagesA/mine/baseCompany" style="width: 100%;height: 74rpx;color: #f3a54f;background: #fff8ed;text-align: center;font-size: 28rpx;z-index: 99;display: flex;flex-direction: column;
 				justify-content: center;align-items: center;border-bottom: 1px solid rgba(243,165,79,.5);"
@@ -208,6 +208,11 @@
 			},
 			onlineKefu() {
 
+			},
+			goVipInfo(){
+				uni.navigateTo({
+					url:'/pagesA/mine/vipCard'
+				})
 			}
 		}
 	}

@@ -47,7 +47,7 @@
 					console.log('>>>>',res)
 					if(res.code === 200){
 						this.list = res.data
-						if(this.length === 0){
+						if(this.list.length === 0){
 							this.isEmpty = true
 						}
 					}
