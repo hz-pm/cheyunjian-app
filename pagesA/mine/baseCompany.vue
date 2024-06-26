@@ -48,7 +48,7 @@
 	const citysList = require('@/data/citysList.json')
 	import test from '../../utils/test/test.js'
 	import {
-		certifiedEnterprise,
+		certifiedSubmit,
 		getUserEnterprise
 	} from '../../apis/modules/user';
 	export default {
@@ -66,25 +66,29 @@
 				companyName: '',
 				address: '',
 				showBtn:true,
-				isAuth:true
+				isAuth:false
 			}
 		},
 		onLoad() {
-			getUserEnterprise().then((res) =>{
-				console.log(res)
-				if(res.code === 200 && res.data){
-					this.companyType = res.data.enterpriseType;
-					this.cityStr = res.data.location;
-					this.address = res.data.address;
-					this.companyName = res.data.enterpriseName;
-					this.pic = res.data.businessLicense;
-					
-					this.showBtn = false
-					this.isAuth = true;
-				}else{
-					this.isAuth = false;
-				}
-			})
+			if(this.vuex_userinfo.enterpriseCertification === 1){
+				this.isAuth = true;
+				//已认证，获取认证信息
+				getUserEnterprise().then((res) =>{
+					console.log(res)
+					if(res.code === 200 && res.data){
+						this.companyType = res.data.enterpriseType;
+						this.cityStr = res.data.location;
+						this.address = res.data.address;
+						this.companyName = res.data.enterpriseName;
+						this.pic = res.data.businessLicense;
+						
+						this.showBtn = false
+						this.isAuth = true;
+					}else{
+						this.isAuth = false;
+					}
+				})
+			}
 		},
 		methods: {
 			closeBindPhonePop() {
@@ -151,7 +155,7 @@
 					return
 				}
 				
-				certifiedEnterprise({
+				certifiedSubmit({
 					enterpriseType: this.companyType,
 					enterpriseName: this.companyName,
 					location: this.cityStr,
@@ -209,6 +213,12 @@
 							_this.pic = data.data
 						}
 						console.log('===Upload===>' + JSON.stringify(res))
+					},
+					fail: (res) => {
+						uni.showToast({
+							title: res.msg,
+							icon: 'none'
+						})
 					}
 				});
 			},

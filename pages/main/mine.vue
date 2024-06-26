@@ -47,19 +47,19 @@
 
 				<view style="width: 92%;display: flex;flex-direction: row;align-items: center;justify-content: space-between;
 				margin-top: 25rpx;margin-bottom: 25rpx;">
-					<navigator url="/pagesA/mine/bill?type=0" style="width: 33%;display: flex;flex-direction: column;align-items: center;
+					<navigator url="/pagesA/mine/bill" style="width: 33%;display: flex;flex-direction: column;align-items: center;
 					border-right: 0.5px solid rgba(0,0,0,.1);">
 						<text style="font-size: 32rpx;font-weight: bold;color: #00acdd;">{{pointsInfo.realityQty}}</text>
 						<text style="font-size: 28rpx;color: #808080;margin-top: 5rpx;">剩余积分</text>
 					</navigator>
-					<navigator url="/pagesA/mine/bill?type=1" style="width: 33%;display: flex;flex-direction: column;align-items: center;
+					<navigator url="/pagesA/mine/bill" style="width: 33%;display: flex;flex-direction: column;align-items: center;
 					border-right: 0.5px solid rgba(0,0,0,.1);">
 						<text style="font-size: 32rpx;font-weight: bold;color: #00acdd;">{{pointsInfo.useQty}}</text>
 						<text style="font-size: 28rpx;color: #808080;margin-top: 5rpx;">已使用积分</text>
 					</navigator>
 					<navigator url="/pagesA/mine/recharge"
 						style="width: 33%;display: flex;flex-direction: column;align-items: center;">
-						<text style="font-size: 32rpx;font-weight: bold;color: #00acdd;">{{pointsInfo.rechargeAmount}}</text>
+						<text style="font-size: 32rpx;font-weight: bold;color: #00acdd;">{{pointsInfo.totalAmount}}</text>
 						<text style="font-size: 28rpx;color: #808080;margin-top: 5rpx;">总充值金额</text>
 					</navigator>
 				</view>

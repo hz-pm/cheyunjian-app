@@ -67,14 +67,14 @@ export function bindPhoneNumber(params1){
 	return http.post('/sms/bindPhoneNumber',{},{params:params1})
 }
 
-//绑定手机号
+//绑定邮箱
 export function bindEmail(params1){
 	return http.post('/index/user/bindEmail',{},{params:params1})
 }
 
-//认证企业
-export function certifiedEnterprise(params){
-	return http.post('/index/enterprise/certified',params)
+//提交企业认证
+export function certifiedSubmit(params){
+	return http.post('/index/enterprise/certifiedSubmit',params)
 }
 
 //获取认证信息
@@ -89,7 +89,7 @@ export function pointsRecordList(params1){
 
 //充值积分
 export function rechargePoints(params){
-	return http.post('/Wx/pay',params)
+	return http.post('/Wx/rechargePoints',params)
 }
 
 //充值记录
@@ -98,8 +98,8 @@ export function getRechargeRecordList(params){
 }
 
 //购买vip
-export function getVip(params){
-	return http.post('/Wx/getVip',params)
+export function buyVip(params){
+	return http.post('/Wx/buyVip',params)
 }
 
 //获取车云检记录
@@ -120,5 +120,15 @@ export function checkCar(params){
 //积分购买列表
 export function getPointsSkuList(params){
 	return http.get('/index/points/pointsSkuList',params)
+}
+
+//获取用户vip信息
+export function getUserVipInfo(params){
+	return http.get('/index/vip/getUserVipInfo',params)
+}
+
+//获取VIP列表
+export function getVipCardInfo(params){
+	return http.get('/index/vip/getVipCardList',params)
 }
 

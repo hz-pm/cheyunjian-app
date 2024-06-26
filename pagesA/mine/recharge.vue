@@ -15,8 +15,8 @@
 			v-for="(item,index) in list" @click="clickItem(item)">
 				<view style="width: 95%;display: flex;flex-direction: row;align-items: center;justify-content: space-between;">
 					<view style="display: flex;flex-direction: column;margin-top: 30rpx;margin-bottom: 30rpx;">
-						<text style="font-size: 32rpx;color: #111;">{{item.rechargeId}}</text>
-						<text style="font-size: 28rpx;color: #a6a6a6;margin-top: 10rpx;">{{item.createTime}}</text>
+						<text style="font-size: 32rpx;color: #111;">{{item.orderCode}}</text>
+						<text style="font-size: 28rpx;color: #a6a6a6;margin-top: 10rpx;">{{item.payTime}}</text>
 					</view>
 					<view style="display: flex;flex-direction: row;align-items: center;">
 						<view style="display: flex;flex-direction: column;justify-content: flex-end;align-items: flex-end;
@@ -30,8 +30,11 @@
 				<view style="height: 1rpx; width: 95%;align-self: flex-end;background-color: #f5f5f5;"></view>
 			</view>
 
-			<u-empty mode="data" icon="../../static/img-nodata.png" text="暂无数据" width="90rpx"
-				style="margin-top: 40rpx;" v-if="isEmpty"></u-empty>
+			<view style="width: 90%;height: 50vh;display: flex;flex-direction: column;align-items: center;
+			justify-content: center;" v-if="isEmpty">
+				<image src="../../static/img-nodata.png" style="width: 120rpx;height: 160rpx;"></image>
+				<text style="font-size: 32rpx;color: #888;margin-top: 25rpx;">暂无数据</text>
+			</view>
 		</view>
 	</view>
 </template>
@@ -52,8 +55,11 @@
 		},
 		onLoad() {
 			getRechargeRecordList().then((res) => {
-				if(res.code == 200){
+				if(res.code === 200){
 					this.list = res.data
+					if(this.list.length === 0){
+						this.isEmpty = true
+					}
 				}
 			})
 		},

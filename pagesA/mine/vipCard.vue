@@ -31,32 +31,32 @@
 				</view>
 
 				<view class="vip-v">
-					<view class="item-v" :class="vipIndex == 1?'item-select':''" @click="clickItem(1)">
+					<view class="item-v" :class="vipIndex == 0?'item-select':''" @click="clickItem(0)">
 						<view class="top">
-							<image :src="vipIndex==1?'../../static/f-vip2.png':'../../static/f-vip2-grey.png'"
+							<image :src="vipIndex==0?'../../static/f-vip2.png':'../../static/f-vip2-grey.png'"
 								style="width: 35rpx;height: 35rpx;"></image>
-							<text class="top-t">VIP会员</text>
+							<text class="top-t">{{vipList[0].name}}会员</text>
 						</view>
 						<view class="money-v">
 							<text class="type">￥</text>
-							<text class="money">199</text>
+							<text class="money">{{vipList[0].price}}</text>
 						</view>
 						<text class="t-1">积分充值每满78减28</text>
 						<view class="bottom-v">
-							<text>封顶可减560元</text>
+							<text>封顶可减{{vipList[0].realitylAmount}}元</text>
 						</view>
 					</view>
 
-					<view class="item-v" :class="vipIndex == 2?'item-select':''" @click="clickItem(2)">
+					<view class="item-v" :class="vipIndex == 1?'item-select':''" @click="clickItem(1)">
 						<view class="top">
 							<image
-								:src="vipIndex==2?'../../static/vip-crown-2-fill.png':'../../static/vip-crown-2-fill-grey.png'"
+								:src="vipIndex==1?'../../static/vip-crown-2-fill.png':'../../static/vip-crown-2-fill-grey.png'"
 								style="width: 35rpx;height: 35rpx;"></image>
-							<text class="top-t">SVIP会员</text>
+							<text class="top-t">{{vipList[1].name}}会员</text>
 						</view>
 						<view class="money-v">
 							<text class="type">￥</text>
-							<text class="money">399</text>
+							<text class="money">{{vipList[1].price}}</text>
 						</view>
 						<text class="t-1">积分充值每满78减28</text>
 						<view class="bottom-v">
@@ -109,19 +109,26 @@
 	import projectConfig from '@/common/config.js';
 	import test from '../../utils/test/test.js'
 	import {
-		getVip,
+		buyVip,
+		getVipCardInfo
 	} from '../../apis/modules/user';
 	export default {
 		components: {},
 		data() {
 			return {
-				vipIndex: 1,
+				vipIndex: 0,
 				checked:false,
 				userinfo: {},
+				vipList:[]
 			}
 		},
 		onLoad() {
 			this.userinfo =  this.vuex_userinfo
+			
+			getVipCardInfo().then((res) => {
+				this.vipList = res.data
+				console.log('>>>',res)
+			})
 		},
 		methods: {
 			goSetting() {
@@ -155,8 +162,9 @@
 					})
 					return
 				}
-				getVip({
-					type:this.vipIndex
+				//购买vip
+				buyVip({
+					id:this.vipList[this.vipIndex].id
 				}).then((res) => {
 					console.log(res)
 					

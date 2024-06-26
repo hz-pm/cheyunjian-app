@@ -18,9 +18,11 @@
 			</view>
 			<view style="height: 1rpx;width: 95%;align-self: flex-end;background-color: #f5f5f5;"></view>
 		</view>
+		
 		<view style="width: 90%;height: 50vh;display: flex;flex-direction: column;align-items: center;
 		justify-content: center;" v-if="isEmpty">
-			<text style="font-size: 32rpx;color: #888;">暂无数据</text>
+			<image src="../../static/img-nodata.png" style="width: 120rpx;height: 160rpx;"></image>
+			<text style="font-size: 32rpx;color: #888;margin-top: 25rpx;">暂无数据</text>
 		</view>
 	</view>
 </template>
@@ -34,17 +36,15 @@
 		components: {},
 		data() {
 			return {
-				isEmpty:true,
+				isEmpty:false,
 				list:[],
 				pointsInfo:''
 			}
 		},
 		onLoad(op) {
 			if(op){
-				pointsRecordList({
-					type:op.type
-				}).then((res) =>{
-					console.log('>>>>',res)
+				pointsRecordList({}).then((res) =>{
+					// console.log('>>>>',res)
 					if(res.code === 200){
 						this.list = res.data
 						if(this.list.length === 0){

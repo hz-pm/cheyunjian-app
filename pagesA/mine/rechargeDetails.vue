@@ -3,7 +3,7 @@
 		<view class="cell">
 			<view class="cell-1">
 				<text style="color: #a6a6a6;">订单编号</text>
-				<text style="color: #111;">{{detail.rechargeId}}</text>
+				<text style="color: #111;">{{detail.orderCode}}</text>
 			</view>
 			<view class="line"></view>
 		</view>
@@ -31,7 +31,7 @@
 		<view class="cell">
 			<view class="cell-1">
 				<text style="color: #a6a6a6;">优惠金额</text>
-				<text style="color: #111;">{{detail.discount}}元</text>
+				<text style="color: #111;">{{detail.couponAmount}}元</text>
 			</view>
 			<view class="line"></view>
 		</view>
@@ -52,7 +52,7 @@
 		<view class="cell">
 			<view class="cell-1">
 				<text style="color: #a6a6a6;">支付时间</text>
-				<text style="color: #111;">{{detail.createTime}}</text>
+				<text style="color: #111;">{{detail.payTime}}</text>
 			</view>
 			<view class="line"></view>
 		</view>
