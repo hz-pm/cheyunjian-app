@@ -35,8 +35,11 @@
 			</view>
 			<view style="height: 1rpx;width: 95%;align-self: flex-end;background-color: #f5f5f5;"></view>
 		</view>
-		<u-empty mode="data" icon="../../static/img-nodata.png" text="暂无数据" width="90rpx"
-		style="margin-top: 40rpx;" v-if="isEmpty"></u-empty>
+		<view style="width: 100%;height: 50vh;display: flex;flex-direction: column;align-items: center;
+		justify-content: center;" v-if="isEmpty">
+			<image src="../../static/img-nodata.png" style="width: 120rpx;height: 160rpx;"></image>
+			<text style="font-size: 32rpx;color: #888;margin-top: 25rpx;">暂无数据</text>
+		</view>
 	</view>
 </template>
 

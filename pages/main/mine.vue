@@ -25,11 +25,11 @@
 						<view style="width: 92%; display: flex;flex-direction: row;align-items: center;
 						justify-content: space-between;color: #111;font-size: 30rpx;">
 							<view style="display: flex;flex-direction: row;align-items: center;">
-								<image src="../../static/ic-VIP.png" style="width: 50rpx;height: 50rpx;"></image>
-								<text style="margin-left: 10rpx;font-weight: bold;">升级新能源云检VIP</text>
+								<image :src="'../../static/'+vipImg" style="width: 50rpx;height: 50rpx;"></image>
+								<text style="margin-left: 10rpx;font-weight: bold;">{{userinfo.vip > 0?userinfo.vipName:'升级新能源云检VIP'}}</text>
 							</view>
 							<view style="display: flex;flex-direction: row;align-items: center;">
-								<text>最高享全年5折</text>
+								<text>{{userinfo.vip > 0?'查看详情':'最高享全年5折'}}</text>
 								<uni-icons type="right" size="32rpx"></uni-icons>
 							</view>
 						</view>
@@ -95,7 +95,7 @@
 					</view>
 					<view style="height: 1rpx; width: 84%;align-self: flex-end;background-color: #f5f5f5;"></view>
 				</navigator>
-				<navigator url="/pagesA/mine/carRecord" class="cell">
+				<navigator url="/pagesA/mine/eleRecord" class="cell">
 					<view class="cell-1">
 						<view class="cell-1-left">
 							<text class="iconfont icon-huishou Licon"></text>电易估记录
@@ -147,7 +147,8 @@
 			return {
 				phoneList: ['13316028972', '呼叫'],
 				userinfo: {},
-				pointsInfo: {}
+				pointsInfo: {},
+				vipImg:'ic-VIP.png'
 			}
 		},
 		onLoad() {
@@ -157,12 +158,21 @@
 			this.pointsInfo =  this.vuex_points_info
 			this.userinfo =  this.vuex_userinfo
 			
+			if(this.userinfo){
+				if(this.userinfo.vip > 0){
+					this.vipImg = 'f-vip2-black.png'
+				}
+			}
 			//获取用户信息
 			getUserInfo().then((res) => {
 				// console.log('getuserInfo', res)
 				if(res.code === 200){
 					this.$u.vuex('vuex_userinfo',res.data)
 					this.userinfo = res.data
+					
+					if(this.userinfo.vip > 0){
+						this.vipImg = 'f-vip2-black.png'
+					}
 				}else{
 					uni.showToast({
 						title: res.msg,
@@ -210,9 +220,16 @@
 
 			},
 			goVipInfo(){
-				uni.navigateTo({
-					url:'/pagesA/mine/vipCard'
-				})
+				if(this.userinfo.vip > 0){
+					//查看vip详情
+					uni.navigateTo({
+						url:'/pagesA/mine/myVip'
+					})
+				}else{
+					uni.navigateTo({
+						url:'/pagesA/mine/vipCard'
+					})
+				}
 			}
 		}
 	}

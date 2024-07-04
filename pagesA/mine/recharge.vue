@@ -21,7 +21,7 @@
 					<view style="display: flex;flex-direction: row;align-items: center;">
 						<view style="display: flex;flex-direction: column;justify-content: flex-end;align-items: flex-end;
 						margin-right: 10rpx;">
-							<text style="font-size: 32rpx;color: #dc4144;font-weight: bold;">￥{{item.payable}}</text>
+							<text style="font-size: 32rpx;color: #dc4144;font-weight: bold;">￥{{item.actuallyPaid}}</text>
 							<text style="font-size: 28rpx;color: #0da665;margin-top: 10rpx;">+{{item.qty}}积分</text>
 						</view>
 						<uni-icons type="right" color="#a6a6a6" size="35rpx"></uni-icons>

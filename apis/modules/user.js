@@ -102,19 +102,29 @@ export function buyVip(params){
 	return http.post('/Wx/buyVip',params)
 }
 
-//获取车云检记录
-export function cloudRecordList(params){
-	return http.get('/index/cloudRecord/list',params)
-}
-
 //获取已绑定车辆的报告
 export function submitGetMyCarReport(params){
 	return http.post('/car/info/submitGetMyCarReport',params)
 }
 
 //车云检
-export function checkCar(params){
-	return http.post('/index/cloud/checkCar',params)
+export function checkCar(params,config){
+	return http.post('/index/cloud/checkCar',params,config)
+}
+
+//获取车云检记录
+export function cloudRecordList(params){
+	return http.get('/index/cloud/list',params)
+}
+
+//获取车云检详情
+export function cloudDetails(params1){
+	return http.get('/index/cloud/getDetails',{params:params1})
+}
+
+//导出检测报告图片
+export function reportImgUrl(params1){
+	return http.get('/index/cloud/reportImgUrl',{params:params1})
 }
 
 //积分购买列表
@@ -130,5 +140,15 @@ export function getUserVipInfo(params){
 //获取VIP列表
 export function getVipCardInfo(params){
 	return http.get('/index/vip/getVipCardList',params)
+}
+
+//电易估
+export function eleCheck(params,config){
+	return http.post('/index/ele/eleCheck',params,config)
+}
+
+//获取电易估记录
+export function eleRecordList(params){
+	return http.get('/index/ele/list',params)
 }
 

@@ -113,7 +113,6 @@
 			return {
 				current: 0,
 				list5: [{
-						// img: '../../static/img-banner.webp',
 						img: projectConfig.baseImageUrl+'img-banner.webp',
 						color: '#0298fe'
 					},

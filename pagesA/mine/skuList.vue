@@ -40,7 +40,7 @@
 
 		<view style="width: 100%;display: flex;flex-direction: row;
 				align-items: center;justify-content: space-between;background-color: #FFF;
-				margin-top: 20rpx;">
+				margin-top: 20rpx;" v-if="vipInfo">
 			<view style="display: flex;flex-direction: row;align-items: center;margin-left: 35rpx;
 					margin-top: 35rpx;margin-bottom: 35rpx;">
 				<image src="../../static/VIP.png" style="width: 90rpx;height: 35rpx;"></image>
@@ -112,7 +112,8 @@
 	import test from '../../utils/test/test.js'
 	import {
 		rechargePoints,
-		getPointsSkuList
+		getPointsSkuList,
+		getUserVipInfo
 	} from '../../apis/modules/user';
 	export default {
 		components: {},
@@ -125,7 +126,9 @@
 				inputPoints: '',
 				radioCur: 0,
 				syYh: -28, //使用优惠
-				customP: 0
+				customP: 0,
+				userinfo:null,
+				vipInfo:null, //vip折扣信息
 			}
 		},
 		onLoad() {
@@ -134,6 +137,20 @@
 				this.list = res.data
 
 				this.customP = this.list[5].price
+				
+				this.userinfo =  this.vuex_userinfo
+				if(this.userinfo && this.userinfo.vip > 0){
+					//获取用户vip信息
+					getUserVipInfo().then((res) => {
+						// console.log(res)
+						if(res.code === 200){
+							this.vipInfo = res.data
+							//优惠
+							this.syYh = parseFloat(Number.parseInt(((this.vipInfo.discountFactor * this.list[this.current].price) 
+							- this.list[this.current].price))).toFixed(2)
+						}
+					})
+				}
 			})
 		},
 		methods: {
@@ -145,6 +162,13 @@
 				for (let i = 0; i < this.list.length; i++) {
 					if (this.list[i].qty + '' === res.detail.value) {
 						this.current = i;
+						let money = ((this.vipInfo.discountFactor * this.list[this.current].price)
+						- this.list[this.current].price)
+						if(this.current === 5){
+							this.syYh = parseFloat(money).toFixed(2)
+						}else{
+							this.syYh = parseFloat(Number.parseInt(money)).toFixed(2)
+						}
 						break;
 					}
 				}

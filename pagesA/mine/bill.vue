@@ -8,12 +8,12 @@
 		v-for="(item,index) in list">
 			<view style="width: 100%;display: flex;flex-direction: row;align-items: center;justify-content: space-between;">
 				<view style="display: flex;flex-direction: column;margin-top: 30rpx;margin-bottom: 30rpx;">
-					<text style="font-size: 32rpx;color: #111;">{{item.consumptionSubject}}</text>
+					<text style="font-size: 32rpx;color: #111;">{{item.eventName}}</text>
 					<text style="font-size: 28rpx;color: #a6a6a6;margin-top: 10rpx;">{{item.createTime}}</text>
 				</view>
 				<view style="display: flex;flex-direction: column;justify-content: flex-end;align-items: flex-end;">
-					<text style="font-size: 32rpx;color: #dc4144;font-weight: bold;">{{item.consumptionQty}}</text>
-					<text style="font-size: 28rpx;color: #a6a6a6;margin-top: 10rpx;">剩余{{item.realityQty}}积分</text>
+					<text style="font-size: 32rpx;color: #dc4144;font-weight: bold;">{{item.qty}}</text>
+					<text style="font-size: 28rpx;color: #a6a6a6;margin-top: 10rpx;">剩余{{item.residueStockQty}}积分</text>
 				</view>
 			</view>
 			<view style="height: 1rpx;width: 95%;align-self: flex-end;background-color: #f5f5f5;"></view>

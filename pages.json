@@ -58,6 +58,14 @@
 				}
 			},
 			{
+				"path": "mine/eleRecord",
+				"style": {
+					"navigationBarTitleText": "电易估记录",
+					"enablePullDownRefresh": false,
+					"navigationStyle": "default"
+				}
+			},
+			{
 				"path": "mine/appraiseRecord",
 				"style": {
 					"navigationBarTitleText": "电易估记录",
@@ -125,6 +133,14 @@
 				"path": "mine/rechargeDetails",
 				"style": {
 					"navigationBarTitleText": "订单详情",
+					"enablePullDownRefresh": false,
+					"navigationStyle": "default"
+				}
+			
+			}, {
+				"path": "mine/myVip",
+				"style": {
+					"navigationBarTitleText": "我的会员",
 					"enablePullDownRefresh": false,
 					"navigationStyle": "default"
 				}

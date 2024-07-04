@@ -1,5 +1,5 @@
 <template>
-	<view class="content" @touchmove.stop.prevent="disabledScroll">
+	<view class="content">
 		<view class="top-bg">
 			<view style="width: 90%;display: flex;flex-direction: row;align-items: center;
 					margin-top: 20rpx;justify-content: space-between;">
@@ -19,7 +19,7 @@
 						<picker :range="typeColumns" @change="confirmTypeChange">
 							<view style="display: flex;flex-direction: row;align-items: center;">
 								<text
-									style="font-size: 28rpx;font-weight: bold;color: #ff8d1a;margin-left: 20rpx;">{{companyType}}</text>
+									style="font-size: 28rpx;font-weight: bold;color: #ff8d1a;margin-left: 20rpx;">{{companyTypeStr}}</text>
 								<view class="triangle"></view>
 							</view>
 						</picker>
@@ -34,7 +34,7 @@
 					align-items: center;padding-top: 20rpx;padding-bottom: 20rpx;">
 					<image src="../../static/icon-search.png" style="width: 45rpx;height: 45rpx;
 							margin-left: 20rpx;margin-right: 20rpx;"></image>
-					<input placeholder="请核对查询类型后输入车架号" fontSize="32rpx" color="#111" border="none"></input>
+					<input placeholder="请核对查询类型后输入车架号" fontSize="32rpx" color="#111" border="none" v-model="vinCode"></input>
 				</view>
 				<view style="height: 1rpx;width: 100%;background-color: #DDD;"></view>
 				<view style="width: 100%;display: flex;flex-direction: row;align-items: center;
@@ -105,11 +105,6 @@
 			</view>
 		</uni-popup>
 
-		<uni-popup ref="alertDialog" type="dialog">
-			<uni-popup-dialog type="info" confirmText="我知道了" :content='content' @confirm="confirmModal"
-				:showClose="false"></uni-popup-dialog>
-		</uni-popup>
-
 		<uni-popup ref="popup2" type="bottom" border-radius="15rpx 15rpx 0 0" @close="closeDemoPop" @open="openDemoPop"
 			background-color="#FFF">
 			<view style="display: flex;flex-direction: column;align-items: center;height: 80vh;">
@@ -138,9 +133,6 @@
 				</scroll-view>
 			</view>
 		</uni-popup>
-
-		<u-picker :show="showTypePop" :columns="typeColumns" @confirm="confirmType"
-			@cancel="showTypePop=false"></u-picker>
 	</view>
 </template>
 
@@ -148,90 +140,33 @@
 	import projectConfig from '@/common/config.js';
 
 	import {
-		getDoOrder,
+		eleCheck,
 	} from '../../apis/modules/user';
 	export default {
 		components: {},
 		data() {
 			return {
-				showPop: false,
-				showModal: false,
 				pic: '',
-				checked: false,
-				cbValue: 'cb1',
-				checkboxList1: [{
-					name: 'cb1',
-					value: 25,
-				}, {
-					name: 'cb2',
-					value: 10,
-				}, {
-					name: 'cb3',
-					value: 30,
-				}, {
-					name: 'cb4',
-					value: 10,
-				}, {
-					name: 'cb5',
-					value: 5,
-				}],
-				checkboxValue1: [],
-				amount: 0,
-				showTypePop: false,
 				typeColumns: ['车架号(VIN)', '电池包编码', '整车型号(公告号)'],
-				companyType: '车架号(VIN)',
+				companyType: 0,
+				companyTypeStr:'车架号(VIN)',
 				curTab: 1,
-				img1:'',
-				img1:'',
-				baseImageUrl:projectConfig.baseImageUrl
+				baseImageUrl:projectConfig.baseImageUrl,
+				vinCode:''
 			}
 		},
 		methods: {
 			open() {
-				this.showPop = true
 				this.$refs.popup.open()
 			},
 			close() {
-				this.showPop = false
 				this.$refs.popup.close()
 			},
-			disabledScroll() {
-				if (this.showPop) {
-					return
-				}
-			},
-			clickAddMyCar() {
-				this.$refs.alertDialog.close()
-			},
-			confirmModal() {
-				this.$refs.alertDialog.open()
-				this.openDemoPop()
-			},
 			closeDemoPop() {
-				this.showPop = false
 				this.$refs.popup2.close()
 			},
 			openDemoPop() {
-				this.showPop = true
 				this.$refs.popup2.open()
-			},
-			checkboxChange(n) {
-				console.log('change', n);
-				this.getAmount(n)
-			},
-			checkedCb() {
-				this.checked = !this.checked
-			},
-			argeement(type) {
-				uni.navigateTo({
-					url: '/pagesB/reg/webView?type=' + type
-				})
-			},
-			clickAddSubmit() {
-				if (!this.checked) {
-					this.$u.toast('请先阅读并同意协议')
-					return
-				}
 			},
 			openImagePage() {
 				let that = this;
@@ -268,66 +203,53 @@
 					}
 				});
 			},
-			clickEditCar(item) {
-				this.showPop = true
-				this.$refs.popup2.open()
-			},
-			openSelectItemPop() {
-				this.showPop = true
-				this.$refs.popup3.open()
-			},
-			closeSelectItemPop() {
-				this.showPop = false
-				this.$refs.popup3.close()
-			},
-			clickSubmitInquire() {
-				this.closeSelectItemPop()
-			},
-			selectAll() {
-				//全选
-				if (this.checkboxValue1.length == 5) {
-					this.checkboxValue1 = []
-				} else {
-					this.checkboxValue1 = []
-					for (var i = 0; i < this.checkboxList1.length; i++) {
-						this.checkboxValue1.push(this.checkboxList1[i].name)
-					}
-				}
-
-				this.getAmount(this.checkboxValue1)
-			},
-			clickSelectOk() {
-				console.log(this.checkboxValue1)
-				if (this.checkboxValue1.includes('cb1') || this.checkboxValue1.includes('cb3')) {
-					console.log('========***========')
-				} else {
-					this.$u.toast('模块1.3中必需选中一项')
-				}
-			},
-			getAmount(list) {
-				let value = 0;
-				for (var i = 0; i < list.length; i++) {
-					for (var j = 0; j < this.checkboxList1.length; j++) {
-						if (list[i] == this.checkboxList1[j].name) {
-							value += this.checkboxList1[j].value
-						}
-					}
-				}
-				this.amount = value
-			},
-			confirmType(e) {
-				console.log('confirm', e)
-				this.showTypePop = false
-				this.companyType = e.value[0]
-				console.log('=====>' + this.companyType)
-			},
 			clickTab(index) {
 				this.curTab = index
-
 			},
 			confirmTypeChange(e) {
-				this.companyType = this.typeColumns[e.detail.value]
+				console.log('============>>>'+e.detail.value)
+				if(e.detail.value === 0){
+					//车架号(VIN)
+					this.companyType = 3501
+				}else if(e.detail.value === 1){
+					//电池包编码
+					this.companyType = 3502
+				}else{
+					//整车型号(公告号)
+					this.companyType = 3503
+				}
+				this.companyTypeStr = this.typeColumns[e.detail.value]
 				console.log(this.companyType)
+			},
+			clickSubmit(){
+				//提交检测
+				if(this.vinCode === ''){
+					uni.showToast({
+						title:'请输入车架号',
+						icon:'error'})
+					return
+				}
+				//车云检
+				eleCheck({
+					vinCode:this.vinCode,
+					requestIdType:this.companyType,
+				},{custom: {catch: true,}
+				}).then((res) => {
+					if(!res.data){
+						uni.showModal({
+							title: '提示',
+							content: res.msg,
+							showCancel:false,
+							success: function (res) {
+							}
+						});
+					}else{
+						//进入详情页
+						uni.navigateTo({
+							url:'/pagesB/main/detectionReport?vinCode='+this.vinCode
+						})
+					}
+				});
 			}
 		}
 	}

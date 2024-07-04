@@ -27,7 +27,7 @@
 					align-items: center;padding-top: 20rpx;padding-bottom: 20rpx;">
 					<image src="../../static/icon-search.png" style="width: 45rpx;height: 45rpx;
 							margin-left: 20rpx;margin-right: 20rpx;"></image>
-					<input placeholder="请输入17位VIN车架号" fontSize="32rpx" color="#111" border="none"></input>
+					<input placeholder="请输入17位VIN车架号" fontSize="32rpx" color="#111" border="none" v-model="vinCode"></input>
 				</view>
 				<view style="height: 1rpx;width: 100%;background-color: #DDD;"></view>
 				<view style="width: 100%;display: flex;flex-direction: row;align-items: center;
@@ -73,11 +73,6 @@
 					</view>
 				</scroll-view>
 			</view>
-		</uni-popup>
-
-		<uni-popup ref="alertDialog" type="dialog">
-			<uni-popup-dialog type="info" confirmText="我知道了" :content='content' @confirm="confirmModal"
-				:showClose="false"></uni-popup-dialog>
 		</uni-popup>
 
 		<uni-popup ref="popup2" type="bottom" border-radius="15rpx 15rpx 0 0" @close="closeDemoPop" @open="openDemoPop"
@@ -168,8 +163,8 @@
 					}
 				],
 				amount: 0,
-				content: '',
-				baseImageUrl: projectConfig.baseImageUrl
+				baseImageUrl: projectConfig.baseImageUrl,
+				vinCode:'V5654656565656566' //车架号
 			}
 		},
 		methods: {
@@ -180,15 +175,6 @@
 			close() {
 				this.showPop = false
 				this.$refs.popup.close()
-			},
-			disabledScroll() {
-				if (this.showPop) {
-					return
-				}
-			},
-			confirmModal() {
-				this.$refs.alertDialog.open()
-				this.openDemoPop()
 			},
 			closeDemoPop() {
 				this.showPop = false
@@ -233,10 +219,6 @@
 					}
 				});
 			},
-			clickEditCar(item) {
-				this.showPop = true
-				this.$refs.popup2.open()
-			},
 			openSelectItemPop() {
 				this.showPop = true
 				this.$refs.popup3.open()
@@ -244,9 +226,6 @@
 			closeSelectItemPop() {
 				this.showPop = false
 				this.$refs.popup3.close()
-			},
-			clickSubmitInquire() {
-				this.closeSelectItemPop()
 			},
 			 checkboxChange(event) {
 				// console.log('change', event);
@@ -267,14 +246,7 @@
 			clickSelectOk() {
 				if (this.checkboxValue1.includes('cb1') || this.checkboxValue1.includes('cb3')) {
 					console.log('========***========');
-					//车云检
-					checkCar({
-						vinCode:'VSVSVSVSVSVSV123456',
-						points:20
-					}).then((res) => {
-						
-					})
-					
+
 				} else {
 					uni.showToast({
 						title: '模块1.3中必需选中一项',
@@ -292,6 +264,35 @@
 					}
 				}
 				this.amount = value;
+			},
+			clickSubmit(){
+				if(this.vinCode === ''){
+					uni.showToast({
+						title:'请输入车架号',
+						icon:'error'})
+					return
+				}
+				//车云检
+				checkCar({
+					vinCode:this.vinCode,
+					points:80,
+				},{custom: {catch: true,}
+				}).then((res) => {
+					if(!res.data){
+						uni.showModal({
+							title: '提示',
+							content: res.msg,
+							showCancel:false,
+							success: function (res) {
+							}
+						});
+					}else{
+						//进入详情页
+						uni.navigateTo({
+							url:'/pagesB/main/detectionReport?vinCode='+this.vinCode
+						})
+					}
+				});
 			}
 		}
 	}

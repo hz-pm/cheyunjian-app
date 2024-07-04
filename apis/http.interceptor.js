@@ -46,7 +46,7 @@ http.setConfig((config) => {
 		LoadingText: 'Loading...',
 		//错误提示框
 		toast:true,
-		catch: true,
+		catch: false,
 	}; // 全局自定义参数默认值
 	config.dataType = 'json'
 	return config
@@ -101,6 +101,9 @@ http.interceptors.response.use(async (resp) => {
 	}
 	//1.请求成功则返回结果
 	if (code === httpCode.SUCCESS) {
+		return data;
+	}
+	if(custom.catch){
 		return data;
 	}
 	// 2请求失败:

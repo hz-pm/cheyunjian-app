@@ -30,7 +30,7 @@
 					</view>
 				</view>
 
-				<view class="vip-v">
+				<view class="vip-v" v-if="vipList">
 					<view class="item-v" :class="vipIndex == 0?'item-select':''" @click="clickItem(0)">
 						<view class="top">
 							<image :src="vipIndex==0?'../../static/f-vip2.png':'../../static/f-vip2-grey.png'"
@@ -119,7 +119,7 @@
 				vipIndex: 0,
 				checked:false,
 				userinfo: {},
-				vipList:[]
+				vipList:null
 			}
 		},
 		onLoad() {
@@ -127,7 +127,7 @@
 			
 			getVipCardInfo().then((res) => {
 				this.vipList = res.data
-				console.log('>>>',res)
+				// console.log('>>>',res)
 			})
 		},
 		methods: {
@@ -139,7 +139,7 @@
 			clickItem(index) {
 				this.vipIndex = index;
 			},
-			checkboxChange(e){
+			checkboxChange(n){
 				if (n.detail.value.length > 0) {
 					this.checked = true
 				} else {
@@ -164,9 +164,13 @@
 				}
 				//购买vip
 				buyVip({
-					id:this.vipList[this.vipIndex].id
+					pId:this.vipList[this.vipIndex].id
 				}).then((res) => {
 					console.log(res)
+					
+					setTimeout(() => {
+						uni.navigateBack()
+					},1000)
 					
 					uni.showToast({
 						title:'购买成功！',

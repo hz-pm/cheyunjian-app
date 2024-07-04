@@ -42,7 +42,7 @@
 <script>
 	import projectConfig from '@/common/config.js';
 	import {
-		cloudRecordList
+		eleRecordList
 	} from '../../apis/modules/user';
 	export default {
 		components: {},
@@ -54,7 +54,7 @@
 			}
 		},
 		onLoad() {
-			cloudRecordList().then((res) => {
+			eleRecordList().then((res) => {
 				console.log(res)
 				this.list = res.data
 				
@@ -63,7 +63,7 @@
 				})
 				
 				// let json = JSON.parse(this.list[0].resultTxt)
-				console.log(this.list[0].resultTxt)
+				// console.log(this.list[0].resultTxt)
 				
 				if(this.list.length === 0){
 					this.isEmpty = true
@@ -75,7 +75,7 @@
 		methods: {
 			clickItem(item){
 				uni.navigateTo({
-					url:'/pagesB/main/detectionReport?vinCode='+item.vinCode
+					url:'/pagesB/main/detectionReport'
 				})
 			},
 			search(res) {

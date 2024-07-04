@@ -1,18 +1,18 @@
 <template>
-	<view class="content">
+	<view class="content" v-if="detail">
 		<view style="width: 100%;background: linear-gradient(180deg,#00acdd,#f7fcff 400%);
 		display: flex;flex-direction: column;align-items: center;">
 			<view style="width: 92%; display: flex;flex-direction: row;align-items: center;
 			margin-top: 20rpx;margin-bottom: 30rpx;">
-				<image src="../../static/ic-car.png" style="width: 80rpx;height: 80rpx;background-color: #f1f1f1;
+				<image :src="detail.resultTxt.brandLogo" style="width: 80rpx;height: 80rpx;background-color: #f1f1f1;
 				border-radius: 15rpx;"></image>
 				<view style="display: flex;flex-direction: column;color: #FFF;margin-left: 25rpx;">
-					<text style="font-size: 30rpx;">大众汽车</text>
-					<text style="font-size: 26rpx;margin-top: 15rpx;">VIN：SSVUD******022558</text>
+					<text style="font-size: 30rpx;">{{detail.resultTxt.brand}}</text>
+					<text style="font-size: 26rpx;margin-top: 15rpx;">VIN：{{detail.vinCode}}</text>
 				</view>
 			</view>
 			<view style="height: 1rpx; opacity: 0.1;width: 92%;background-color: #FFF;"></view>
-			<text style="width: 92%; font-size: 28rpx;color: #FFF;margin-top: 20rpx;">生成日期：2021-10-10</text>
+			<text style="width: 92%; font-size: 28rpx;color: #FFF;margin-top: 20rpx;">生成日期：{{detail.createTime}}</text>
 			<view style="width: 92%;display: flex;flex-direction: column;align-items: center;margin-top: 30rpx;
 			background-color: #FFF;border-top-right-radius: 20rpx;border-top-left-radius: 20rpx;">
 				<view style="width: 65%;display: flex;flex-direction: row;align-items: center;
@@ -32,14 +32,14 @@
 					position: absolute;margin-top: 115rpx;align-items: center;">
 						<view style="display: flex;flex-direction: row;">
 							<text style="font-size: 75rpx;color: #00acdd;
-							font-weight: 500;">413</text>
+							font-weight: 500;">{{detail.resultTxt.referRateMileage}}</text>
 							<text style="font-size: 30rpx;color: #00acdd;margin-top: 5rpx;">km</text>
 						</view>
 						<view style="display: flex;flex-direction: row;background-color: #fff9ed;border: 1rpx solid #f3a550;
 						padding-left: 6rpx;padding-right: 6rpx;border-radius: 5rpx;align-items: center;
 						margin-top: 25rpx;justify-content: center;width: 130rpx;">
-							<uni-icons type="arrow-down" color="#f3a550" size="30rpx"></uni-icons>
-							<text style="font-size: 30rpx;color: #FFF;color: #f3a550;">20.3%</text>
+							<uni-icons type="arrow-down" color="#f3a550" size="30rpx" v-if="false"></uni-icons>
+							<text style="font-size: 30rpx;color: #FFF;color: #f3a550;">{{detail.resultTxt.referRateMileageAssess}}</text>
 						</view>
 					</view>
 				</view>
@@ -50,15 +50,15 @@
 			<view class="i-cell-1">
 				<text style="margin-top: 30rpx;">表显行驶里程</text>
 				<view style="display: flex;flex-direction: row;align-items: center;margin-top: 10rpx;">
-					<text style="font-size: 38rpx;color: #00acdd;font-weight: bold;">28000 km</text>
+					<text style="font-size: 38rpx;color: #00acdd;font-weight: bold;">{{detail.resultTxt.displayMileage}} km</text>
 					<text class="iconfont icon-question" style="margin-left: 5rpx;color: #666;"></text>
 				</view>
-				<text style="font-size: 26rpx;margin-top: 5rpx;margin-bottom: 30rpx;">最后更新于2023-10-30</text>
+				<text style="font-size: 26rpx;margin-top: 5rpx;margin-bottom: 30rpx;">最后更新于{{detail.resultTxt.lastDrivingDate}}</text>
 			</view>
 			<view class="i-cell-1">
 				<text style="margin-top: 30rpx;">已使用天数</text>
-				<text style="font-size: 38rpx;color: #00acdd;font-weight: bold;margin-top: 10rpx;">644天</text>
-				<text style="font-size: 26rpx;margin-top: 5rpx;margin-bottom: 30rpx;">日均行驶1.01小时</text>
+				<text style="font-size: 38rpx;color: #00acdd;font-weight: bold;margin-top: 10rpx;">xxx天</text>
+				<text style="font-size: 26rpx;margin-top: 5rpx;margin-bottom: 30rpx;">日均行驶{{detail.resultTxt.averageDailyDriveHour}}小时</text>
 			</view>
 		</view>
 
@@ -374,6 +374,18 @@
 				</view>
 			</view>
 		</view>
+		
+		<uni-popup ref="imgPopup" type="bottom" border-radius="15rpx 15rpx 0 0" @close="closeImgPop" @open="openImgPop"
+			background-color="#FFF">
+			<view style="display: flex;flex-direction: column;align-items: center;height: 65vh;">
+				<scroll-view scroll-y="true" style="height: 65vh;">
+					<view style="width: 100%;display: flex;flex-direction: column;align-items: center;">
+						<image :src="reportImg" style="width: 100%;"></image>
+					</view>
+				</scroll-view>
+			</view>
+		</uni-popup>
+		
 	</view>
 </template>
 
@@ -417,7 +429,10 @@
 	// ]);
 
 	import projectConfig from '@/common/config.js';
-	import {} from '../../apis/modules/user';
+	import {
+		cloudDetails,
+		reportImgUrl
+	} from '../../apis/modules/user';
 	export default {
 		components: {},
 		onReady() {
@@ -431,7 +446,6 @@
 				percentage: 50, // 进度条的百分比
 				lines: 7, // 放射线的数量
 				circles: 3, // 半圆数量
-
 				radarOption: {
 					radar: {
 						indicator: [{
@@ -534,7 +548,30 @@
 						},
 					}],
 				},
+				vinCode:'LNAD2AB38M5000711',
+				detail:'',
+				reportImg:''
 			}
+		},
+		onLoad(op) {
+			// if(op){
+			// 	this.vinCode = op.vinCode;
+			// 	console.log(this.vinCode)
+			// 	//获取详情
+			// 	cloudDetails({
+			// 		vinCode:this.vinCode
+			// 	}).then((res) => {
+			// 		this.detail = res.data
+			// 	})
+			// }
+			cloudDetails({
+				vinCode:this.vinCode
+			}).then((res) => {
+				this.detail = res.data
+				//格式化json数据
+				this.detail.resultTxt = JSON.parse(res.data.resultTxt)
+			})
+			
 		},
 		methods: {
 			clickTab(index) {
@@ -544,7 +581,12 @@
 				this.$u.toast('刷新');
 			},
 			clickExport() {
-				this.$u.toast('导出');
+				reportImgUrl({
+					reportId:this.detail.resultTxt.id,
+					vinCode:this.vinCode
+				}).then((res) => {
+					
+				})
 			},
 			drawHalfCircleProgress() {
 				const ctx = uni.createCanvasContext('progressCanvas', this);
@@ -610,7 +652,13 @@
 			},
 			number(value) {
 			    return /^[\+-]?(\d+\.?\d*|\.\d+|\d\.\d+e\+\d+)$/.test(value)
-			}
+			},
+			closeImgPop() {
+				this.$refs.imgPopup.close()
+			},
+			openImgPop() {
+				this.$refs.imgPopup.open()
+			},
 		}
 	}
 </script>
