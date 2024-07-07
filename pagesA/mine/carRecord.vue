@@ -61,9 +61,6 @@
 					info.resultTxt = JSON.parse(info.resultTxt)
 				})
 				
-				// let json = JSON.parse(this.list[0].resultTxt)
-				console.log(this.list[0].resultTxt)
-				
 				if(this.list.length === 0){
 					this.isEmpty = true
 				}else{

@@ -1,7 +1,7 @@
 <template>
 	<view class="content">
 		<view class="top-v">
-			<view style="height: 180rpx;"></view>
+			<view style="height: 150rpx;"></view>
 			<image src="../../static/logo-login.png" style="width: 200rpx;height: 220rpx;"></image>
 
 			<view class="tab-v">
@@ -9,7 +9,6 @@
 				<text class="tab-text" :class="selectTab == 1?'active-tab':''" @click="selectTab=1">用户密码登录</text>
 			</view>
 		</view>
-
 
 		<view class="form-v">
 			<input placeholder="请输入手机号" font-size="28rpx" v-model="phone"
@@ -49,7 +48,7 @@
 			</checkbox-group>
 		</view>
 		<view style="width: 90%;display: flex;flex-direction: column;align-items: center;
-		margin-top: 150rpx;margin-bottom: 50rpx;">
+		margin-top: 120rpx;margin-bottom: 50rpx;">
 			<view style="width: 100%;display: flex;flex-direction: row;
 			align-items: center;justify-content: space-between;">
 				<view style="width: 30%;background-color: #BBB;height: 1rpx;"></view>
@@ -273,6 +272,7 @@
 				})
 			},
 			async onLogin() {
+				let that = this
 				uni.showLoading({
 					mask:true,
 					title:'Loading...'
@@ -308,14 +308,24 @@
 						//调用登录接口
 						loginByWX(params).then((res) => {
 							console.log(res)
+							if (res.code === 200) {
+								uni.showToast({
+									title: '登录成功',
+									icon: 'none'
+								})
+								//保存token
+								// that.$u.vuex('vuex_token',res.token)
+								uni.setStorageSync('TOKEN', res.token)
+								//获取用户信息
+								that.getUserInfo2()
+							} else {
+								uni.showToast({
+									title: res.msg,
+									icon: 'none'
+								})
+							}
+							
 						})
-						
-						// const {
-						// 	data
-						// } = await wxLogin(params);
-						// uni.setStorageSync(USER_TOKEN, data.token);
-						// this.$store.commit("SET_USER_INFO", data);
-						// this.$api.msg("登陆成功");
 					}
 				}
 				

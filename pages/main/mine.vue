@@ -121,11 +121,16 @@
 						<text style="margin-top: 10rpx;">电话咨询</text>
 					</view>
 					<view style="width: 1rpx;height: 90rpx;background-color: #f5f5f5;"></view>
-					<view style="width: 50%;display: flex;flex-direction: column;align-items: center;"
-						@click="onlineKefu">
+					
+					<view style="display: flex;flex-direction: column;align-items: center;color:#111;
+					width: 50%;">
 						<text class="iconfont icon-msg" style="color: #00acdd;font-size: 50rpx;"></text>
-						<text style="margin-top: 5rpx;">在线客服</text>
+						<text style="margin-top: 5rpx;font-size: 28rpx;">在线客服</text>
+						<button style="display: flex;flex-direction: column;align-items: center;border: none;background-color: #33000000;
+						position: absolute;width: 50%;height: 85rpx;"
+						type="default" plain="true" open-type="contact" size="default"></button>
 					</view>
+					
 				</view>
 				<view style="height: 1rpx;width: 100%;background-color: #f5f5f5;"></view>
 
@@ -217,7 +222,7 @@
 				});
 			},
 			onlineKefu() {
-
+				console.log('==============')
 			},
 			goVipInfo(){
 				if(this.userinfo.vip > 0){
