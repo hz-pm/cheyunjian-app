@@ -23,7 +23,7 @@
 					padding: 20rpx;" border="none">
 				</input>
 				<text @click="getCode" style="font-size: 26rpx;padding-right: 20rpx;color: #00acdd;">{{tips}}</text>
-			</view>	
+			</view>
 
 			<input placeholder="请输入密码" font-size="28rpx" v-model="pwd" password style="background-color: #FFF;border-radius: 20rpx;
 			margin-top: 40rpx;width: 95%;padding: 20rpx;" border="none" v-if="selectTab == 1">
@@ -35,7 +35,7 @@
 				<navigator url="/pagesB/reg/register">注册新账号</navigator>
 			</view>
 
-			<button class="btn"@click="login">登录</button>
+			<button class="btn" @click="login">登录</button>
 
 			<checkbox-group
 				style="display: flex;flex-direction: row;align-items: center;font-size: 26rpx;margin-top: 20rpx;"
@@ -47,7 +47,17 @@
 					<text @click="argeement(2)" style="color: #00acdd;">《隐私政策》</text>
 				</view>
 			</checkbox-group>
-
+		</view>
+		<view style="width: 90%;display: flex;flex-direction: column;align-items: center;
+		margin-top: 150rpx;margin-bottom: 50rpx;">
+			<view style="width: 100%;display: flex;flex-direction: row;
+			align-items: center;justify-content: space-between;">
+				<view style="width: 30%;background-color: #BBB;height: 1rpx;"></view>
+				<text style="font-size: 30rpx;color: #888;">微信登录</text>
+				<view style="width: 30%;background-color: #BBB;height: 1rpx;"></view>
+			</view>
+			<image src="../../static/wxLogin.png" style="width: 100rpx;height: 100rpx;margin-top: 35rpx;"
+			@click="onLogin"></image>
 		</view>
 	</view>
 </template>
@@ -58,11 +68,12 @@
 		userLogin,
 		loginByCode,
 		getUserInfo,
-		sendSms
+		sendSms,
+		loginByWX
 	} from '../../apis/modules/user';
 	export default {
 		components: {
-			
+
 		},
 		data() {
 			return {
@@ -73,22 +84,22 @@
 				tips: '获取验证码',
 				cbValue: 'cb1',
 				checked: true,
-				timer:null,
-				canGetCode:true,
+				timer: null,
+				canGetCode: true,
 			}
 		},
 		options: {
-		      styleIsolation: 'shared',
+			styleIsolation: 'shared',
 		},
 		onunload() {
-			if(this.timer){
+			if (this.timer) {
 				clearInterval(this.timer)
 				this.timer = null
 			}
 		},
 		methods: {
 			login() {
-				
+
 				if (test.isEmpty(this.phone)) {
 					uni.showToast({
 						title: '请输入手机号',
@@ -120,49 +131,49 @@
 					})
 					return
 				}
-				
-				
+
+
 				let that = this
 				if (this.selectTab == 0) {
 					loginByCode({
-						phoneNumber:this.phone,
-						smsCode:this.code,
+						phoneNumber: this.phone,
+						smsCode: this.code,
 					}).then((res) => {
 						console.log('userLoginByCode', res)
-						if(res.code === 200){
+						if (res.code === 200) {
 							uni.showToast({
 								title: '登录成功',
 								icon: 'none'
 							})
 							//保存token
 							// that.$u.vuex('vuex_token',res.token)
-							uni.setStorageSync('TOKEN',res.token)
+							uni.setStorageSync('TOKEN', res.token)
 							//获取用户信息
 							that.getUserInfo2()
-						}else{
+						} else {
 							uni.showToast({
 								title: res.msg,
 								icon: 'none'
 							})
 						}
 					})
-				}else{
+				} else {
 					userLogin({
-						username:this.phone,
-						password:this.pwd,
+						username: this.phone,
+						password: this.pwd,
 					}).then((res) => {
 						console.log('userLogin', res)
-						if(res.code === 200){
+						if (res.code === 200) {
 							uni.showToast({
 								title: '登录成功',
 								icon: 'none'
 							})
 							//保存token
 							// that.$u.vuex('vuex_token',res.token)
-							uni.setStorageSync('TOKEN',res.token)
+							uni.setStorageSync('TOKEN', res.token)
 							//获取用户信息
 							that.getUserInfo2()
-						}else{
+						} else {
 							uni.showToast({
 								title: res.msg,
 								icon: 'none'
@@ -172,28 +183,28 @@
 				}
 			},
 			getCode() {
-				if(test.isEmpty(this.phone)){
+				if (test.isEmpty(this.phone)) {
 					uni.showToast({
 						title: '请输入手机号',
 						icon: 'none'
 					})
 					return
 				}
-				if(!test.mobile(this.phone)){
+				if (!test.mobile(this.phone)) {
 					uni.showToast({
 						title: '请输入正确手机号',
 						icon: 'none'
 					})
 					return
 				}
-				
+
 				if (this.canGetCode) {
 					sendSms({
-						phoneNumber:this.phone,
-						type:'login'
+						phoneNumber: this.phone,
+						type: 'login'
 					}).then((res) => {
 						console.log('sendSms', res)
-						if(res.code === 200){
+						if (res.code === 200) {
 							uni.showToast({
 								title: '验证码已发送',
 								icon: 'none'
@@ -203,17 +214,17 @@
 							//开始倒计时
 							this.timer = setInterval(() => {
 								//倒计时
-								if(time <= 0){
+								if (time <= 0) {
 									this.canGetCode = true
 									this.tips = '重新获取'
 									clearInterval(this.timer)
 									this.timer = null;
 									return
 								}
-								time-=1000
+								time -= 1000
 								this.tips = time / 1000 + 's后重新获取'
 							}, 1000)
-						}else{
+						} else {
 							uni.showToast({
 								title: res.msg,
 								icon: 'none'
@@ -227,17 +238,17 @@
 					})
 				}
 			},
-			getUserInfo2(){
+			getUserInfo2() {
 				getUserInfo().then((res) => {
 					console.log('getuserInfo', res)
-					if(res.code === 200){
-						this.$u.vuex('vuex_userinfo',res.data)
+					if (res.code === 200) {
+						this.$u.vuex('vuex_userinfo', res.data)
 						setTimeout(() => {
 							uni.reLaunch({
-								url:'/pages/main/main',
+								url: '/pages/main/main',
 							})
 						}, 500)
-					}else{
+					} else {
 						uni.showToast({
 							title: res.msg,
 							icon: 'none'
@@ -258,8 +269,57 @@
 			},
 			argeement(type) {
 				uni.navigateTo({
-					url:'/pagesB/reg/webView?type='+type,
+					url: '/pagesB/reg/webView?type=' + type,
 				})
+			},
+			async onLogin() {
+				uni.showLoading({
+					mask:true,
+					title:'Loading...'
+				})
+				
+				//获取用户信息
+				const [, userProfile] = await uni.getUserProfile({
+					desc: "获取用户信息",
+					lang: "zh_CN",
+				});
+
+				if (userProfile) {
+					//登录
+					const [, loginInfo] = await uni.login({
+						provider: "weixin"
+					});
+					if (loginInfo) {
+						const {
+							code
+						} = await loginInfo;
+						const {
+							userInfo: {
+								avatarUrl,
+								nickName
+							},
+						} = userProfile;
+						const params = {
+							code,
+							avatarUrl,
+							userName: nickName,
+						};
+						console.log(params)
+						//调用登录接口
+						loginByWX(params).then((res) => {
+							console.log(res)
+						})
+						
+						// const {
+						// 	data
+						// } = await wxLogin(params);
+						// uni.setStorageSync(USER_TOKEN, data.token);
+						// this.$store.commit("SET_USER_INFO", data);
+						// this.$api.msg("登陆成功");
+					}
+				}
+				
+				uni.hideLoading();
 			}
 		}
 	}

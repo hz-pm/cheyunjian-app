@@ -79,7 +79,7 @@ http.interceptors.request.use((config) => {
 	uni.showToast({
 		icon: 'none',
 		position: 'bottom',
-		title: '网络异常'
+		title: '网络请求异常'
 	})
 	return Promise.reject(config)
 })
@@ -150,17 +150,23 @@ http.interceptors.response.use(async (resp) => {
 		msg = '未知错误,请联系管理员'
 	}
 	//提示:信息
-	uni.showToast({
-		icon: "none",
-		title: msg
+	// uni.showToast({
+	// 	icon: "error",
+	// 	title: 
+	// })
+	uni.showModal({
+		title:'提示',
+		content:msg,
+		showCancel:false,
 	})
 	return Promise.reject(data)
 }, (response) => { // 请求错误做点什么。可以使用async await 做异步操作
 	uni.hideLoading();
 	uni.showToast({
-		icon: 'none',
+		icon: 'error',
 		position: 'bottom',
-		title: '网络异常'
+		duration:3000,
+		title: '网络错误'+response.statusCode
 	})
 	return Promise.reject(response)
 })

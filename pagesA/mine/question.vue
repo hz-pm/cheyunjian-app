@@ -108,7 +108,6 @@
 			}
 		},
 		onLoad(op) {
-			console.log('=========*1===========', op)
 			if (op.qType == '2') {
 				this.list = this.qList2
 			}else {

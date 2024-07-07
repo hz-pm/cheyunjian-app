@@ -24,7 +24,6 @@
 							<text style="font-size: 26rpx;color: #a6a6a6;margin-top: 10rpx;">{{item.createTime}}</text>
 						</view>
 					</view>
-					
 					<uni-icons type="right" color="#a6a6a6" size="35rpx"></uni-icons>
 				</view>
 				<view style="width: 95%;align-self: flex-end;height: 1rpx;background-color: #f5f5f5;"></view>
@@ -75,7 +74,7 @@
 		methods: {
 			clickItem(item){
 				uni.navigateTo({
-					url:'/pagesB/main/detectionReport?vinCode='+item.vinCode
+					url:'/pagesB/main/detectionReportV2?vinCode='+item.vinCode
 				})
 			},
 			search(res) {

@@ -66,7 +66,7 @@
 					</navigator>
 				</view>
 
-				<navigator url="/pagesA/mine/question" style="color: #383838;display: flex;
+				<navigator url="/pagesA/mine/question?qType=2" style="color: #383838;display: flex;
 						flex-direction: row;align-items: center;">
 					<text class="iconfont icon-question" style="margin-left: 5rpx;font-size: 28rpx;">常见问题</text>
 				</navigator>
@@ -148,7 +148,7 @@
 			return {
 				pic: '',
 				typeColumns: ['车架号(VIN)', '电池包编码', '整车型号(公告号)'],
-				companyType: 0,
+				companyType: 3501,
 				companyTypeStr:'车架号(VIN)',
 				curTab: 1,
 				baseImageUrl:projectConfig.baseImageUrl,
@@ -246,7 +246,7 @@
 					}else{
 						//进入详情页
 						uni.navigateTo({
-							url:'/pagesB/main/detectionReport?vinCode='+this.vinCode
+							url:'/pagesB/main/newBattery?vinCode='+this.vinCode
 						})
 					}
 				});

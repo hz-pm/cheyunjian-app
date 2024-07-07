@@ -1,5 +1,5 @@
 <template>
-	<view class="content" @touchmove.stop.prevent="disabledScroll">
+	<view class="content">
 		<view class="top-bg">
 			<view style="width: 90%;display: flex;flex-direction: row;align-items: center;
 					margin-top: 20rpx;justify-content: space-between;">
@@ -33,9 +33,10 @@
 				<view style="width: 100%;display: flex;flex-direction: row;align-items: center;
 						text-align: center; font-size: 26rpx;justify-content: space-between;">
 					<text url="/pagesA/mine/fiesRecord" style="width: 49%;color: #ff8d1a;padding-top: 20rpx;padding-bottom: 20rpx;
-							font-weight: bold;" @click="openSelectItemPop">请选择检测模块<span style="font-size: 10px;">▼</span></text>
+							font-weight: bold;" @click="openSelectItemPop"><span style="font-size: 10px;"></span></text>
+							<!-- font-weight: bold;" @click="openSelectItemPop" >请选择检测模块<span style="font-size: 10px;">▼</span></text> -->
 					<view style="width: 1rpx;height: 35rpx;background-color: #DDD;"></view>
-					<text class="iconfont icon-question" style="width: 49%;font-size: 26rpx;color: #00acdd;"
+					<text class="iconfont icon-question" style="width: 49%;font-size: 26rpx;color: #00acdd;padding-top: 20rpx;padding-bottom: 20rpx;"
 						@click="open()">如何找到车架号</text>
 				</view>
 			</view>
@@ -220,8 +221,8 @@
 				});
 			},
 			openSelectItemPop() {
-				this.showPop = true
-				this.$refs.popup3.open()
+				// this.showPop = true
+				// this.$refs.popup3.open()
 			},
 			closeSelectItemPop() {
 				this.showPop = false
@@ -289,7 +290,7 @@
 					}else{
 						//进入详情页
 						uni.navigateTo({
-							url:'/pagesB/main/detectionReport?vinCode='+this.vinCode
+							url:'/pagesB/main/detectionReportV2?vinCode='+this.vinCode
 						})
 					}
 				});

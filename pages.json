@@ -174,7 +174,15 @@
 				}
 			},
 			{
-				"path": "main/detectionReport",
+				"path": "main/newBattery",
+				"style": {
+					"navigationBarTitleText": "电易估报告",
+					"enablePullDownRefresh": false,
+					"navigationStyle": "default"
+				}
+			},
+			{
+				"path": "main/detectionReportV2",
 				"style": {
 					"navigationBarTitleText": "车云检报告",
 					"enablePullDownRefresh": false,

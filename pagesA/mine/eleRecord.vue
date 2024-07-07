@@ -75,7 +75,7 @@
 		methods: {
 			clickItem(item){
 				uni.navigateTo({
-					url:'/pagesB/main/detectionReport'
+					url:'/pagesB/main/newBattery?vinCode='+item.vinCode
 				})
 			},
 			search(res) {

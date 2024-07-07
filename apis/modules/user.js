@@ -32,6 +32,11 @@ export function userLogin(params){
 	return http.post('/index/user/login', params)
 }
 
+//微信登录
+export function loginByWX(params1){
+	return http.post('/index/user/miniProgramLogin',{},{params:params1})
+}
+
 //重置密码
 export function resetPwd(params1){
 	return http.post('/sms/resetPwd',{},{params:params1})
@@ -150,5 +155,10 @@ export function eleCheck(params,config){
 //获取电易估记录
 export function eleRecordList(params){
 	return http.get('/index/ele/list',params)
+}
+
+//获取电易估详情
+export function eleDetails(params1){
+	return http.get('/index/ele/getDetails',{params:params1})
 }
 
