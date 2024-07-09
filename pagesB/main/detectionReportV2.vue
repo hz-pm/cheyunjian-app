@@ -107,7 +107,7 @@
 								</view>
 								<view class="right" :class="computedVolumeScoreClass">
 									<view class="per">{{detail.resultTxt.volumeScore}}<text class="txt"><span>%</span></text></view>
-									<view class="size">{{detail.resultTxt.volumeScoreAssess}}</view>
+									<view class="size">{{detail.resultTxt.volumeScoreAssess.substring(0, 2)}}</view>
 								</view>
 							</view>
 							<view class="speed" style="margin-top: 20rpx;">
@@ -128,7 +128,7 @@
 								</view>
 								<view class="right" :class="computedVoltConsistenceScoreClass">
 									<view class="per">{{detail.resultTxt.voltConsistenceScore}}<text class="txt"><span>%</span></text></view>
-									<view class="size">{{detail.resultTxt.voltConsistenceScoreAssess}}</view>
+									<view class="size">{{detail.resultTxt.voltConsistenceScoreAssess.substring(0, 2)}}</view>
 								</view>
 							</view>
 							<view class="speed" style="margin-top: 20rpx;">
@@ -149,7 +149,7 @@
 								</view>
 								<view class="right" :class="computedInternalResistanceScoreClass">
 									<view class="per">{{detail.resultTxt.internalResistanceScore}}<text class="txt"><span>%</span></text></view>
-									<view class="size">{{detail.resultTxt.internalResistanceScoreAssess}}</view>
+									<view class="size">{{detail.resultTxt.internalResistanceScoreAssess.substring(0, 2)}}</view>
 								</view>
 							</view>
 							<view class="speed" style="margin-top: 20rpx;">
@@ -170,7 +170,7 @@
 								</view>
 								<view class="right" :class="computedTemperatureConsistenceScoreClass">
 									<view class="per">{{detail.resultTxt.temperatureConsistenceScore}}<text class="txt"><span>%</span></text></view>
-									<view class="size">{{detail.resultTxt.temperatureConsistenceScoreAssess}}</view>
+									<view class="size">{{detail.resultTxt.temperatureConsistenceScoreAssess.substring(0, 2)}}</view>
 								</view>
 							</view>
 							<view class="speed" style="margin-top: 10px;">
@@ -181,7 +181,7 @@
 											<view id="container" class="progress-container"
 												style="background: rgba(0, 0, 0, 0.1);">
 												<view class="progress-content flex j-end" :style="{ width: detail.resultTxt.selfDischargeRateScore + '%',
-												background: progressBG(detail.resultTxt.selfDischargeRateScoreAssess) }"
+												background: progressBG(detail.resultTxt.selfDischargeRateScoreAssess)}"
 													style="width: 100%; height: 10px;">
 												</view>
 											</view>
@@ -191,7 +191,7 @@
 								</view>
 								<view class="right" :class="computedSelfDischargeRateScoreClass">
 									<view class="per">{{detail.resultTxt.selfDischargeRateScore}}<text class="txt"><span>%</span></text></view>
-									<view class="size">{{detail.resultTxt.selfDischargeRateScoreAssess}}</view>
+									<view class="size">{{detail.resultTxt.selfDischargeRateScoreAssess.substring(0, 2)}}</view>
 								</view>
 							</view>
 							<view class="illustrate">
@@ -549,7 +549,8 @@
 				percentage: 0, // 进度条的百分比
 				lines: 7, // 放射线的数量
 				circles: 3, // 半圆数量
-				vinCode: 'LNAD2AB38M5000711',
+				// vinCode: 'LNAD2AB38M5000711',
+				vinCode: '',
 				detail: '',
 				reportImg: '',
 				curTab: 0,
@@ -643,33 +644,39 @@
 			}
 		},
 		onLoad(op) {
-			// if(op){
-			// 	this.vinCode = op.vinCode;
-			// 	console.log(this.vinCode)
-			// 	//获取详情
-			// 	cloudDetails({
-			// 		vinCode:this.vinCode
-			// 	}).then((res) => {
-			// 		this.detail = res.data
-			// 	})
-			// }
+			if(op){
+				this.vinCode = op.vinCode;
+				console.log(this.vinCode)
+				//获取详情
+				cloudDetails({
+					vinCode:this.vinCode
+				}).then((res) => {
+					this.detail = res.data
+					//格式化json数据
+					this.detail.resultTxt = JSON.parse(res.data.resultTxt)
+					
+					//进度条
+					this.percentage = 100 - this.extractedPercentage(this.detail.resultTxt.referRateMileageAssess);
+					// this.percentage = 100
+					console.log('====percentage====>'+this.percentage)
+					this.drawHalfCircleProgress();
+				})
+			}
 
 
-			cloudDetails({
-				vinCode: this.vinCode
-			}).then((res) => {
-				this.detail = res.data
-				//格式化json数据
-				this.detail.resultTxt = JSON.parse(res.data.resultTxt)
+			// cloudDetails({
+			// 	vinCode: this.vinCode
+			// }).then((res) => {
+			// 	this.detail = res.data
+			// 	//格式化json数据
+			// 	this.detail.resultTxt = JSON.parse(res.data.resultTxt)
 				
-				//进度条
-				// this.percentage = 100 - this.extractedPercentage(this.detail.resultTxt.referRateMileageAssess);
-				this.percentage = 100
-				console.log('====percentage====>'+this.percentage)
-				this.drawHalfCircleProgress();
-			})
-			
-			
+			// 	//进度条
+			// 	// this.percentage = 100 - this.extractedPercentage(this.detail.resultTxt.referRateMileageAssess);
+			// 	this.percentage = 100
+			// 	console.log('====percentage====>'+this.percentage)
+			// 	this.drawHalfCircleProgress();
+			// })
 		},
 		methods: {
 			clickTabs(index) {
@@ -856,15 +863,15 @@
 			},
 			progressBG(str){
 				let bg = ''
-				if(str === '优秀'){
+				if(str.includes('优秀')){
 					bg = 'linear-gradient(to right, rgb(42, 212, 183), rgb(71, 173, 19))'
-				}else if(str === '良好'){
+				}else if(str.includes('良好')){
 					bg = 'linear-gradient(to right, rgb(0, 200, 255), rgb(0, 172, 221))'
-				}else if(str === '中等'){
+				}else if(str.includes('中等')){
 					bg = 'linear-gradient(to right, rgb(255, 213, 0), rgb(255, 174, 74))'
-				}else if(str === '较差'){
+				}else if(str.includes('较差')){
 					bg = 'linear-gradient(to right, rgb(255, 195, 0), rgb(255, 128, 0))'
-				}else if(str === '差'){
+				}else if(str.includes('差')){
 					bg = 'linear-gradient(to right, rgb(255, 81, 60), rgb(240, 0, 48))'
 				}
 				return bg;
@@ -875,15 +882,15 @@
 				// ORANGE2Cr 较差  linear-gradient(to right, rgb(255, 195, 0), rgb(255, 128, 0))
 				// REDCr 差  linear-gradient(to right, rgb(255, 81, 60), rgb(240, 0, 48))
 				let color = ''
-				if(str === '优秀'){
+				if(str.includes('优秀')){
 					color = 'GREENCr'
-				}else if(str === '良好'){
+				}else if(str.includes('良好')){
 					color = 'BLUECr'
-				}else if(str === '中等'){
+				}else if(str.includes('中等')){
 					color = 'ORANGECr'
-				}else if(str === '较差'){
+				}else if(str.includes('较差')){
 					color = 'ORANGE2Cr'
-				}else if(str === '差'){
+				}else if(str.includes('差')){
 					color = 'REDCr'
 				}
 				return color;
@@ -895,15 +902,15 @@
 				// 较差 sohORANGE2
 				// 差 sohRED
 				let color = ''
-				if(str === '优秀'){
+				if(str.includes('优秀')){
 					color = 'sohGREEN'
-				}else if(str === '良好'){
+				}else if(str.includes('良好')){
 					color = 'sohBLUE'
-				}else if(str === '中等'){
+				}else if(str.includes('中等')){
 					color = 'sohORANGE'
-				}else if(str === '较差'){
+				}else if(str.includes('较差')){
 					color = 'sohORANGE2'
-				}else if(str === '差'){
+				}else if(str.includes('差')){
 					color = 'sohRED'
 				}
 				return color;
@@ -916,15 +923,15 @@
 				// <!-- REDBg 差 sohGREEN GREENCr -->
 				
 				let color = ''
-				if(str === '优秀'){
+				if(str.includes('优秀')){
 					color = 'GREENBg'
-				}else if(str === '良好'){
+				}else if(str.includes('良好')){
 					color = 'BLUEBg'
-				}else if(str === '中等'){
+				}else if(str.includes('中等')){
 					color = 'ORANGEBg'
-				}else if(str === '较差'){
+				}else if(str.includes('较差')){
 					color = 'ORANGEBg'
-				}else if(str === '差'){
+				}else if(str.includes('差')){
 					color = 'REDBg'
 				}
 				return color;
@@ -932,7 +939,7 @@
 			tagTextColor(str){
 				// <!-- tagBLUE 正常 -->
 				// <!-- tagORANGE 偏高 -->
-				if(str === '偏高'){
+				if(str.includes('偏高')){
 					return 'tagORANGE'
 				}else{
 					return 'tagBLUE'

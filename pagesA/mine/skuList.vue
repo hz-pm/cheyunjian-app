@@ -13,8 +13,8 @@
 		<view style="width: 100%;display: flex;flex-direction: column;align-items: center;
 				background-color: #FFF;">
 			<radio-group style="width: 100%; display: flex;flex-direction: column;align-items: center;"
-				v-for="(item,index) in list" @change="radioChange" :key="item.qty">
-				<view class="cell" @click="clickCell(item.qty,index)">
+				v-for="(item,index) in list" :key="index">
+				<view class="cell" @click="radioChange(item,index)">
 					<view class="c-left">
 						<text class="c-jifen" v-if="index!=list.length-1">{{item.qty}}积分</text>
 						<text class="shouchong" v-if="index==0">首单特惠</text>
@@ -22,7 +22,7 @@
 							maxlength="10" v-model="inputPoints" @input="inputChange"></input>
 					</view>
 					<view class="c-right">
-						<text class="c-money">￥{{index != 5?item.price:customP}}元</text>
+						<text class="c-money">￥{{index !=5 ?item.price:(item.price*inputPoints).toFixed(2)}}元</text>
 						<radio :value="item.qty+''" :checked="index === current"></radio>
 					</view>
 				</view>
@@ -48,7 +48,7 @@
 						margin-left: 15rpx;">积分充值享5折优惠</text>
 			</view>
 			<view style="display: flex;flex-direction: row;align-items: center;" @click="openPop">
-				<text style="font-size: 30rpx;color: #f73939;">{{syYh}} 元</text>
+				<text style="font-size: 30rpx;color: #f73939;">{{isUseVip?syYh+' 元':'不使用优惠'}}</text>
 				<uni-icons type="right" size="40rpx" color="#f73939"
 					style="margin-left: 15rpx;margin-right: 35rpx;"></uni-icons>
 			</view>
@@ -75,7 +75,7 @@
 					<uni-icons type="closeempty" size="40rpx" @click="closePop" style="padding: 5rpx;"></uni-icons>
 				</view>
 				<radio-group style="width: 100%;display: flex;flex-direction: column;align-items: center;
-				margin-bottom: 45rpx;" @change="yhRadioChange">
+				margin-bottom: 45rpx;" @change="">
 					<view class="pop-item-bg">
 						<view style="width: 95%; display: flex;flex-direction: row;align-items: center;justify-content: space-between;
 						margin-top: 35rpx;margin-bottom: 35rpx;">
@@ -88,7 +88,7 @@
 								<view style="display: flex;flex-direction: column;margin-left: 20rpx;">
 									<text style="font-size: 30rpx;font-weight: bold;color: #000;">积分充值享5折优惠</text>
 									<text
-										style="font-size: 28rpx;color: #ff8d1a;margin-top: 20rpx;">当前订单共计78元，可减28.00元</text>
+										style="font-size: 28rpx;color: #ff8d1a;margin-top: 20rpx;">当前订单共计{{amount}}元，可减{{Math.abs(syYh)}}元</text>
 								</view>
 							</view>
 							<radio value="r1" :checked="radioCur === 0"></radio>
@@ -119,16 +119,16 @@
 		components: {},
 		data() {
 			return {
-				radioValue: 80,
 				list: [],
 				current: 0,
 				baseImageUrl: projectConfig.baseImageUrl,
 				inputPoints: '',
 				radioCur: 0,
-				syYh: -28, //使用优惠
-				customP: 0,
+				syYh: 0, //优惠
 				userinfo:null,
 				vipInfo:null, //vip折扣信息
+				isUseVip:false ,//是否使用优惠
+				amount:0, //总金额
 			}
 		},
 		onLoad() {
@@ -136,51 +136,42 @@
 				console.log('>>>' + JSON.stringify(res))
 				this.list = res.data
 
-				this.customP = this.list[5].price
-				
 				this.userinfo =  this.vuex_userinfo
 				if(this.userinfo && this.userinfo.vip > 0){
+					this.isUseVip = true;
+					//优惠 1元1积分  --- 原价300非会员优惠价234会员5折优惠  300 * 0.5 = 150元
+					//优惠金额234 - 150 = 84元
+					this.syYh = this.getYhMoney(this.list[0].qty,this.list[0].price)
 					//获取用户vip信息
 					getUserVipInfo().then((res) => {
 						// console.log(res)
 						if(res.code === 200){
 							this.vipInfo = res.data
-							//优惠
-							this.syYh = parseFloat(Number.parseInt(((this.vipInfo.discountFactor * this.list[this.current].price) 
-							- this.list[this.current].price))).toFixed(2)
 						}
 					})
 				}
 			})
 		},
 		methods: {
-			clickCell(item, index) {
-				this.radioValue = item;
+			radioChange(item,index) {
 				this.current = index;
-			},
-			radioChange(res) {
-				for (let i = 0; i < this.list.length; i++) {
-					if (this.list[i].qty + '' === res.detail.value) {
-						this.current = i;
-						let money = ((this.vipInfo.discountFactor * this.list[this.current].price)
-						- this.list[this.current].price)
-						if(this.current === 5){
-							this.syYh = parseFloat(money).toFixed(2)
-						}else{
-							this.syYh = parseFloat(Number.parseInt(money)).toFixed(2)
-						}
-						break;
-					}
+				if(index < 5){
+					this.syYh = this.getYhMoney(item.qty,item.price)
+					this.amount = item.price
+				}else{
+					this.syYh = this.getYhMoney(this.inputPoints,this.inputPoints*0.78)
+					this.amount = (this.inputPoints*0.78).toFixed(2)
 				}
 			},
 			inputChange(e) {
 				if (test.isEmpty(e.detail.value)) {
-					this.inputPoints = 1
-					this.customP = this.list[5].price
-				} else {
-					this.customP = parseFloat(this.list[5].price * e.detail.value).toFixed(2)
+					this.inputPoints = '';
+					this.syYh = 0;
+					this.amount = 0
+				}else{
+					this.syYh = this.getYhMoney(this.inputPoints,this.inputPoints*0.78)
+					this.amount = (this.inputPoints*0.78).toFixed(2)
 				}
-				console.log(e)
 			},
 			clickPay() {
 				let id = this.list[this.current].id
@@ -199,17 +190,38 @@
 				rechargePoints({
 					prodId: id,
 					qty: qty,
+					useVip:this.isUseVip
 				}).then((res) => {
 					console.log(res)
 					if (res.code === 200) {
-						uni.showToast({
-							title: res.msg,
-							icon: 'success'
+						// 调用微信支付
+						uni.requestPayment({
+							  provider: 'wxpay',
+							  timeStamp: res.data.timeStamp,
+							  nonceStr: res.data.nonceStr,
+							  package: res.data.package,
+							  signType: res.data.signType,
+							  paySign: res.data.paySign,
+						  success(res) {
+						    // 支付成功回调
+						    console.log('===Success===>'+JSON.stringify(res))
+							uni.showToast({
+								icon:'success',
+								title:'支付成功'
+							})
+							// setTimeout(() => {
+							// 	uni.navigateBack()
+							// }, 1000)
+						  },
+						  fail(err) {
+						    // 支付失败回调
+						    console.log('===Fail===>'+JSON.stringify(err))
+							uni.showToast({
+								icon:'fail',
+								title:'支付失败'
+							})
+						  }
 						})
-
-						setTimeout(() => {
-							uni.navigateBack()
-						}, 1000)
 					}
 				})
 
@@ -226,12 +238,24 @@
 			yhRadioChange(evt) {
 				if (evt.detail.value === 'r1') {
 					this.radioCur = 0;
-					this.syYh = -28
+					this.isUseVip = true
+					//重新计算优惠
+					this.radioChange(this.list[this.current],this.current)
 				} else {
 					this.radioCur = 1;
-					this.syYh = -0
+					this.isUseVip = false
 				}
 				this.closePop()
+			},
+			getYhMoney(qty,price){
+				//VIP才有优惠
+				if(this.isUseVip){
+					if(qty === '' || qty === '1'){
+						return 0
+					}
+					return parseFloat(Number.parseInt(qty * 0.5) - price).toFixed(2)
+				}
+				return 0
 			}
 		}
 	}

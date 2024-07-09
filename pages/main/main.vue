@@ -141,33 +141,7 @@
 					this.$u.vuex('vuex_points_info',res.data)
 				}
 			})
-			
-
 			console.log('>>',JSON.stringify(this.userinfo))
-			
-			// console.log('=========*1==========='+op.name)
-			//获取首页信息
-			// getIndexIndex().then((res) => { //   rules  event  faq   about_us
-			// 	this.vipList = res.vip
-			// 	this.$u.vuex('vuex_appname', res.appname)
-			// 	this.$u.vuex('vuex_vipLevel', res.level + 1)
-			// 	this.rates = res.rates;
-			// 	// this.userName = res.username
-			// 	res.vip.map((item, index) => {
-			// 		if (res.level == item.level) {
-			// 			this.vipList[index]['currentLevel'] = 1
-			// 		} else {
-			// 			this.vipList[index]['currentLevel'] = 0
-			// 		}
-			// 		if (res.level == item.level) {
-			// 			// this.vipListDetails = item.details
-			// 			this.vipName = item.name
-			// 			// this.vipPic = item.pic
-			// 		}
-			// 	})
-			// 	this.$u.vuex('vuex_vipList', res.vip)
-			// })
-
 		},
 		methods: {
 			clickGrid(index) {

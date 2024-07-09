@@ -58,7 +58,7 @@
 			<view style="width: 90%;display: flex;flex-direction: row;justify-content: space-between;color: #383838;
 					font-size: 26rpx;margin-top: 30rpx;">
 				<view style="display: flex;flex-direction: row;align-items: center;">
-					<text>积分余额：0</text>
+					<text>积分余额：{{curPoints}}</text>
 					<navigator url="/pagesA/mine/skuList" style="margin-left: 35rpx;color: #00acdd;display: flex;
 							flex-direction: row;align-items: center;">
 						<text class="iconfont icon-money"></text><span
@@ -141,6 +141,7 @@
 
 	import {
 		eleCheck,
+		getPointsInfo
 	} from '../../apis/modules/user';
 	export default {
 		components: {},
@@ -152,8 +153,25 @@
 				companyTypeStr:'车架号(VIN)',
 				curTab: 1,
 				baseImageUrl:projectConfig.baseImageUrl,
-				vinCode:''
+				vinCode:'',
+				curPoints:'0'
 			}
+		},
+		onShow() {
+			this.pointsInfo =  this.vuex_points_info
+			if(this.pointsInfo){
+				this.curPoints = this.pointsInfo.realityQty
+			}
+			
+			//获取用户积分信息
+			getPointsInfo().then((res) => {
+				// console.log('=======>', res)
+				if (res.code == 200) {
+					this.pointsInfo = res.data
+					this.curPoints = this.pointsInfo.realityQty
+					this.$u.vuex('vuex_points_info',res.data)
+				}
+			})
 		},
 		methods: {
 			open() {
@@ -167,41 +185,6 @@
 			},
 			openDemoPop() {
 				this.$refs.popup2.open()
-			},
-			openImagePage() {
-				let that = this;
-				uni.chooseImage({
-					count: 1,
-					sizeType: ['compressed'],
-					sourceType: ['album', 'camera'],
-					success: function(res) {
-						uni.showLoading({
-							title: 'Uploading Image'
-						});
-						//上传图片
-						that.uploadImage(res.tempFilePaths)
-					}
-				});
-			},
-			uploadImage(tempFilePaths) {
-				let _this = this;
-				console.log('===***===>' + projectConfig.baseUrl)
-
-				uni.uploadFile({
-					url: projectConfig.baseUrl + '/api.php/common/upload', //接口地址
-					header: {
-						"Token": _this.vuex_token,
-					}, //请求token
-					filePath: tempFilePaths[0],
-					name: 'file',
-					success: (res) => {
-						uni.hideLoading();
-						let data = JSON.parse(res.data);
-						_this.pic = data.data.fullurl
-
-						console.log('===Upload===>' + JSON.stringify(data))
-					}
-				});
 			},
 			clickTab(index) {
 				this.curTab = index
@@ -229,7 +212,7 @@
 						icon:'error'})
 					return
 				}
-				//车云检
+				//电易估
 				eleCheck({
 					vinCode:this.vinCode,
 					requestIdType:this.companyType,

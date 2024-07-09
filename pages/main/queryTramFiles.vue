@@ -397,7 +397,7 @@
 				let _this = this;
 				console.log('===***===>' + projectConfig.baseUrl)
 				uni.uploadFile({
-					url: projectConfig.baseUrl + '/index/user/uploadImg', //接口地址
+					url: projectConfig.baseUrl + '/index/user/vehicleLicenseOCR', //接口地址
 					header: {
 						"Authorization": _this.vuex_token,
 					}, //请求token
@@ -405,11 +405,18 @@
 					name: 'file',
 					success: (res) => {
 						uni.hideLoading();
-						let data = JSON.parse(res.data);
-						if(data.code == 200){
-							_this.pic = data.data
-						}
 						console.log('===Upload===>' + JSON.stringify(res))
+						let data = JSON.parse(res.data);
+						//识别成功
+						if(data.code == 200){
+							_this.pic = data.data.url
+							_this.vin = data.data.vin
+						}else{
+							uni.showToast({
+								title: res.msg,
+								icon: 'none'
+							});
+						}
 					}
 				});
 			},

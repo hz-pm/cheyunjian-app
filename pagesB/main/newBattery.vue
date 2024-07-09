@@ -189,7 +189,7 @@
 		data() {
 			return {
 				isEmpty: false,
-				vinCode: 'LRW3E7FS3PC797835',
+				vinCode: 'LVHDH1832L5004288',
 				detail: '',
 				imgUrl: ''
 			}

@@ -33,10 +33,10 @@
 				<view style="width: 100%;display: flex;flex-direction: row;align-items: center;
 						text-align: center; font-size: 26rpx;justify-content: space-between;">
 					<text url="/pagesA/mine/fiesRecord" style="width: 49%;color: #ff8d1a;padding-top: 20rpx;padding-bottom: 20rpx;
-							font-weight: bold;" @click="openSelectItemPop"><span style="font-size: 10px;"></span></text>
+							font-weight: bold;" @click="openSelectItemPop" v-if="false"><span style="font-size: 10px;"></span></text>
 							<!-- font-weight: bold;" @click="openSelectItemPop" >请选择检测模块<span style="font-size: 10px;">▼</span></text> -->
 					<view style="width: 1rpx;height: 35rpx;background-color: #DDD;"></view>
-					<text class="iconfont icon-question" style="width: 49%;font-size: 26rpx;color: #00acdd;padding-top: 20rpx;padding-bottom: 20rpx;"
+					<text class="iconfont icon-question" style="width: 100%;font-size: 26rpx;color: #00acdd;padding-top: 20rpx;padding-bottom: 20rpx;"
 						@click="open()">如何找到车架号</text>
 				</view>
 			</view>
@@ -48,7 +48,7 @@
 			<view style="width: 90%;display: flex;flex-direction: row;justify-content: space-between;color: #383838;
 					font-size: 26rpx;margin-top: 30rpx;">
 				<view style="display: flex;flex-direction: row;align-items: center;">
-					<text>积分余额：0</text>
+					<text>积分余额：{{curPoints}}</text>
 					<navigator url="/pagesA/mine/skuList" style="margin-left: 35rpx;color: #00acdd;display: flex;
 							flex-direction: row;align-items: center;">
 						<text class="iconfont icon-money"></text><span
@@ -67,10 +67,10 @@
 
 		<uni-popup ref="popup" type="bottom" border-radius="15rpx 15rpx 0 0" @close="close" @open="open"
 			background-color="#FFF">
-			<view style="display: flex;flex-direction: column;align-items: center;height: 80vh;">
-				<scroll-view scroll-y="true" style="height: 80vh;">
+			<view style="display: flex;flex-direction: column;align-items: center;height: 50vh;">
+				<scroll-view scroll-y="true" style="height: 50vh;">
 					<view style="width: 100%;height: 650rpx;display: flex;flex-direction: column;align-items: center;">
-						<image :src="baseImageUrl+'img-rhhdcj.webp'" style="width: 700rpx;height: 1500rpx;"></image>
+						<image :src="baseImageUrl+'img-rhhdcj.webp'" style="width: 700rpx;height: 650rpx;"></image>
 					</view>
 				</scroll-view>
 			</view>
@@ -127,6 +127,7 @@
 
 	import {
 		checkCar,
+		getPointsInfo
 	} from '../../apis/modules/user';
 	export default {
 		components: {},
@@ -165,8 +166,25 @@
 				],
 				amount: 0,
 				baseImageUrl: projectConfig.baseImageUrl,
-				vinCode:'V5654656565656566' //车架号
+				vinCode:'' ,//车架号
+				curPoints:'0'
 			}
+		},
+		onShow() {
+			this.pointsInfo =  this.vuex_points_info
+			if(this.pointsInfo){
+				this.curPoints = this.pointsInfo.realityQty
+			}
+			
+			//获取用户积分信息
+			getPointsInfo().then((res) => {
+				// console.log('=======>', res)
+				if (res.code == 200) {
+					this.pointsInfo = res.data
+					this.curPoints = this.pointsInfo.realityQty
+					this.$u.vuex('vuex_points_info',res.data)
+				}
+			})
 		},
 		methods: {
 			open() {
@@ -203,20 +221,27 @@
 			uploadImage(tempFilePaths) {
 				let _this = this;
 				console.log('===***===>' + projectConfig.baseUrl)
-
 				uni.uploadFile({
-					url: projectConfig.baseUrl + '/api.php/common/upload', //接口地址
+					url: projectConfig.baseUrl + '/index/user/vehicleLicenseOCR', //接口地址
 					header: {
-						"Token": _this.vuex_token,
+						"Authorization": _this.vuex_token,
 					}, //请求token
 					filePath: tempFilePaths[0],
 					name: 'file',
 					success: (res) => {
 						uni.hideLoading();
+						console.log('===Upload===>' + JSON.stringify(res))
 						let data = JSON.parse(res.data);
-						_this.pic = data.data.fullurl
-
-						console.log('===Upload===>' + JSON.stringify(data))
+						//识别成功
+						if(data.code == 200){
+							_this.pic = data.data.url
+							_this.vinCode = data.data.vin
+						}else{
+							uni.showToast({
+								title: res.msg,
+								icon: 'none'
+							});
+						}
 					}
 				});
 			},

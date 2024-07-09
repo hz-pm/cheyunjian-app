@@ -24,8 +24,8 @@
 				<view class="iconRight iconfont  icon-VIP"></view>
 				<view class="vipBottom">
 					<view class="vipBottomBox">
-						<view class="view">封顶可减额度：<text class="b"><span>10000559元</span></text></view>
-						<view class="view" style="text-align: right;">有效期至 2025-06-23</view>
+						<view class="view">封顶可减额度：<text class="b"><span>{{vipInfo.plantAmount}}元</span></text></view>
+						<view class="view" style="text-align: right;">有效期至 {{vipInfo.vipEndTime}}</view>
 						<view class="vipBottomBg"></view>
 					</view>
 				</view>
@@ -33,22 +33,22 @@
 			<view class="tit">积分充值优惠权益</view>
 			<view class="statisticsList">
 				<view class="list">
-					<view class="h1">9660.00</view>
+					<view class="h1">{{vipInfo.plantAmount - vipInfo.realitylAmount}}</view>
 					<view class="p">当前已减金额</view>
 				</view>
 				<view class="list">
-					<view class="h1" style="">9990899</view>
+					<view class="h1" style="">{{vipInfo.realitylAmount}}</view>
 					<view class="p">剩余可减额度</view>
 				</view>
 			</view>
 			<view class="tit">电易估免费查询权益</view>
 			<view class="statisticsList">
 				<view class="list">
-					<view class="h1">537</view>
+					<view class="h1">{{vipInfo.totalUseInterestsQty}}</view>
 					<view class="p">已免费查询</view>
 				</view>
 				<view class="list">
-					<view class="h1">288</view>
+					<view class="h1">{{vipInfo.totalFreeInterestsQty}}</view>
 					<view class="p">剩余查询次数</view>
 				</view>
 			</view>
@@ -64,8 +64,7 @@
 	import projectConfig from '@/common/config.js';
 	import test from '../../utils/test/test.js'
 	import {
-		buyVip,
-		getVipCardInfo
+		getUserVipInfo
 	} from '../../apis/modules/user';
 	export default {
 		components: {},
@@ -74,11 +73,17 @@
 				vipIndex: 0,
 				checked: false,
 				userinfo: {},
-				vipList: null
+				vipInfo:''
 			}
 		},
 		onLoad() {
 			this.userinfo = this.vuex_userinfo
+			
+			getUserVipInfo().then((res) => {
+				if(res.code === 200){
+					this.vipInfo = res.data
+				}
+			})
 		},
 		methods: {
 

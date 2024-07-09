@@ -51,7 +51,7 @@
 				<navigator url="/pagesB/reg/updatePassword" class="cell-v" style="margin-top: 25rpx;justify-content: center;">
 					<text class="title" style="color: #333;">修改密码</text>
 				</navigator>
-				<view class="cell-v" style="margin-top: 25rpx;justify-content: center;" @click="$refs.alertDialog.open()">
+				<view class="cell-v" style="margin-top: 25rpx;justify-content: center;" @click="clickLoginOut">
 					<text class="title" style="color: #333;">退出登录</text>
 				</view>
 			</view>
@@ -99,9 +99,9 @@
 			</view>
 		</uni-popup>
 		
-		<uni-popup ref="alertDialog" type="dialog">
+		<!-- <uni-popup ref="alertDialog" type="dialog">
 			<uni-popup-dialog type="info" confirmText="确定" :content='content' @confirm="confirmModal"></uni-popup-dialog>
-		</uni-popup>
+		</uni-popup> -->
 	</view>
 </template>
 
@@ -123,7 +123,6 @@
 				showBindPhonePop: '',
 				showBindEmailPop:'',
 				title:'提示',
-				content:'确定要退出登录吗？',
 				show:false,
 				userinfo: {
 				},
@@ -157,10 +156,24 @@
 			closeBindEmailPop(){
 				this.$refs.showBindEmailPop.close()
 			},
-			confirmModal(){
-				this.$refs.alertDialog.close()
-				uni.navigateTo({
-					url: '/pages/login/login'
+			clickLoginOut(){
+				let that = this
+				uni.showModal({
+					title:'提示',
+					content:'您确定要退出登录吗？',
+					success(res) {
+						if(res.confirm){
+							console.log('=confirm=')
+							
+							uni.setStorageSync('TOKEN', '')
+							that.$u.vuex('vuex_userinfo', '')
+							uni.reLaunch({
+								url: "/pages/login/login"
+							})
+						}else if(res.cancel){
+							console.log('=cancel=')
+						}
+					}
 				})
 			},
 			getCode() {
