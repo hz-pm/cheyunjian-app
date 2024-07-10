@@ -38,7 +38,7 @@
 					</view>
 					<view class="endurance">
 						<view id="model1" class="tit titList">电池健康模块<text
-								class="tionDate"><span>数据更新于{{detail.resultTxt.latestChargeDate}}</span></text>
+								class="tionDate">数据更新于{{detail.resultTxt.latestChargeDate}}</text>
 							<view class="signify" @click="open"><text class="iconfont icon-info"></text>指标说明</view>
 						</view>
 						<view class="notModel" v-if="false">
@@ -54,20 +54,21 @@
 							<view
 								style="width: 100%;display: flex;flex-direction: row;align-items: center;justify-content: center; margin-top: 10rpx;">
 								
-								<canvas class="progress-canvas" canvas-id="progressCanvas"></canvas>
+								<canvas class="progress-canvas" canvas-id="progressCanvas" v-if="!canvasSrc"></canvas>
+								<image class="progress-canvas" :src="canvasSrc" v-if="canvasSrc" :style="{ width: width + 'px', height: height + 'px' }"></image>
 
 								<view style="display: flex;flex-direction: column;
-								position: absolute;margin-top: 115rpx;align-items: center;">
+								position: absolute;margin-top: 85rpx;align-items: center;">
 									<view style="display: flex;flex-direction: row;font-weight: bold;">
 										<text style="font-size: 82rpx;color: #00acdd;">{{detail.resultTxt.referRateMileage}}</text>
-										<text style="font-size: 30rpx;color: #00acdd;margin-top: -30rpx;">km</text>
+										<text style="font-size: 30rpx;color: #00acdd;margin-top: 0rpx;">km</text>
 									</view>
 									<view style="display: flex;flex-direction: row;background-color: #fff9ed;border: 1rpx solid #f3a550;
 									padding-left: 6rpx;padding-right: 6rpx;border-radius: 5rpx;align-items: center;
-									margin-top: 45rpx;justify-content: center;width: 130rpx;">
+									margin-top: 15rpx;justify-content: center;width: 130rpx;">
 										<uni-icons type="arrow-down" color="#f3a550" size="30rpx"
 											v-if="false"></uni-icons>
-										<text style="font-size: 30rpx;color: #FFF;color: #f3a550;">{{detail.resultTxt.referRateMileageAssess}}</text>
+										<text style="font-size: 28rpx;color: #FFF;color: #f3a550;">{{detail.resultTxt.referRateMileageAssess}}</text>
 									</view>
 								</view>
 							</view>
@@ -83,7 +84,7 @@
 								<view class="battertTxt">
 									<view class="txT">SOH(电池健康度)</view>
 									<view class="txBox">
-										<view class="txB">{{detail.resultTxt.batterySoh}}<text class="text"><span>%</span></text></view>
+										<view class="txB">{{detail.resultTxt.batterySoh}}<text class="text">%</text></view>
 										<view class="txBr">{{detail.resultTxt.batterySohLvStr}}</view>
 									</view>
 								</view>
@@ -106,8 +107,8 @@
 									</view>
 								</view>
 								<view class="right" :class="computedVolumeScoreClass">
-									<view class="per">{{detail.resultTxt.volumeScore}}<text class="txt"><span>%</span></text></view>
-									<view class="size">{{detail.resultTxt.volumeScoreAssess.substring(0, 2)}}</view>
+									<view class="per">{{detail.resultTxt.volumeScore}}<text class="txt">%</text></view>
+									<view class="size">{{detail.resultTxt.volumeScoreAssess.split(/，\s*/)[0]}}</view>
 								</view>
 							</view>
 							<view class="speed" style="margin-top: 20rpx;">
@@ -127,8 +128,8 @@
 									</view>
 								</view>
 								<view class="right" :class="computedVoltConsistenceScoreClass">
-									<view class="per">{{detail.resultTxt.voltConsistenceScore}}<text class="txt"><span>%</span></text></view>
-									<view class="size">{{detail.resultTxt.voltConsistenceScoreAssess.substring(0, 2)}}</view>
+									<view class="per">{{detail.resultTxt.voltConsistenceScore}}<text class="txt">%</text></view>
+									<view class="size">{{detail.resultTxt.voltConsistenceScoreAssess.split(/，\s*/)[0]}}</view>
 								</view>
 							</view>
 							<view class="speed" style="margin-top: 20rpx;">
@@ -148,8 +149,8 @@
 									</view>
 								</view>
 								<view class="right" :class="computedInternalResistanceScoreClass">
-									<view class="per">{{detail.resultTxt.internalResistanceScore}}<text class="txt"><span>%</span></text></view>
-									<view class="size">{{detail.resultTxt.internalResistanceScoreAssess.substring(0, 2)}}</view>
+									<view class="per">{{detail.resultTxt.internalResistanceScore}}<text class="txt">%</text></view>
+									<view class="size">{{detail.resultTxt.internalResistanceScoreAssess.split(/，\s*/)[0]}}</view>
 								</view>
 							</view>
 							<view class="speed" style="margin-top: 20rpx;">
@@ -169,8 +170,8 @@
 									</view>
 								</view>
 								<view class="right" :class="computedTemperatureConsistenceScoreClass">
-									<view class="per">{{detail.resultTxt.temperatureConsistenceScore}}<text class="txt"><span>%</span></text></view>
-									<view class="size">{{detail.resultTxt.temperatureConsistenceScoreAssess.substring(0, 2)}}</view>
+									<view class="per">{{detail.resultTxt.temperatureConsistenceScore}}<text class="txt">%</text></view>
+									<view class="size">{{detail.resultTxt.temperatureConsistenceScoreAssess.split(/，\s*/)[0]}}</view>
 								</view>
 							</view>
 							<view class="speed" style="margin-top: 10px;">
@@ -190,8 +191,8 @@
 									</view>
 								</view>
 								<view class="right" :class="computedSelfDischargeRateScoreClass">
-									<view class="per">{{detail.resultTxt.selfDischargeRateScore}}<text class="txt"><span>%</span></text></view>
-									<view class="size">{{detail.resultTxt.selfDischargeRateScoreAssess.substring(0, 2)}}</view>
+									<view class="per">{{detail.resultTxt.selfDischargeRateScore}}<text class="txt">%</text></view>
+									<view class="size">{{detail.resultTxt.selfDischargeRateScoreAssess.split(/，\s*/)[0]}}</view>
 								</view>
 							</view>
 							<view class="illustrate">
@@ -233,16 +234,16 @@
 							</view>
 							<view class="line">
 								<view class="left">标称容量</view>
-								<view class="right">{{detail.resultTxt.rateCapacity}}<text class="txt"><span>Ah</span></text></view>
+								<view class="right">{{detail.resultTxt.rateCapacity}}<text class="txt">Ah</text></view>
 							</view>
 							<view class="line">
 								<view class="left">标称能量</view>
 								<view class="right" style="word-break: break-all;">{{detail.resultTxt.nominalEnergy}}<text
-										class="txt"><span>kWh</span></text></view>
+										class="txt">kWh</text></view>
 							</view>
 							<view class="line">
 								<view class="left">标称续航</view>
-								<view class="right">{{detail.resultTxt.rateMileage}}<text class="txt"><span>km</span></text></view>
+								<view class="right">{{detail.resultTxt.rateMileage}}<text class="txt">km</text></view>
 							</view>
 							<view class="line">
 								<view class="left">电池类型</view>
@@ -252,22 +253,22 @@
 					</view>
 					<view class="dataBox">
 						<view id="model3" class="tit titList">车辆行驶模块<text
-								class="tionDate"><span>表显里程更新于{{detail.resultTxt.lastDrivingDate}}</span></text></view>
+								class="tionDate">表显里程更新于{{detail.resultTxt.lastDrivingDate}}</text></view>
 						<view class="travel">
 							<view class="tBox" style="width: 49%;">
-								<view class="h1">{{detail.resultTxt.displayMileage}}<text class="tex"><span>Km</span></text></view>
+								<view class="h1">{{detail.resultTxt.displayMileage}}<text class="tex">Km</text></view>
 								<view class="p">表显行驶里程<text class="iconfont icon-question"></text>
 								</view>
 							</view>
 							<view class="tBox" style="width: 49%;">
-								<view class="h1">{{detail.resultTxt.averageDailyDriveHour}}<text><span>小时</span></text></view>
+								<view class="h1">{{detail.resultTxt.averageDailyDriveHour}}<text>小时</text></view>
 								<view class="p">日均行驶时长</view>
 							</view>
 						</view>
 						<view class="tableBox" v-if="detail.resultTxt.suspectedAdjust">
 							<view class="triangle"></view>
 							<view class="h1"><text class="iconfont icon-warning"
-									style="font-weight: normal; vertical-align: -1px; margin-right: 5px;"><span></span>
+									style="font-weight: normal; vertical-align: -1px; margin-right: 5px;">
 									</text>该车辆疑似于{{detail.resultTxt.suspectedAdjustDate}}日调表
 							</view>
 							<!-- 该字段2024-3.15后不再输出 -->
@@ -281,13 +282,13 @@
 									<view class="r">60000 km</view>
 								</view>
 							</view>
-							<view class="tip"><text><span>说明：本报告仅展示最近一次里程异常情况<br>不表示只出现过一次异常，请结合实际车况判断!</span></text>
+							<view class="tip"><text>说明：本报告仅展示最近一次里程异常情况<br>不表示只出现过一次异常，请结合实际车况判断!</text>
 							</view>
 						</view>
 					</view>
 					<view class="dataBox">
 						<view id="model4" class="tit titList">车辆充放电模块<text
-								class="tionDate"><span>数据更新于{{detail.resultTxt.valuationDate}}</span></text></view>
+								class="tionDate">数据更新于{{detail.resultTxt.valuationDate}}</text></view>
 						<view class="notModel" v-if="false">
 							<image src="../../static/img-nodata.png" style="width: 90rpx; height: 108rpx;"></image>
 							<view class="text">您当前未选择评估该模块</view>
@@ -296,7 +297,7 @@
 						
 						<view class="electricity">
 							<view class="le" :class="computedBatteryHabitBtBgClass">
-								<view class="iconBox" :class="computedBatteryHabitSohClass"><text class="iconfont icon-charge"><span></span></text>
+								<view class="iconBox" :class="computedBatteryHabitSohClass"><text class="iconfont icon-charge"></text>
 								</view>
 								<view class="p">电池使用习惯</view>
 								<view class="assess" :class="computedBatteryHabitCrColorClass">{{detail.resultTxt.batteryHabitAssess}}</view>
@@ -305,21 +306,21 @@
 								<view class="boxLine">
 									<view class="line">
 										<view class="left">总充电次数</view>
-										<view class="right">{{detail.resultTxt.totalChargeCount}}<text class="txt"><span>次</span></text></view>
+										<view class="right">{{detail.resultTxt.totalChargeCount}}<text class="txt">次</text></view>
 									</view>
 									<view class="line">
 										<view class="left">循环次数</view>
-										<view class="right">{{detail.resultTxt.totalChargeSoc}}<text class="txt"><span>次</span></text></view>
+										<view class="right">{{detail.resultTxt.totalChargeSoc}}<text class="txt">次</text></view>
 									</view>
 									<view class="line">
 										<view class="left">快充占比</view>
-										<view class="right">{{detail.resultTxt.fastRatio}}<text class="txt"><span>%</span></text>
+										<view class="right">{{detail.resultTxt.fastRatio}}<text class="txt">%</text>
 											<view class="tag" :class="computedFastRatioAssessClass">{{detail.resultTxt.fastRatioAssess}}</view>
 										</view>
 									</view>
 									<view class="line">
 										<view class="left">次均充入电量</view>
-										<view class="right">{{detail.resultTxt.chaSocAvg}}<text class="txt"><span>%</span></text>
+										<view class="right">{{detail.resultTxt.chaSocAvg}}<text class="txt">%</text>
 											<view class="tag" :class="computedChaSocAvgAssessClass">{{detail.resultTxt.chaSocAvgAssess}}</view>
 										</view>
 									</view>
@@ -346,7 +347,7 @@
 					</view>
 					<view class="dataBox">
 						<view id="model5" class="tit titList" style="position: relative;">电池预警信息<text
-								class="tionDate"><span>数据更新于{{detail.resultTxt.valuationDate}}</span></text>
+								class="tionDate">数据更新于{{detail.resultTxt.valuationDate}}</text>
 							<view class="signify" style="top: 2px; right: 0px;" @click="open2"><text
 									class="iconfont icon-info"></text>指标说明</view>
 						</view>
@@ -381,8 +382,8 @@
 							<view class="explain" style="width: 100%;" v-if="detail.resultTxt.exectionNarrate
 							&& (JSON.parse(detail.resultTxt.exectionNarrate).length > 0)">
 								<view class="tit" style="position: relative;"><text
-										class="iconfont icon-notebook"><span></span></text>预警信息解读<view
-										class="abnormal REDBga"><text class="iconfont icon-flash"><span></span></text>1项异常</view>
+										class="iconfont icon-notebook"></text>预警信息解读<view
+										class="abnormal REDBga"><text class="iconfont icon-flash"></text>1项异常</view>
 								</view>
 								<view v-for="(item,index) in JSON.parse(detail.resultTxt.exectionNarrate)">
 									<view class="e_p" style="white-space: pre-wrap;">{{item}}</view>
@@ -390,14 +391,14 @@
 							</view>
 							<view class="explain" style="width: 100%;" v-if="detail.resultTxt.exectionAttention
 							&& (JSON.parse(detail.resultTxt.exectionAttention).length > 0)">
-								<view class="tit"><text class="iconfont icon-warning"><span></span></text>注意</view>
+								<view class="tit"><text class="iconfont icon-warning"></text>注意</view>
 								<view v-for="(item,index) in JSON.parse(detail.resultTxt.exectionAttention)">
 									<view class="e_p" style="white-space: pre-wrap;">{{item}}</view>
 								</view>
 							</view>
 							<view class="explain" style="width: 100%;" v-if="detail.resultTxt.exectionSuggest
 							&& (JSON.parse(detail.resultTxt.exectionSuggest).length > 0)">
-								<view class="tit"><text class="iconfont icon-safe"><span></span></text>建议</view>
+								<view class="tit"><text class="iconfont icon-safe"></text>建议</view>
 								<view v-for="(item,index) in JSON.parse(detail.resultTxt.exectionSuggest)">
 									<view class="e_p" style="white-space: pre-wrap;">{{item}}</view>
 								</view>
@@ -421,7 +422,7 @@
 
 					<view class="dataBox" style="display: none;">
 						<view class="copyright">
-							<view class="p">Copyright<text class="C" style="font-size: 14px;"><span>©</span></text>2022
+							<view class="p">Copyright<text class="C" style="font-size: 14px;">©</text>2022
 								株洲云检新能源科技有限公司</view>
 							<view class="hr"></view>
 							<view class="url">http://m.fjcyxny.cn</view>
@@ -466,6 +467,9 @@
 		<view class="customer">
 			<view class="iconfont icon-kefu"></view>
 			<view class="tx">客服</view>
+			<button style="display: flex;flex-direction: column;align-items: center;border: none;background-color: #00000000;
+			position: absolute;width: 90%;height: 70rpx;"
+			type="default" plain="true" open-type="contact" size="default"></button>
 		</view>
 		<view class="foot">
 			<view class="tiem"><text class="iconfont icon-history"></text>评估时间:{{formatDateOnly(detail.createTime)}}</view>
@@ -485,7 +489,7 @@
 					</div>
 					<img src="../../static/icon-no-integral.png" draggable="false">
 				</image>
-				<view class="explain_text">此次查询预计需要消费<span class="b">()积分</span>,您的积分余额不足。是否充值以完成本次查询？</view>
+				<view class="explain_text">此次查询预计需要消费<text class="b">()积分,您的积分余额不足。是否充值以完成本次查询？</text></view>
 				<view class="button"><button class="butPay">立即支付<text></text>元</button><!----><button class="butGoPay">
 						<view class="iconfont icon-discount"></view>更多优惠充值套餐
 					</button></view>
@@ -497,7 +501,7 @@
 			<view class="popup-help">
 				<view class="popup-help-title faq">SOH及其指标定义</view>
 				<view class="popup-help-content">
-					<text><span>【容量指标】容量是电池健康状态表征的最基本参数，可直接反映车辆充满电后最大续航里程。</span></text><text><span>【电压一致性指标】电池单体电压之间的差异，类似于木桶效应，短板电池将导致整包可用能量变差，从而导致续航下降。</span></text><text><span>【内阻指标】内阻是指电流流过电池内部受到的阻力，内阻变差会导致容量下降，从而导致续航下降。</span></text><text><span>【温度一致性指标】电池包内温度场(不同位置温度检测点)分布的一致性，一致性较差会导致电池老化不一致，加速整包电池的衰退。</span></text><text><span>【自放电率指标】电池安全性方面的重要指标，自放电过高会导致电池衰退，并存在一定风险。</span></text>
+					<text>【容量指标】容量是电池健康状态表征的最基本参数，可直接反映车辆充满电后最大续航里程。</text><text>【电压一致性指标】电池单体电压之间的差异，类似于木桶效应，短板电池将导致整包可用能量变差，从而导致续航下降。</text><text>【内阻指标】内阻是指电流流过电池内部受到的阻力，内阻变差会导致容量下降，从而导致续航下降。</text><text>【温度一致性指标】电池包内温度场(不同位置温度检测点)分布的一致性，一致性较差会导致电池老化不一致，加速整包电池的衰退。</text><text>【自放电率指标】电池安全性方面的重要指标，自放电过高会导致电池衰退，并存在一定风险。</text>
 				</view>
 				<view class="popup-help-btn">
 					<button class="white-btn" @click="clickMoreQuerstion">更多常见问题</button>
@@ -510,8 +514,8 @@
 			background-color="#FFF">
 			<view class="popup-help">
 				<view class="popup-help-content">
-					<text><span>依据GB/T
-							32960-2016《电动汽车远程服务与管理系统技术规范》，一级故障是指不影响车辆正常行驶的故障；二级故障是指影响车性能需驾驶员限制行驶的故障；三级故障是指驾驶员应立即停车处理或者请求数援的故障。</span></text>
+					<text>依据GB/T
+							32960-2016《电动汽车远程服务与管理系统技术规范》，一级故障是指不影响车辆正常行驶的故障；二级故障是指影响车性能需驾驶员限制行驶的故障；三级故障是指驾驶员应立即停车处理或者请求数援的故障。</text>
 				</view>
 				<view class="popup-help-btn">
 					<button class="white-btn" @click="clickMoreQuerstion">更多常见问题</button>
@@ -523,7 +527,7 @@
 		<uni-popup ref="popupImg" type="bottom" border-radius="15rpx 15rpx 0 0" @close="closeImg" @open="openImg"
 			background-color="#FFF">
 			<view class="uPop">
-				<view class="attestation"><text class="iconfont icon-info"><span></span></text>长按报告可保存至手机相册</view>
+				<view class="attestation"><text class="iconfont icon-info"></text>长按报告可保存至手机相册</view>
 				<image :src="imgUrl" mode="widthFix" class="imgUrl" style="width: 100%; overflow-y: auto;"
 					@longpress="saveImage"></image>
 			</view>
@@ -554,7 +558,8 @@
 				detail: '',
 				reportImg: '',
 				curTab: 0,
-				imgUrl: ''
+				imgUrl: '',
+				canvasSrc:''
 			}
 		},
 		computed:{
@@ -716,7 +721,6 @@
 					this.imgUrl = res.msg
 					this.$refs.popupImg.open()
 				})
-				// this.$refs.popupImg.open()
 			},
 			drawHalfCircleProgress() {
 				const ctx = uni.createCanvasContext('progressCanvas', this);
@@ -760,7 +764,16 @@
 					ctx.stroke();
 				}
 
-				ctx.draw();
+				// ctx.draw();
+				ctx.draw(false, () => {
+					let self = this;
+					uni.canvasToTempFilePath({
+						canvasId: 'progressCanvas',
+						success: function(res) {
+							self.canvasSrc = res.tempFilePath;
+						},	
+					})
+				})
 			},
 			getPx(value, unit = false) {
 				if (this.number(value)) {

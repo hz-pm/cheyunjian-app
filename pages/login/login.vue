@@ -62,6 +62,8 @@
 </template>
 
 <script>
+	import projectConfig from '@/common/config.js';
+	
 	import test from '../../utils/test/test.js'
 	import {
 		userLogin,
@@ -76,8 +78,8 @@
 		},
 		data() {
 			return {
-				phone: '17673040529',
-				pwd: '123456',
+				phone: projectConfig.phone,
+				pwd: projectConfig.pwd,
 				code: '',
 				selectTab: 1,
 				tips: '获取验证码',

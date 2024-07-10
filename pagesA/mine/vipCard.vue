@@ -43,7 +43,7 @@
 						</view>
 						<text class="t-1">积分充值每满78减28</text>
 						<view class="bottom-v">
-							<text>封顶可减{{vipList[0].realitylAmount}}元</text>
+							<text>封顶可减{{vipList[0].plantAmount}}元</text>
 						</view>
 					</view>
 
@@ -168,14 +168,36 @@
 				}).then((res) => {
 					console.log(res)
 					
-					setTimeout(() => {
-						uni.navigateBack()
-					},1000)
-					
-					uni.showToast({
-						title:'购买成功！',
-						icon:'success'
-					})
+					if (res.code === 200) {
+						// 调用微信支付
+						uni.requestPayment({
+							  provider: 'wxpay',
+							  timeStamp: res.data.timeStamp,
+							  nonceStr: res.data.nonceStr,
+							  package: res.data.package,
+							  signType: res.data.signType,
+							  paySign: res.data.paySign,
+						  success(res) {
+						    // 支付成功回调
+						    console.log('===Success===>'+JSON.stringify(res))
+							uni.showToast({
+								icon:'success',
+								title:'购买成功'
+							})
+							// setTimeout(() => {
+							// 	uni.navigateBack()
+							// }, 1000)
+						  },
+						  fail(err) {
+						    // 支付失败回调
+						    console.log('===Fail===>'+JSON.stringify(err))
+							uni.showToast({
+								icon:'fail',
+								title:'购买失败'
+							})
+						  }
+						})
+					}
 				})
 			}
 		}

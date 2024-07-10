@@ -150,7 +150,7 @@
 		components: {},
 		data() {
 			return {
-				phoneList: ['13316028972', '呼叫'],
+				phoneList: ['18673436962', '呼叫'],
 				userinfo: {},
 				pointsInfo: {},
 				vipImg:'ic-VIP.png'

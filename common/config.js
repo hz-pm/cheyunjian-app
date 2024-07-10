@@ -9,6 +9,8 @@ const CONFIG = {
 		PLATFORM: "pas",
 		// 加载动画持续时间(ms)
 		LOADING_DELAY: 500,
+		phone: '17673040529',
+		pwd: '123456',
 	},
 	// 生产环境配置
 	production: {

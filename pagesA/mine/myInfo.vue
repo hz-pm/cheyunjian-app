@@ -167,6 +167,7 @@
 							
 							uni.setStorageSync('TOKEN', '')
 							that.$u.vuex('vuex_userinfo', '')
+							that.$u.vuex('vuex_points_info','')
 							uni.reLaunch({
 								url: "/pages/login/login"
 							})

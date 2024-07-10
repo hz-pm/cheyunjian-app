@@ -4,29 +4,29 @@
 			<view class="vin">车架号：{{detail.vinCode}}</view>
 		</view>
 		<view class="evaluationBox">
-			<view class="battery" style="margin-top: 0px;">
+			<view class="battery" style="margin-top: 0px;" v-if="false">
 				<view class="adjust undefined">
 					<view style="height: 50rpx;"></view>
 					<view class="iconfont icon-battery"></view>
 					<view style="height: 30rpx;"></view>
-					<text class="adjustTxt"><span>查看电池剩余容量、车辆表显里程，以及回收参<br>考估价，能为您买卖电池提供有效的参考信息！</span></text>
+					<text class="adjustTxt">查看电池剩余容量、车辆表显里程，以及回收参<br>考估价，能为您买卖电池提供有效的参考信息！</text>
 						<button class="btn">+20积分 评估电池使用情况</button>
 					<view style="height: 50rpx;"></view>
 				</view>
 			</view><!---->
-			<view class="demand">车数万维提供电池回收服务，您可以立即提交您的需求</view>
-			<view class="demandBtn">
+			<view class="demand" v-if="false">车数万维提供电池回收服务，您可以立即提交您的需求</view>
+			<view class="demandBtn" v-if="false">
 				<view class="ask">官方回收</view>
 			</view>
 			<view class="tit titList">电池包信息</view>
 			<view class="autoBox">
 				<view class="twoBox">
 					<view class="p">标称电量</view>
-					<view class="h1"><span>{{detail.resultTxt.nominalEnergy}}<text class="txt"><span>kWh</span></text></span></view>
+					<view class="h1">{{detail.resultTxt.nominalEnergy}}<text class="txt">kWh</text></view>
 				</view>
 				<view class="twoBox">
 					<view class="p">电池包重量</view>
-					<view class="h1"><span>{{detail.resultTxt.batteryWeight}}<text class="txt"><span>kg</span></text></span></view>
+					<view class="h1">{{detail.resultTxt.batteryWeight}}<text class="txt">kg</text></view>
 				</view>
 			</view>
 			<view class="autoBox">
@@ -36,13 +36,13 @@
 				</view>
 				<view class="twoBox">
 					<view class="p">标称电压</view>
-					<view class="h1"><span>{{detail.resultTxt.ratingVolt}}<text class="txt"><span>V</span></text></span></view>
+					<view class="h1">{{detail.resultTxt.ratingVolt}}<text class="txt">V</text></view>
 				</view>
 			</view>
 			<view class="autoBox">
 				<view class="twoBox">
 					<view class="p">标称容量</view>
-					<view class="h1"><span>{{detail.resultTxt.rateCapacity}}<text class="txt"><span>Ah</span></text></span></view>
+					<view class="h1">{{detail.resultTxt.rateCapacity}}<text class="txt">Ah</text></view>
 				</view>
 				<view class="twoBox">
 					<view class="p">电池单体数量</view>
@@ -69,17 +69,17 @@
 				</view>
 				<view class="twoBox">
 					<view class="p">电芯电压</view>
-					<view class="h1"><span>{{detail.resultTxt.batteryVoltUnit}}<text class="txt"><span>V</span></text></span></view>
+					<view class="h1">{{detail.resultTxt.batteryVoltUnit}}<text class="txt">V</text></view>
 				</view>
 			</view>
 			<view class="autoBox">
 				<view class="twoBox">
 					<view class="p">电芯容量</view>
-					<view class="h1"><span>{{detail.resultTxt.batteryVolumeUnit}}<text class="txt"><span>Ah</span></text></span></view>
+					<view class="h1">{{detail.resultTxt.batteryVolumeUnit}}<text class="txt">Ah</text></view>
 				</view>
 				<view class="twoBox">
 					<view class="p">电芯重量</view>
-					<view class="h1"><span>{{detail.resultTxt.batteryWeightUnit}}<text class="txt"><span>kg</span></text></span></view>
+					<view class="h1">{{detail.resultTxt.batteryWeightUnit}}<text class="txt">kg</text></view>
 				</view>
 			</view>
 			<view class="autoBox">
@@ -95,7 +95,7 @@
 			<view class="autoBox">
 				<view class="twoBox" style="width: 100%;">
 					<view class="p">电芯尺寸</view>
-					<view class="h1"><text><span>{{detail.resultTxt.batteryModel}} mm</span></text></view>
+					<view class="h1"><text>{{detail.resultTxt.batteryModel}} mm</text></view>
 				</view>
 			</view>
 			<view class="tit titList">整车信息</view>
@@ -117,13 +117,13 @@
 			</view>
 			<view class="illustrate">
 				<view class="explain">
-					<view class="tit"><text class="iconfont icon-info"><span></span></text>评估说明</view>
+					<view class="tit"><text class="iconfont icon-info"></text>评估说明</view>
 					<view class="e_p pb1">1. 我司基于您提交的鼓包、漏液、泡水、火烧情况进行估值，如未选择则默认电池完好；</view>
 					<view class="e_p pb1">2. 本估价报告有效期15天，但因原材料价格波动导致的价格波动不在本报告考虑范围内；</view>
 					<view class="e_p pb1">3. 如发生特殊情况导致电池容量低于80%，电池价格需重新评估。</view>
 				</view><!---->
 				<view class="explain">
-					<view class="tit"><text class="iconfont icon-warning"><span></span></text>免责申明</view>
+					<view class="tit"><text class="iconfont icon-warning"></text>免责申明</view>
 					<view class="e_p">
 						本报告提供的所有内容及判断仅基于截止到评估日期收集的相关数据信息，所有数据信息均来自第三方。关于此车辆/电池的部分数据可能未被采集或收录。本报告仅是交易参考资料之一，请您结合实际勘测结果，做出更精准的决策。
 					</view>
@@ -133,12 +133,15 @@
 		<view class="customer">
 			<view class="iconfont icon-kefu" style="font-size: 32rpx;"></view>
 			<view class="tx" >客服</view>
+			<button style="display: flex;flex-direction: column;align-items: center;border: none;background-color: #00000000;
+			position: absolute;width: 90%;height: 70rpx;"
+			type="default" plain="true" open-type="contact" size="default"></button>
 		</view><!----><!----><!---->
 		<view style="height: 78px;"></view>
 		<view class="foot">
-			<view class="tiem"><text class="iconfont icon-history"><span></span></text>评估时间:{{formatDateOnly(detail.createTime)}}</view>
+			<view class="tiem"><text class="iconfont icon-history"></text>评估时间:{{formatDateOnly(detail.createTime)}}</view>
 			<view class="export"><button class="blue-btn" @click="clickExport"><text
-						class="iconfont icon-export"><span></span></text>导出报告</button></view>
+						class="iconfont icon-export"></text>导出报告</button></view>
 		</view><!---->
 		<view style="display: none;">
 			<view class="popup_mask"></view>
@@ -157,20 +160,20 @@
 						</div>
 					</uni-resize-sensor><img src="../../static/icon-no-integral.png" draggable="false">
 				</image>
-				<view class="explain_text">此次查询预计需要消费<span
-						class="b">()积分</span>,您的积分余额不足。是否充值以完成本次查询？</view>
+				<view class="explain_text">此次查询预计需要消费<text
+						class="b">()积分</text>,您的积分余额不足。是否充值以完成本次查询？</view>
 				<view class="button"><button class="butPay">立即支付<text
-							data-v-ab5cdc6c=""><span></span></text>元</button><!----><button
+							data-v-ab5cdc6c=""></text>元</button><!----><button
 						class="butGoPay">
 						<view class="iconfont icon-discount"></view>更多优惠充值套餐
 					</button></view>
 			</view>
 		</view>
-		
+
 		<uni-popup ref="popupImg" type="bottom" border-radius="15rpx 15rpx 0 0" @close="closeImg" @open="openImg"
 			background-color="#FFF">
 			<view class="uPop">
-				<view class="attestation"><text class="iconfont icon-info"><span></span></text>长按报告可保存至手机相册</view>
+				<view class="attestation"><text class="iconfont icon-info"></text>长按报告可保存至手机相册</view>
 				<image :src="imgUrl" mode="widthFix" class="imgUrl" style="width: 100%; overflow-y: auto;"
 					@longpress="saveImage"></image>
 			</view>
@@ -189,32 +192,24 @@
 		data() {
 			return {
 				isEmpty: false,
-				vinCode: 'LVHDH1832L5004288',
+				vinCode: '',
 				detail: '',
 				imgUrl: ''
 			}
 		},
 		onLoad(op) {
-			// if(op){
-			// 	this.vinCode = op.vinCode;
-			// 	console.log(this.vinCode)
-			// 	//获取详情
-			// 	cloudDetails({
-			// 		vinCode:this.vinCode
-			// 	}).then((res) => {
-			// 		this.detail = res.data
-			// 	})
-			// }
-			
-			eleDetails({
-				vinCode: this.vinCode
-			}).then((res) => {
-				if(res.data){
+			if(op){
+				this.vinCode = op.vinCode;
+				console.log(this.vinCode)
+				//获取详情
+				eleDetails({
+					vinCode:this.vinCode
+				}).then((res) => {
 					this.detail = res.data
 					//格式化json数据
 					this.detail.resultTxt = JSON.parse(res.data.resultTxt)
-				}
-			})
+				})
+			}
 		},
 		methods: {
 			clickTab(index) {
@@ -225,8 +220,7 @@
 			},
 			clickExport() {
 				reportImgUrl({
-					// reportId: this.detail.resultTxt.id,
-					reportId: 1,
+					reportId: this.detail.resultTxt.id,
 					vinCode: this.vinCode
 				}).then((res) => {
 					this.imgUrl = res.msg
@@ -1208,6 +1202,33 @@
 	    color: #fff;
 		.tx {
 		    font-size: 24rpx;
+		}
+	}
+	
+	.uPop {
+		overflow-y: auto;
+		height: 71vh;
+	
+		.attestation {
+			background: #fff8ed;
+			color: #f3a54f;
+			border-color: #f3a54f;
+			right: var(--window-right);
+			bottom: var(--window-bottom);
+			height: 37px;
+			text-align: center;
+			font-size: 14px;
+			border-bottom: 1px solid rgba(243, 165, 79, .5);
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+	
+		.imgUrl {
+			user-select: auto;
+			-webkit-touch-callout: default;
+			overflow-clip-margin: content-box;
+			overflow: clip;
 		}
 	}
 </style>

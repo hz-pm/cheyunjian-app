@@ -1,7 +1,7 @@
 <template>
 	<view class="content">
 		<view style="width: 100%;display: flex;flex-direction: row;background-color: #FFF;">
-			<uni-search-bar style="width: 100%;" @confirm="search" :focus="true" v-model="searchValue"
+			<uni-search-bar style="width: 100%;" @confirm="search" :focus="false" v-model="searchValue"
 			placeholder="搜索车架号" cancelButton="auto">
 			</uni-search-bar>
 		</view>

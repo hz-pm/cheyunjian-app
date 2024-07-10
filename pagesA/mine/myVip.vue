@@ -18,13 +18,13 @@
 			<view class="topBoxBg"></view>
 			<view class="vipcardBox " style="filter: grayscale(0%);">
 				<view class="vipH1">
-					<text class="iconfont icon-VIP"><span></span></text>VIP会员
+					<text class="iconfont icon-VIP"></text>VIP会员
 				</view>
 				<view class="vipP">积分充值享5折优惠</view>
 				<view class="iconRight iconfont  icon-VIP"></view>
 				<view class="vipBottom">
 					<view class="vipBottomBox">
-						<view class="view">封顶可减额度：<text class="b"><span>{{vipInfo.plantAmount}}元</span></text></view>
+						<view class="view">封顶可减额度：<text class="b">{{vipInfo.plantAmount}}元</text></view>
 						<view class="view" style="text-align: right;">有效期至 {{vipInfo.vipEndTime}}</view>
 						<view class="vipBottomBg"></view>
 					</view>
@@ -53,8 +53,11 @@
 				</view>
 			</view>
 			<view class="bigService" style="margin-top: 0px;">
-				<text class="iconfont icon-kefu" style="margin-left: 30rpx;"><span style="margin-left: 20rpx;font-size: 28rpx;">点击添加VIP客服，参与会员专属活动</span></text>
+				<text class="iconfont icon-kefu" style="margin-left: 30rpx;"><text style="margin-left: 20rpx;font-size: 28rpx;">点击添加VIP客服，参与会员专属活动</text></text>
 				<text class="iconfont icon-arrow" style="margin-right: 35rpx;"></text>
+				<button style="display: flex;flex-direction: column;align-items: center;border: none;background-color: #00000000;
+				position: absolute;width: 90%;height: 70rpx;"
+				type="default" plain="true" open-type="contact" size="default"></button>
 			</view>
 		</view>
 	</view>

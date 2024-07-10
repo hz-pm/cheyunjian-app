@@ -30,8 +30,8 @@
 					<view style="height: 1rpx;width: 100%;background-color: #DDD;"></view>
 					<view style="width: 100%;display: flex;flex-direction: row;align-items: center;
 							text-align: center; font-size: 28rpx;font-weight: bold;">
-						<navigator url="/pagesA/mine/fiesRecord"
-							style="width: 49%;color: #808080;padding-top: 20rpx;padding-bottom: 20rpx;">历史记录</navigator>
+						<view
+							style="width: 49%;color: #808080;padding-top: 20rpx;padding-bottom: 20rpx;" @click="clickRecord">历史记录</view>
 						<view style="width: 1rpx;height: 35rpx;background-color: #DDD;"></view>
 						<text style="width: 49%;color: #ff8d1a;padding-top: 20rpx;padding-bottom: 20rpx;"
 							@click="openInquirePop">获取报告</text>
@@ -160,7 +160,7 @@
 
 		<uni-popup ref="popup3" type="bottom" @close="closeInquirePop"
 			@open="openInquirePop" background-color="#FFF" safe-area:true @change="change">
-			<view style="display: flex;flex-direction: column;align-items: center;">
+			<view style="display: flex;flex-direction: column;align-items: center;height: 30vh;">
 				<text
 					style="font-size: 30rpx;color: #111;font-weight: bold;margin-top: 25rpx;margin-bottom: 25rpx;">选择报告查询模式</text>
 				<view style="width: 90%;display: flex;flex-direction: row;align-items: center;justify-content: space-between;
@@ -176,7 +176,6 @@
 					</view>
 				</view>
 				<button class="btn-org" @click="clickSubmitInquire" shape="circle">确认提交</button>
-				<view style="height: 150rpx;"></view>
 			</view>
 		</uni-popup>
 
@@ -432,8 +431,13 @@
 				this.$refs.popup2.open()
 			},
 			openInquirePop() {
-				this.showPop = true
-				this.$refs.popup3.open()
+				uni.showToast({
+					icon:'none',
+					title:'暂未开放'
+				})
+				
+				// this.showPop = true
+				// this.$refs.popup3.open()
 			},
 			closeInquirePop() {
 				this.showPop = false
@@ -442,8 +446,16 @@
 			clickSubmitInquire() {
 				this.closeInquirePop()
 				//提交查询
+			},
+			clickRecord(){
+				uni.showToast({
+					icon:'none',
+					title:'暂未开放'
+				})
 				
-				
+				// uni.navigateTo({
+				// 	url:'/pagesA/mine/fiesRecord'
+				// })
 			},
 			selectAddress() {
 				this.$refs.cityPicker.show()

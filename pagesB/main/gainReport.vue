@@ -33,10 +33,9 @@
 				<view style="width: 100%;display: flex;flex-direction: row;align-items: center;
 						text-align: center; font-size: 26rpx;justify-content: space-between;">
 					<text url="/pagesA/mine/fiesRecord" style="width: 49%;color: #ff8d1a;padding-top: 20rpx;padding-bottom: 20rpx;
-							font-weight: bold;" @click="openSelectItemPop" v-if="false"><span style="font-size: 10px;"></span></text>
-							<!-- font-weight: bold;" @click="openSelectItemPop" >请选择检测模块<span style="font-size: 10px;">▼</span></text> -->
+							font-weight: bold;" @click="openSelectItemPop" >共5个模块 80积分<span style="font-size: 10px;"></span></text>
 					<view style="width: 1rpx;height: 35rpx;background-color: #DDD;"></view>
-					<text class="iconfont icon-question" style="width: 100%;font-size: 26rpx;color: #00acdd;padding-top: 20rpx;padding-bottom: 20rpx;"
+					<text class="iconfont icon-question" style="width: 49%;font-size: 26rpx;color: #00acdd;padding-top: 20rpx;padding-bottom: 20rpx;"
 						@click="open()">如何找到车架号</text>
 				</view>
 			</view>

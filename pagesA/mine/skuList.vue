@@ -35,6 +35,9 @@
 				<uni-icons type="info-filled" size="40rpx" color="#00acdd" style="margin-left: 25rpx;"></uni-icons>
 				<text style="font-size: 30rpx;margin-left: 10rpx;color: #00acdd;">了解更多大客户优惠政策，请联系客服</text>
 				<uni-icons type="right" size="40rpx" color="#00acdd" style="margin-right: 20rpx;"></uni-icons>
+				<button style="display: flex;flex-direction: column;align-items: center;border: none;background-color: #00000000;
+				position: absolute;width: 90%;height: 70rpx;"
+				type="default" plain="true" open-type="contact" size="default"></button>
 			</view>
 		</view>
 

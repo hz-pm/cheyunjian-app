@@ -34,17 +34,21 @@
 					align-items: center;padding-top: 20rpx;padding-bottom: 20rpx;">
 					<image src="../../static/icon-search.png" style="width: 45rpx;height: 45rpx;
 							margin-left: 20rpx;margin-right: 20rpx;"></image>
-					<input placeholder="请核对查询类型后输入车架号" fontSize="32rpx" color="#111" border="none" v-model="vinCode"></input>
+					<input placeholder="请核对查询类型后输入车架号" fontSize="32rpx" color="#111" border="none" v-model="vinCode"
+					style="width: 80%;"></input>
 				</view>
 				<view style="height: 1rpx;width: 100%;background-color: #DDD;"></view>
 				<view style="width: 100%;display: flex;flex-direction: row;align-items: center;
 						text-align: center; font-size: 28rpx;justify-content: space-around;">
 					<text url="/pagesA/mine/fiesRecord" style="width: 49%;color: #ff8d1a;padding-top: 20rpx;padding-bottom: 20rpx;
-							" @click="openSelectItemPop">估价需10积分<span style="font-size: 26rpx;color: #808080;
-							font-weight: normal;text-decoration: line-through;">40积分</span></text>
+							font-weight: bold;">{{checkPointsStr}}<span style="font-size: 26rpx;color: #808080;
+							font-weight: normal;text-decoration: line-through;" v-if="!vipInfo">40积分</span></text>
 					<view style="width: 1rpx;height: 35rpx;background-color: #DDD;"></view>
-					<uni-icons type="camera" color="#09acc3" size="35rpx" @click="openImagePage()"
-						style="font-weight: bold;"><span style="font-size: 30rpx;">车架号图像识别</span></uni-icons>
+					<!-- <view style="display: flex;flex-direction: row;align-items: center;">
+						<view type="camera" color="#09acc3" size="35rpx" @click="openImagePage()" style="font-weight: bold;"></uni-icons>
+						<span style="font-size: 30rpx;color: #09acc3;">车架号图像识别</span>
+					</view> -->
+					<view class="ocr" @click="openImagePage()"><view class="iconfont icon-camera" style="margin-right: 5rpx;"></view>车架号图像识别</view>
 				</view>
 			</view>
 
@@ -141,7 +145,8 @@
 
 	import {
 		eleCheck,
-		getPointsInfo
+		getPointsInfo,
+		getUserVipInfo
 	} from '../../apis/modules/user';
 	export default {
 		components: {},
@@ -154,7 +159,9 @@
 				curTab: 1,
 				baseImageUrl:projectConfig.baseImageUrl,
 				vinCode:'',
-				curPoints:'0'
+				curPoints:'0',
+				vipInfo:'',
+				checkPointsStr:'估价需10积分', //检测积分提示
 			}
 		},
 		onShow() {
@@ -170,6 +177,18 @@
 					this.pointsInfo = res.data
 					this.curPoints = this.pointsInfo.realityQty
 					this.$u.vuex('vuex_points_info',res.data)
+				}
+			})
+			
+			//获取用户VIP信息
+			getUserVipInfo().then((res) => {
+				// console.log(res)
+				if(res.code === 200){
+					this.vipInfo = res.data
+					//会员剩余免费检测次数
+					if(this.vipInfo.totalFreeInterestsQty > 0){
+						this.checkPointsStr = '会员免费查询 '+this.vipInfo.totalFreeInterestsQty+' 次'
+					}
 				}
 			})
 		},
@@ -218,19 +237,63 @@
 					requestIdType:this.companyType,
 				},{custom: {catch: true,}
 				}).then((res) => {
-					if(!res.data){
-						uni.showModal({
-							title: '提示',
-							content: res.msg,
-							showCancel:false,
-							success: function (res) {
-							}
+					if(res.code === 200){
+						if(res.data){
+							//进入详情页
+							uni.navigateTo({
+								url:'/pagesB/main/newBattery?vinCode='+this.vinCode
+							})
+							return
+						}
+					}
+					uni.showModal({
+						title: '提示',
+						content: res.msg,
+						showCancel:false,
+						success: function (res) {
+						}
+					});
+				});
+			},
+			openImagePage() {
+				let that = this;
+				uni.chooseImage({
+					count: 1,
+					sizeType: ['compressed'],
+					sourceType: ['album', 'camera'],
+					success: function(res) {
+						uni.showLoading({
+							title: 'Uploading Image'
 						});
-					}else{
-						//进入详情页
-						uni.navigateTo({
-							url:'/pagesB/main/newBattery?vinCode='+this.vinCode
-						})
+						//上传图片
+						that.uploadImage(res.tempFilePaths)
+					}
+				});
+			},
+			uploadImage(tempFilePaths) {
+				let _this = this;
+				console.log('===***===>' + projectConfig.baseUrl)
+				uni.uploadFile({
+					url: projectConfig.baseUrl + '/index/user/vehicleLicenseOCR', //接口地址
+					header: {
+						"Authorization": _this.vuex_token,
+					}, //请求token
+					filePath: tempFilePaths[0],
+					name: 'file',
+					success: (res) => {
+						uni.hideLoading();
+						console.log('===Upload===>' + JSON.stringify(res))
+						let data = JSON.parse(res.data);
+						//识别成功
+						if(data.code == 200){
+							// _this.pic = data.data.url
+							_this.vinCode = data.data.vin
+						}else{
+							uni.showToast({
+								title: res.msg,
+								icon: 'none'
+							});
+						}
 					}
 				});
 			}
@@ -368,5 +431,20 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+	}
+	
+	.ocr{
+	    height: 38rpx;
+	    display: flex;
+	    align-items: center;
+	    justify-content: center;
+	    width: 50%;
+	    flex-grow: 1;
+	    text-align: left;
+	    color: #09acc3;
+		font-weight: bold;
+	}
+	.icon-camera:before {
+	    content: "\e90d";
 	}
 </style>
