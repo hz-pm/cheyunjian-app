@@ -138,7 +138,7 @@
 			type="default" plain="true" open-type="contact" size="default"></button>
 		</view><!----><!----><!---->
 		<view style="height: 78px;"></view>
-		<view class="foot">
+		<view class="foot" v-if="isShare != 1">
 			<view class="tiem"><text class="iconfont icon-history"></text>评估时间:{{formatDateOnly(detail.createTime)}}</view>
 			<view class="export"><button class="blue-btn" @click="clickExport"><text
 						class="iconfont icon-export"></text>导出报告</button></view>
@@ -194,12 +194,14 @@
 				isEmpty: false,
 				vinCode: '',
 				detail: '',
-				imgUrl: ''
+				imgUrl: '',
+				isShare:2, //是否为分享页面，隐藏底部按钮
 			}
 		},
 		onLoad(op) {
 			if(op){
 				this.vinCode = op.vinCode;
+				this.isShare = op.share;
 				console.log(this.vinCode)
 				//获取详情
 				eleDetails({
@@ -211,6 +213,22 @@
 				})
 			}
 		},
+		// 分享到微信好友
+		onShareAppMessage() {
+		  return {
+			title: '一码速查电动汽车评估报告',
+			path: '/pagesB/main/newBattery?vinCode='+this.vinCode+'&share=1',
+			imageUrl: '../../static/mp-share.png',
+		  }
+		},
+		// 分享到朋友圈
+		onShareTimeline() {
+		  return {
+			title: '一码速查电动汽车评估报告',
+			path: '/pagesB/main/newBattery?vinCode='+this.vinCode+'&share=1',
+			imageUrl: '../../static/mp-share.png',
+		  }
+		},
 		methods: {
 			clickTab(index) {
 				this.curIndex = index;
@@ -221,7 +239,8 @@
 			clickExport() {
 				reportImgUrl({
 					reportId: this.detail.resultTxt.id,
-					vinCode: this.vinCode
+					type: 2,
+					vinCode:this.vinCode
 				}).then((res) => {
 					this.imgUrl = res.msg
 					this.$refs.popupImg.open()

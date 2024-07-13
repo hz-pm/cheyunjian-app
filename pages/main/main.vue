@@ -46,11 +46,11 @@
 						justify-content: space-between;height: 190rpx;">
 					<image src="../../static/home-menu1.png" style="width: 50%;height: 100%;
 							border-radius: 20rpx;" @click="clickGrid(0)"></image>
-					<image src="../../static/home-menu4.png" style="width: 50%;height: 100%;
-							border-radius: 20rpx;margin-left: 25rpx;" @click="clickGrid(1)"></image>
+					<image src="../../static/home-menu2.png" style="width: 50%;height: 100%;
+							border-radius: 20rpx;margin-left: 25rpx;" @click="clickGrid(3)"></image>
 				</view>
 				<view style="width: 100%;display: flex;flex-direction: row;align-items: center;
-						justify-content: space-between;margin-top: 25rpx;height: 190rpx;">
+						justify-content: space-between;margin-top: 25rpx;height: 190rpx;" v-if="false">
 					<image src="../../static/home-menu3.png" style="width: 50%;height: 100%;
 							border-radius: 20rpx;" @click="clickGrid(2)" v-if="false"></image>
 					<image src="../../static/home-menu2.png" style="width: 50%;height: 100%;
@@ -92,7 +92,8 @@
 		<navigator url="/pagesA/mine/baseCompany" style="width: 100%;height: 74rpx;color: #f3a54f;background: #fff8ed;position: fixed;
 				left: 0;right: 0;bottom: 0rpx;text-align: center;font-size: 28rpx;z-index: 99;display: flex;flex-direction: column;
 				justify-content: center;align-items: center;border-top: 1rpx solid #ffac52;" @click="goBaseCompany"
-				v-if="userinfo.enterpriseCertification != 1">
+				v-if="false">
+				<!-- v-if="userinfo.enterpriseCertification != 1"> -->
 			<view style="display: flex;flex-direction: row;align-items: center;">
 				<image src="../../static/safety_fill.png" style="width: 35rpx;height: 35rpx;"></image>
 				<text style="font-size: 28rpx;margin-left: 5rpx;">申请企业认证，即可获得80积分</text>

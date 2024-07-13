@@ -16,7 +16,8 @@
 				@click="clickItem(item)">
 					<view style="display: flex;flex-direction: row;align-items: center;margin-top: 20rpx;
 					margin-bottom: 20rpx;">
-						<image src="../../static/img-car-jili.png" style="width: 110rpx;height: 110rpx;border-radius: 10rpx;"></image>
+						<!-- <image src="../../static/img-car-jili.png" style="width: 110rpx;height: 110rpx;border-radius: 10rpx;"></image> -->
+						<image style="width: 110rpx;height: 110rpx;border-radius: 10rpx;"></image>
 						<view style="display: flex;flex-direction: column;justify-content: flex-end;
 						margin-left: 20rpx;">
 							<text style="font-size: 32rpx;color: #111;">吉利汽车</text>

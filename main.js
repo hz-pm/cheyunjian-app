@@ -45,6 +45,10 @@ const app = new Vue({
 import httpApi from '@/apis/http.api.js'
 Vue.use(httpApi, app)
 
+//微信分享
+import share from '@/common/share.js'	
+Vue.mixin(share)
+
 import tools from '@/common/tools.js';
 Vue.use(tools, app)
 

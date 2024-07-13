@@ -430,7 +430,7 @@
 								<view class="code">
 									<image class="codeImg" style="position: relative;">
 										<div
-											style="background-image: url(../../static/mp-code.png); background-size: 100% 100%; background-repeat: no-repeat;">
+											style="background-size: 100% 100%; background-repeat: no-repeat;">
 										</div><uni-resize-sensor>
 											<div>
 												<div></div>
@@ -438,14 +438,14 @@
 											<div>
 												<div></div>
 											</div>
-										</uni-resize-sensor><img src="../../static/mp-code.png" draggable="false">
+										</uni-resize-sensor><img draggable="false">
 									</image>
 									<view class="codeTxt">关注公众号</view>
 								</view>
 								<view class="code">
 									<image class="codeImg" style="position: relative;">
 										<div
-											style="background-image: url(../../static/channels-code.png); background-size: 100% 100%; background-repeat: no-repeat;">
+											style=" background-size: 100% 100%; background-repeat: no-repeat;">
 										</div><uni-resize-sensor>
 											<div>
 												<div></div>
@@ -453,7 +453,7 @@
 											<div>
 												<div></div>
 											</div>
-										</uni-resize-sensor><img src="../../static/channels-code.png" draggable="false">
+										</uni-resize-sensor><img  draggable="false">
 									</image>
 									<view class="codeTxt">关注视频号</view>
 								</view>
@@ -471,7 +471,7 @@
 			position: absolute;width: 90%;height: 70rpx;"
 			type="default" plain="true" open-type="contact" size="default"></button>
 		</view>
-		<view class="foot">
+		<view class="foot" v-if="isShare != 1">
 			<view class="tiem"><text class="iconfont icon-history"></text>评估时间:{{formatDateOnly(detail.createTime)}}</view>
 			<view class="export"><button class="white-btn">刷新</button>
 				<button class="blue-btn" @click="clickExport"><text class="iconfont icon-export"></text>导出</button>
@@ -559,7 +559,8 @@
 				reportImg: '',
 				curTab: 0,
 				imgUrl: '',
-				canvasSrc:''
+				canvasSrc:'',
+				isShare:2, //是否为分享页面，隐藏底部按钮
 			}
 		},
 		computed:{
@@ -651,6 +652,7 @@
 		onLoad(op) {
 			if(op){
 				this.vinCode = op.vinCode;
+				this.isShare = op.share;
 				console.log(this.vinCode)
 				//获取详情
 				cloudDetails({
@@ -682,6 +684,22 @@
 			// 	console.log('====percentage====>'+this.percentage)
 			// 	this.drawHalfCircleProgress();
 			// })
+		},
+		// 分享到微信好友
+		onShareAppMessage() {
+		  return {
+			title: '一码速查电动汽车评估报告',
+			path: '/pagesB/main/detectionReportV2?vinCode='+this.vinCode+'&share=1',
+			imageUrl: '../../static/mp-share.png',
+		  }
+		},
+		// 分享到朋友圈
+		onShareTimeline() {
+		  return {
+			title: '一码速查电动汽车评估报告',
+			path: '/pagesB/main/detectionReportV2?vinCode='+this.vinCode+'&share=1',
+			imageUrl: '../../static/mp-share.png',
+		  }
 		},
 		methods: {
 			clickTabs(index) {
@@ -716,7 +734,8 @@
 			clickExport() {
 				reportImgUrl({
 					reportId: this.detail.resultTxt.id,
-					vinCode: this.vinCode
+					type: 1,
+					vinCode:this.vinCode
 				}).then((res) => {
 					this.imgUrl = res.msg
 					this.$refs.popupImg.open()

@@ -225,12 +225,14 @@
 			"iconPath": "static/tab-1-n.png",
 			"selectedIconPath": "static/tab-1-s.png",
 			"text": "首页"
-		}, {
-			"pagePath": "pages/main/queryTramFiles",
-			"iconPath": "static/tab-2-n.png",
-			"selectedIconPath": "static/tab-2-s.png",
-			"text": "车智驾"
-		}, {
+		}, 
+		// {
+		// 	"pagePath": "pages/main/queryTramFiles",
+		// 	"iconPath": "static/tab-2-n.png",
+		// 	"selectedIconPath": "static/tab-2-s.png",
+		// 	"text": "车智驾"
+		// }, 
+		{
 			"pagePath": "pages/main/mine",
 			"iconPath": "static/tab-3-n.png",
 			"selectedIconPath": "static/tab-3-s.png",

@@ -30,7 +30,7 @@
 						<uni-icons type="right" color="#888" size="28rpx" style="margin-left: 10rpx;"></uni-icons>
 					</view>
 				</view>
-				<view class="cell-v" style="margin-top: 25rpx;">
+				<view class="cell-v" style="margin-top: 25rpx;" v-if="false">
 					<text class="title">企业名称</text>
 					<view class="right">
 						<text>{{userinfo.enterprise}}</text>
@@ -38,7 +38,8 @@
 							v-if="false"></uni-icons>
 					</view>
 				</view>
-				<navigator url="/pagesA/mine/baseCompany" class="cell-v" style="margin-top: 2rpx;">
+				<navigator url="/pagesA/mine/baseCompany" class="cell-v" style="margin-top: 2rpx;"
+				v-if="false">
 					<text class="title">企业认证</text>
 					<view class="right">
 						<text style="background-color: #fff8ed;color: #f3a54f;border-color: rgba(243,165,79,.3);
