@@ -253,39 +253,57 @@
 				this.$refs.popupImg.open()
 			},
 			saveImage() {
-				let imageUrl = this.imgUrl;
-				// 下载图片
-				uni.downloadFile({
-					url: imageUrl,
-					success: downloadResult => {
-						if (downloadResult.statusCode === 200) {
-							// 下载成功，保存图片到系统相册
-							uni.saveImageToPhotosAlbum({
-								filePath: downloadResult.tempFilePath,
-								success: () => {
-									uni.showToast({
-										title: '图片保存成功'
-									});
+				let that = this;
+				uni.showModal({
+				title: '提示',
+				content: '是否保存图片到相册？',
+				success: function (res) {
+						if (res.confirm) {
+							uni.showLoading({
+								title: 'Loading...'
+							});
+							let imageUrl = that.imgUrl;
+							// 下载图片
+							uni.downloadFile({
+								url: imageUrl,
+								success: downloadResult => {
+									uni.hideLoading();
+									console.log(downloadResult)
+									if (downloadResult.statusCode === 200) {
+										// 下载成功，保存图片到系统相册
+										uni.saveImageToPhotosAlbum({
+											filePath: downloadResult.tempFilePath,
+											success: () => {
+												uni.showToast({
+													title: '图片保存成功'
+												});
+											},
+											fail: (err) => {
+												console.log(err)
+												uni.showToast({
+													title: '图片保存失败',
+													icon: 'none'
+												});
+											}
+										});
+									} else {
+										uni.showToast({
+											title: '图片下载失败',
+											icon: 'none'
+										});
+									}
 								},
 								fail: () => {
+									uni.hideLoading();
 									uni.showToast({
-										title: '图片保存失败',
+										title: '图片下载失败',
 										icon: 'none'
 									});
 								}
 							});
-						} else {
-							uni.showToast({
-								title: '图片下载失败',
-								icon: 'none'
-							});
+						} else if (res.cancel) {
+							console.log('用户点击取消');
 						}
-					},
-					fail: () => {
-						uni.showToast({
-							title: '图片下载失败',
-							icon: 'none'
-						});
 					}
 				});
 			},
@@ -872,7 +890,7 @@
 	.foot .tiem .icon-history{
 	  font-size: 35rpx;
 	  margin-right: 15rpx;
-	  color: #00acdd
+	  color: #30ad55
 	}
 	
 	.foot .export{
@@ -891,7 +909,7 @@
 	  margin-left: 20rpx;
 	  font-size: 30rpx;
 	  color: #fff;
-	  background: linear-gradient(135deg, #00acdd, #47ad13);
+	  background: linear-gradient(135deg, #30ad55, #47ad13);
 	}
 	
 	.foot .export .blue-btn.disable,
@@ -1103,7 +1121,7 @@
 	
 	.batteryBox{
 	  height: 128rpx;
-	  background: linear-gradient(180deg, #00acdd 20%, #47ad13 180%)
+	  background: linear-gradient(180deg, #57ca9e 20%, #47ad13 180%)
 	}
 	
 	uni-button.soButt{
@@ -1212,7 +1230,7 @@
 	    width: 82rpx;
 	    height: 82rpx;
 	    border-radius: 50%;
-	    background: #33bde4;
+	    background: #30ad55;
 	    display: flex;
 	    flex-direction: column;
 	    justify-content: center;

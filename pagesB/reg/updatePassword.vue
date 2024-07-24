@@ -11,7 +11,7 @@
 				<input placeholder="请输入验证码" font-size="28rpx" v-model="code" type="number" maxlength="6" style="
 					padding: 20rpx;" border="none">
 				</input>
-				<text @click="getCode" style="font-size: 26rpx;padding-right: 20rpx;color: #00acdd;">{{tips}}</text>
+				<text @click="getCode" style="font-size: 26rpx;padding-right: 20rpx;color: #30ad55;">{{tips}}</text>
 			</view>	
 			
 			<input placeholder="6-16位新密码区分大小写" password font-size="28rpx" v-model="pwd" style="background-color: #FFF;border-radius: 20rpx;
@@ -188,7 +188,7 @@
 	
 	.btn {
 		width: 100%;
-		background: linear-gradient(135deg, #00acdd, #47ad13);
+		background: linear-gradient(135deg, #30ad55, #30ad55);
 		margin-top: 45rpx;
 		border-radius: 20rpx;
 		margin-bottom: 35rpx;

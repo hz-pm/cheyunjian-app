@@ -25,7 +25,7 @@
 					justify-content: space-between;">
 				<view style="display: flex;flex-direction: row;align-items: center;">
 					<view style="width: 82rpx;height: 82rpx;border-radius: 50%;
-							background: linear-gradient(135deg,#00acdd,#47ad13);box-shadow: 0 4rpx 20rpx 0 rgba(18,140,91,.3);
+							background: linear-gradient(135deg,#30ad55,#47ad13);box-shadow: 0 4rpx 20rpx 0 rgba(18,140,91,.3);
 							text-align: center;line-height: 82rpx;">
 						<uni-icons type="person" size="30" color="#FFF"></uni-icons>
 					</view>
@@ -36,7 +36,7 @@
 					</view>
 				</view>
 				<view style="display: flex;flex-direction: column;align-items: center;">
-					<text style="font-size: 32rpx;color: #00acdd;font-weight: bold;">{{pointsInfo.realityQty}}</text>
+					<text style="font-size: 32rpx;color: #30ad55;font-weight: bold;">{{pointsInfo.realityQty}}</text>
 					<text style="font-size: 26rpx;color: #808080;margin-top: 8rpx;">账户积分</text>
 				</view>
 			</view>
@@ -68,7 +68,7 @@
 				<navigator url="/pagesA/mine/vipCard" style="width: 50%;height: 100%;display: flex;flex-direction: column;align-items: center;
 						position: relative;justify-content: center;border-right: 1px solid #e3eeee;">
 					<text style="font-size: 35rpx;font-weight: bold;">VIP会员</text>
-					<text style="color: #808080;margin-top: 5rpx;">最高享全年<span style="color: #ff8d1a;">5折优惠</span></text>
+					<text style="color: #808080;margin-top: 5rpx;">最高享全年<span style="color: #ff8902;">58折优惠</span></text>
 					<text style="width: 165rpx;color: #FFF;background: linear-gradient(136.25deg,#ffb300,#ff5833);
 							border-radius: 65rpx;line-height: 65rpx;height: 65rpx;text-align: center;margin-top: 15rpx;">升级会员</text>
 				</navigator>
@@ -76,7 +76,7 @@
 						position: relative;justify-content: center;">
 					<text style="font-size: 35rpx;font-weight: bold;">积分充值</text>
 					<text style="color: #808080;margin-top: 5rpx;">积分可抵用全平台服务</text>
-					<text style="width: 165rpx;color: #FFF;background: linear-gradient(135deg,#00acdd,#47ad13);
+					<text style="width: 165rpx;color: #FFF;background: linear-gradient(135deg,#30ad55,#47ad13);
 							border-radius: 65rpx;line-height: 65rpx;height: 65rpx;text-align: center;margin-top: 15rpx;">立即充值</text>
 				</navigator>
 			</view>
@@ -115,12 +115,12 @@
 				current: 0,
 				list5: [{
 						img: projectConfig.baseImageUrl+'img-banner.webp',
-						color: '#0298fe'
-					},
-					{
-						img: projectConfig.baseImageUrl+'img-banner-2.webp',
-						color: '#f8ce95'
+						color: '#57ca9e'
 					}
+					// ,{
+					// 	img: projectConfig.baseImageUrl+'img-banner-2.webp',
+					// 	color: '#f8ce95'
+					// }
 				],
 				userinfo: {},
 				pointsInfo:{},

@@ -846,39 +846,55 @@
 				});
 			},
 			saveImage() {
-				let imageUrl = this.imgUrl;
-				// 下载图片
-				uni.downloadFile({
-					url: imageUrl,
-					success: downloadResult => {
-						if (downloadResult.statusCode === 200) {
-							// 下载成功，保存图片到系统相册
-							uni.saveImageToPhotosAlbum({
-								filePath: downloadResult.tempFilePath,
-								success: () => {
-									uni.showToast({
-										title: '图片保存成功'
-									});
+				let that = this;
+				uni.showModal({
+				title: '提示',
+				content: '是否保存图片到相册？',
+				success: function (res) {
+						if (res.confirm) {
+							uni.showLoading({
+								title: 'Loading...'
+							});
+							let imageUrl = that.imgUrl;
+							// 下载图片
+							uni.downloadFile({
+								url: imageUrl,
+								success: downloadResult => {
+									uni.hideLoading();
+									if (downloadResult.statusCode === 200) {
+										// 下载成功，保存图片到系统相册
+										uni.saveImageToPhotosAlbum({
+											filePath: downloadResult.tempFilePath,
+											success: () => {
+												uni.showToast({
+													title: '图片保存成功'
+												});
+											},
+											fail: () => {
+												uni.showToast({
+													title: '图片保存失败',
+													icon: 'none'
+												});
+											}
+										});
+									} else {
+										uni.showToast({
+											title: '图片下载失败',
+											icon: 'none'
+										});
+									}
 								},
 								fail: () => {
+									uni.hideLoading();
 									uni.showToast({
-										title: '图片保存失败',
+										title: '图片下载失败',
 										icon: 'none'
 									});
 								}
 							});
-						} else {
-							uni.showToast({
-								title: '图片下载失败',
-								icon: 'none'
-							});
+						} else if (res.cancel) {
+							console.log('用户点击取消');
 						}
-					},
-					fail: () => {
-						uni.showToast({
-							title: '图片下载失败',
-							icon: 'none'
-						});
 					}
 				});
 			},
@@ -998,7 +1014,7 @@
 
 <style lang="scss">
 	.page {
-		background: linear-gradient(180deg, #00acdd, #28ad6f 7%, #47cff5 16%, #47cff5)
+		background: linear-gradient(180deg, #57ca9e, #28ad6f 7%, #47cff5 16%, #47cff5)
 	}
 
 	.page::after {
@@ -1015,7 +1031,7 @@
 	}
 
 	.recordTop {
-		background: linear-gradient(180deg, #00acdd 30%, #fff);
+		background: linear-gradient(180deg, #57ca9e 30%, #fff);
 		padding: 0 30rpx;
 
 		.company {
@@ -2569,7 +2585,7 @@
 			.icon-history {
 				font-size: 35rpx;
 				margin-right: 15rpx;
-				color: #00acdd;
+				color: #30ad55;
 			}
 		}
 
@@ -2587,8 +2603,8 @@
 				margin-left: 20rpx;
 				background: #fff;
 				font-size: 30rpx;
-				color: #00acdd;
-				border: 1rpx solid #00acdd;
+				color: #30ad55;
+				border: 1rpx solid #30ad55;
 				transform: rotate(1turn);
 			}
 
@@ -2599,7 +2615,7 @@
 				border-radius: 10rpx;
 				padding: 0 20rpx;
 				margin-left: 20rpx;
-				background: linear-gradient(135deg, #00acdd, #47ad13);
+				background: linear-gradient(135deg, #30ad55, #47ad13);
 				color: #fff;
 				font-size: 30rpx;
 			}
@@ -2630,7 +2646,7 @@
 		width: 82rpx;
 		height: 82rpx;
 		border-radius: 50%;
-		background: #33bde4;
+		background: #30ad55;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
@@ -2691,13 +2707,13 @@
 				background: #fff;
 				border-radius: 20rpx;
 				font-size: 30rpx;
-				color: #00acdd;
-				border: 1rpx solid #00acdd;
+				color: #30ad55;
+				border: 1rpx solid #30ad55;
 				transform: rotate(1turn);
 			}
 
 			.blue-btn {
-				background: linear-gradient(135deg, #00acdd, #47ad13);
+				background: linear-gradient(135deg, #30ad55, #47ad13);
 				border-radius: 10px;
 				font-size: 15px;
 				color: #fff;

@@ -10,7 +10,7 @@
 				<input placeholder="请输入验证码" font-size="28rpx" v-model="code" type="number" maxlength="6" style="
 					padding: 20rpx;" border="none">
 				</input>
-				<text @click="getCode" style="font-size: 26rpx;padding-right: 20rpx;color: #00acdd;">{{tips}}</text>
+				<text @click="getCode" style="font-size: 26rpx;padding-right: 20rpx;color: #30ad55;">{{tips}}</text>
 			</view>	
 			
 			
@@ -34,8 +34,8 @@
 				style="display: flex;flex-direction: row;align-items: center;font-size: 26rpx;margin-top: 30rpx;"
 				@change="checkboxChange">
 				<checkbox value="cb1" :checked="checked"></checkbox>
-				<text @click="checkedCb">我已阅读并同意<span style="color: #00acdd;"
-						@click="argeement(1)">《用户服务协议》</span><span style="color: #00acdd;"
+				<text @click="checkedCb">我已阅读并同意<span style="color: #30ad55;"
+						@click="argeement(1)">《用户服务协议》</span><span style="color: #30ad55;"
 						@click="argeement(2)">《隐私政策》</span></text>
 			</checkbox-group>
 			
@@ -62,7 +62,7 @@
 				tips: '获取验证码',
 				account:'',
 				cbValue:'cb1',
-				checked:true,
+				checked:false,
 				canGetCode:true,
 				timer:''
 			}
@@ -230,7 +230,7 @@
 	
 	.btn {
 		width: 100%;
-		background: linear-gradient(135deg, #00acdd, #47ad13);
+		background: linear-gradient(135deg, #30ad55, #30ad55);
 		margin-top: 45rpx;
 		border-radius: 20rpx;
 		margin-bottom: 35rpx;

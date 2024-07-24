@@ -21,7 +21,7 @@
 				<input placeholder="请输入验证码" font-size="28rpx" v-model="code" type="number" maxlength="6" style="
 					padding: 20rpx;" border="none">
 				</input>
-				<text @click="getCode" style="font-size: 26rpx;padding-right: 20rpx;color: #00acdd;">{{tips}}</text>
+				<text @click="getCode" style="font-size: 26rpx;padding-right: 20rpx;color: #30ad55;">{{tips}}</text>
 			</view>
 
 			<input placeholder="请输入密码" font-size="28rpx" v-model="pwd" password style="background-color: #FFF;border-radius: 20rpx;
@@ -29,7 +29,7 @@
 			</input>
 
 			<view style="width: 90%;display: flex;flex-direction: row;align-items: center;justify-content: space-between;
-			color: #00acdd;font-size: 26rpx;margin-top: 35rpx;align-self: center;" v-if="selectTab == 1">
+			color: #30ad55;font-size: 26rpx;margin-top: 35rpx;align-self: center;" v-if="selectTab == 1">
 				<navigator url="/pagesB/reg/updatePassword">忘记密码</navigator>
 				<navigator url="/pagesB/reg/register">注册新账号</navigator>
 			</view>
@@ -42,8 +42,8 @@
 				<checkbox value="cb1" :checked="checked"></checkbox>
 				<view style="display: flex;flex-direction: row;align-items: center;">
 					<text @click="checkedCb">我已阅读并同意</text>
-					<text @click="argeement(1)" style="color: #00acdd;">《用户服务协议》</text>
-					<text @click="argeement(2)" style="color: #00acdd;">《隐私政策》</text>
+					<text @click="argeement(1)" style="color: #30ad55;">《用户服务协议》</text>
+					<text @click="argeement(2)" style="color: #30ad55;">《隐私政策》</text>
 				</view>
 			</checkbox-group>
 		</view>
@@ -84,7 +84,7 @@
 				selectTab: 1,
 				tips: '获取验证码',
 				cbValue: 'cb1',
-				checked: true,
+				checked: false,
 				timer: null,
 				canGetCode: true,
 			}
@@ -274,6 +274,13 @@
 				})
 			},
 			async onLogin() {
+				if (!this.checked) {
+					uni.showToast({
+						title: '请先阅读并同意协议',
+						icon: 'none'
+					})
+					return
+				}
 				let that = this
 				uni.showLoading({
 					mask:true,
@@ -382,14 +389,14 @@
 		}
 
 		.active-tab {
-			border-bottom: 4rpx solid #00acdd;
-			color: #00acdd;
+			border-bottom: 4rpx solid #30ad55;
+			color: #30ad55;
 		}
 	}
 
 	.btn {
 		width: 100%;
-		background: linear-gradient(135deg, #00acdd, #47ad13);
+		background: linear-gradient(135deg, #30ad55, #30ad55);
 		margin-top: 45rpx;
 		border-radius: 20rpx;
 		margin-bottom: 35rpx;

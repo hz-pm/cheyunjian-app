@@ -5,7 +5,7 @@
 			flex-direction: column;
 			align-items: center;">
 				<view style="width: 100%;display: flex;flex-direction: column;align-items: center;
-				background: linear-gradient(180deg,#00acdd,#47ad13 150%);">
+				background: linear-gradient(180deg,#57ca9e,#47ad13 150%);">
 					<view style="width: 92%;display: flex;flex-direction: row;align-items: center;margin-top: 40rpx;
 					justify-content: space-between;">
 						<view style="display: flex;flex-direction: row;align-items: center;margin-bottom: 50rpx;">
@@ -41,7 +41,7 @@
 							<text class="type">￥</text>
 							<text class="money">{{vipList[0].price}}</text>
 						</view>
-						<text class="t-1">积分充值每满78减28</text>
+						<text class="t-1">积分充值每满100减42</text>
 						<view class="bottom-v">
 							<text>封顶可减{{vipList[0].plantAmount}}元</text>
 						</view>
@@ -58,7 +58,7 @@
 							<text class="type">￥</text>
 							<text class="money">{{vipList[1].price}}</text>
 						</view>
-						<text class="t-1">积分充值每满78减28</text>
+						<text class="t-1">积分充值每满100减42</text>
 						<view class="bottom-v">
 							<text>无封顶限制</text>
 						</view>
@@ -67,16 +67,16 @@
 
 				<view class="info-v">
 					<view style="width: 92%;display: flex;flex-direction: column;margin-top: 25rpx;">
-						<text style="font-size: 28rpx;font-weight: bold;color: #00acdd;">会员权益说明</text>
+						<text style="font-size: 28rpx;font-weight: bold;color: #30ad55;">会员权益说明</text>
 						<view class="t-v">
 							<view class="dot"></view>
-							<text class="t">会员可享受积分充值每满78元减28元， VIP会员封顶最高可减560元， SVIP无封顶限制。</text>
+							<text class="t">会员可享受积分充值每满100元减42元， VIP会员封顶最高可减840元， SVIP无封顶限制。</text>
 						</view>
 						<view class="t-v">
 							<view class="dot"></view>
 							<text class="t">会员有效期为购买后的1年， 会员最高可减额度已满或者有效期已过， 会员权益将会自动失效。 请购买后尽快充值积分进行优惠抵扣!</text>
 						</view>
-						<view class="t-v">
+						<view class="t-v" v-if="false">
 							<view class="dot"></view>
 							<text class="t">VIP会员赠送300次电易估静态数据免费查询次数，SVIP赠送800次电易估静态数据免费查询次数，有效期1年。</text>
 						</view>
@@ -97,7 +97,7 @@
 					@change="checkboxChange">
 					<checkbox value="cb1" :checked="checked"></checkbox>
 					<text @click="checkedCb" style="color: #111;font-size: 30rpx;">我已阅读并同意<span 
-					style="color: #00acdd;" @click="argeement(3)">《VIP会员服务协议》</span></text>
+					style="color: #30ad55;" @click="argeement(3)">《VIP会员服务协议》</span></text>
 				</checkbox-group>
 				<view style="height: 80rpx;"></view>
 			</view>
@@ -304,7 +304,7 @@
 
 	.info-v {
 		width: 92%;
-		background-color: #eef9fd;
+		background-color: #edfff6;
 		display: flex;
 		flex-direction: column;
 		margin-top: 35rpx;
@@ -322,7 +322,7 @@
 				width: 10rpx;
 				height: 10rpx;
 				border-radius: 50%;
-				border: 4rpx solid #00acdd;
+				border: 4rpx solid #30ad55;
 				margin-top: 6rpx;
 			}
 			.t {
@@ -334,7 +334,7 @@
 	
 	.btn {
 		width: 90%;
-		background: linear-gradient(135deg, #00acdd, #47ad13);
+		background: linear-gradient(135deg, #30ad55, #30ad55);
 		margin-top: 45rpx;
 		border-radius: 20rpx;
 		margin-bottom: 35rpx;

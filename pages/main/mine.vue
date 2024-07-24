@@ -6,7 +6,7 @@
 			align-items: center;
 			">
 				<view style="width: 100%;display: flex;flex-direction: column;align-items: center;
-				background: linear-gradient(180deg,#00acdd,#47ad13 150%);">
+				background: linear-gradient(180deg,#57ca9e,#47ad13 150%);">
 					<view style="width: 92%;display: flex;flex-direction: row;align-items: center;margin-top: 40rpx;
 					justify-content: space-between;">
 						<view style="display: flex;flex-direction: row;align-items: center;">
@@ -29,7 +29,8 @@
 								<text style="margin-left: 10rpx;font-weight: bold;">{{userinfo.vip > 0?userinfo.vipName:'升级新能源云检VIP'}}</text>
 							</view>
 							<view style="display: flex;flex-direction: row;align-items: center;">
-								<text>{{userinfo.vip > 0?'查看详情':'最高享全年5折'}}</text>
+								<!-- <text>{{userinfo.vip > 0?'查看详情':'最高享全年5折'}}</text> -->
+								<text>享全年58折</text>
 								<uni-icons type="right" size="32rpx"></uni-icons>
 							</view>
 						</view>
@@ -49,17 +50,17 @@
 				margin-top: 25rpx;margin-bottom: 25rpx;">
 					<navigator url="/pagesA/mine/bill" style="width: 33%;display: flex;flex-direction: column;align-items: center;
 					border-right: 0.5px solid rgba(0,0,0,.1);">
-						<text style="font-size: 32rpx;font-weight: bold;color: #00acdd;">{{pointsInfo.realityQty}}</text>
+						<text style="font-size: 32rpx;font-weight: bold;color: #30ad55;">{{pointsInfo.realityQty}}</text>
 						<text style="font-size: 28rpx;color: #808080;margin-top: 5rpx;">剩余积分</text>
 					</navigator>
 					<navigator url="/pagesA/mine/bill" style="width: 33%;display: flex;flex-direction: column;align-items: center;
 					border-right: 0.5px solid rgba(0,0,0,.1);">
-						<text style="font-size: 32rpx;font-weight: bold;color: #00acdd;">{{pointsInfo.useQty}}</text>
+						<text style="font-size: 32rpx;font-weight: bold;color: #30ad55;">{{pointsInfo.useQty}}</text>
 						<text style="font-size: 28rpx;color: #808080;margin-top: 5rpx;">已使用积分</text>
 					</navigator>
 					<navigator url="/pagesA/mine/recharge"
 						style="width: 33%;display: flex;flex-direction: column;align-items: center;">
-						<text style="font-size: 32rpx;font-weight: bold;color: #00acdd;">{{pointsInfo.totalAmount}}</text>
+						<text style="font-size: 32rpx;font-weight: bold;color: #30ad55;">{{pointsInfo.totalAmount}}</text>
 						<text style="font-size: 28rpx;color: #808080;margin-top: 5rpx;">总充值金额</text>
 					</navigator>
 				</view>
@@ -117,14 +118,14 @@
 				margin-top: 25rpx;margin-bottom: 25rpx;color: #111;font-size: 28rpx;">
 					<view style="width: 50%;display: flex;flex-direction: column;align-items: center;"
 						@click="clickKfPhone">
-						<text class="iconfont icon-call" style="color: #00acdd;font-size: 50rpx;"></text>
+						<text class="iconfont icon-call" style="color: #30ad55;font-size: 50rpx;"></text>
 						<text style="margin-top: 10rpx;">电话咨询</text>
 					</view>
 					<view style="width: 1rpx;height: 90rpx;background-color: #f5f5f5;"></view>
 					
 					<view style="display: flex;flex-direction: column;align-items: center;color:#111;
 					width: 50%;">
-						<text class="iconfont icon-msg" style="color: #00acdd;font-size: 50rpx;"></text>
+						<text class="iconfont icon-msg" style="color: #30ad55;font-size: 50rpx;"></text>
 						<text style="margin-top: 5rpx;font-size: 28rpx;">在线客服</text>
 						<button style="display: flex;flex-direction: column;align-items: center;border: none;background-color: #33000000;
 						position: absolute;width: 50%;height: 85rpx;"
@@ -150,10 +151,10 @@
 		components: {},
 		data() {
 			return {
-				phoneList: ['18673436962', '呼叫'],
+				phoneList: ['18673356612', '呼叫'],
 				userinfo: {},
 				pointsInfo: {},
-				vipImg:'ic-VIP.png'
+				vipImg:'ic-VIP.png',
 			}
 		},
 		onLoad() {
@@ -225,16 +226,16 @@
 				console.log('==============')
 			},
 			goVipInfo(){
-				if(this.userinfo.vip > 0){
-					//查看vip详情
-					uni.navigateTo({
-						url:'/pagesA/mine/myVip'
-					})
-				}else{
+				// if(this.userinfo.vip > 0){
+				// 	//查看vip详情
+				// 	uni.navigateTo({
+				// 		url:'/pagesA/mine/myVip'
+				// 	})
+				// }else{
 					uni.navigateTo({
 						url:'/pagesA/mine/vipCard'
 					})
-				}
+				// }
 			}
 		}
 	}

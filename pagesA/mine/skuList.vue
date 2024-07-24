@@ -1,7 +1,7 @@
 <template>
 	<view class="content">
 		<navigator url="/pagesA/mine/vipCard" style="width: 100%;display: flex;flex-direction: column;align-items: center;
-				background-color: #00acdd;">
+				background-color: #57ca9e;">
 			<image :src="baseImageUrl+'vip-banner.gif'" style="width: 90%;height: 110rpx;
 					margin-top: 20rpx;"></image>
 		</navigator>
@@ -17,7 +17,7 @@
 				<view class="cell" @click="radioChange(item,index)">
 					<view class="c-left">
 						<text class="c-jifen" v-if="index!=list.length-1">{{item.qty}}积分</text>
-						<text class="shouchong" v-if="index==0">首单特惠</text>
+						<text class="shouchong" v-if="index==0 && firstRecharge">首单特惠</text>
 						<input placeholder="请输入积分数量" v-if="index==list.length-1" type="number" color="#333"
 							maxlength="10" v-model="inputPoints" @input="inputChange"></input>
 					</view>
@@ -32,9 +32,9 @@
 			<view style="width: 90%;background-color: #ecfaff;border: 1px solid #d9f5ff;
 					height: 70rpx;border-radius: 10rpx;margin-top: 45rpx;margin-bottom: 30rpx;
 					display: flex;flex-direction: row;justify-content: space-between;align-items: center;">
-				<uni-icons type="info-filled" size="40rpx" color="#00acdd" style="margin-left: 25rpx;"></uni-icons>
-				<text style="font-size: 30rpx;margin-left: 10rpx;color: #00acdd;">了解更多大客户优惠政策，请联系客服</text>
-				<uni-icons type="right" size="40rpx" color="#00acdd" style="margin-right: 20rpx;"></uni-icons>
+				<uni-icons type="info-filled" size="40rpx" color="#30ad55" style="margin-left: 25rpx;"></uni-icons>
+				<text style="font-size: 30rpx;margin-left: 10rpx;color: #30ad55;">了解更多大客户优惠政策，请联系客服</text>
+				<uni-icons type="right" size="40rpx" color="#30ad55" style="margin-right: 20rpx;"></uni-icons>
 				<button style="display: flex;flex-direction: column;align-items: center;border: none;background-color: #00000000;
 				position: absolute;width: 90%;height: 70rpx;"
 				type="default" plain="true" open-type="contact" size="default"></button>
@@ -48,7 +48,7 @@
 					margin-top: 35rpx;margin-bottom: 35rpx;">
 				<image src="../../static/VIP.png" style="width: 90rpx;height: 35rpx;"></image>
 				<text style="font-size: 30rpx;color: #a6a6a6;
-						margin-left: 15rpx;">积分充值享5折优惠</text>
+						margin-left: 15rpx;">积分充值享58折优惠</text>
 			</view>
 			<view style="display: flex;flex-direction: row;align-items: center;" @click="openPop">
 				<text style="font-size: 30rpx;color: #f73939;">{{isUseVip?syYh+' 元':'不使用优惠'}}</text>
@@ -89,7 +89,7 @@
 										style="width: 65rpx;height: 65rpx;margin: 20rpx;"></image>
 								</view>
 								<view style="display: flex;flex-direction: column;margin-left: 20rpx;">
-									<text style="font-size: 30rpx;font-weight: bold;color: #000;">积分充值享5折优惠</text>
+									<text style="font-size: 30rpx;font-weight: bold;color: #000;">积分充值享58折优惠</text>
 									<text
 										style="font-size: 28rpx;color: #ff8d1a;margin-top: 20rpx;">当前订单共计{{amount}}元，可减{{Math.abs(syYh)}}元</text>
 								</view>
@@ -132,26 +132,40 @@
 				vipInfo:null, //vip折扣信息
 				isUseVip:false ,//是否使用优惠
 				amount:0, //总金额
+				firstRecharge:true, //首充优惠是否显示
 			}
 		},
 		onLoad() {
 			getPointsSkuList().then((res) => {
-				console.log('>>>' + JSON.stringify(res))
+				console.log('>>>' + JSON.stringify(res)) 
 				this.list = res.data
-
 				this.userinfo =  this.vuex_userinfo
-				if(this.userinfo && this.userinfo.vip > 0){
-					this.isUseVip = true;
-					//优惠 1元1积分  --- 原价300非会员优惠价234会员5折优惠  300 * 0.5 = 150元
-					//优惠金额234 - 150 = 84元
-					this.syYh = this.getYhMoney(this.list[0].qty,this.list[0].price)
-					//获取用户vip信息
-					getUserVipInfo().then((res) => {
-						// console.log(res)
-						if(res.code === 200){
-							this.vipInfo = res.data
-						}
-					})
+				if(this.userinfo){
+					//首充优惠7.8折
+					if(this.userinfo.firstRecharge != 1){
+						this.firstRecharge = true;
+						this.list[0].price = (this.list[0].price*0.78).toFixed(2)
+					}else{
+						this.firstRecharge = false;
+					}
+					
+					//VIP用户优惠
+					if(this.userinfo.vip > 0){
+						//获取用户vip信息
+						getUserVipInfo().then((res) => {
+							// console.log(res)
+							if(res.code === 200){
+								this.isUseVip = true;
+								//优惠 1元1积分  --- 原价300非会员优惠价234会员58折优惠  300 * 0.58 = 150元
+								//优惠金额234 - 150 = 84元
+								this.vipInfo = res.data
+								this.syYh = this.getYhMoney(this.list[0].qty,this.list[0].price)
+							}
+						})
+					}
+				}else{
+					this.firstRecharge = true;
+					this.list[0].price = (this.list[0].price*0.78).toFixed(2)
 				}
 			})
 		},
@@ -162,8 +176,8 @@
 					this.syYh = this.getYhMoney(item.qty,item.price)
 					this.amount = item.price
 				}else{
-					this.syYh = this.getYhMoney(this.inputPoints,this.inputPoints*0.78)
-					this.amount = (this.inputPoints*0.78).toFixed(2)
+					this.syYh = this.getYhMoney(this.inputPoints,this.inputPoints)
+					this.amount = this.inputPoints
 				}
 			},
 			inputChange(e) {
@@ -172,11 +186,12 @@
 					this.syYh = 0;
 					this.amount = 0
 				}else{
-					this.syYh = this.getYhMoney(this.inputPoints,this.inputPoints*0.78)
-					this.amount = (this.inputPoints*0.78).toFixed(2)
+					this.syYh = this.getYhMoney(this.inputPoints,this.inputPoints)
+					this.amount = this.inputPoints
 				}
 			},
 			clickPay() {
+				let that = this;
 				let id = this.list[this.current].id
 				let qty = this.list[this.current].qty
 				if (this.current === 5) {
@@ -215,6 +230,20 @@
 							// setTimeout(() => {
 							// 	uni.navigateBack()
 							// }, 1000)
+							
+							//获取用户信息
+							getUserInfo().then((res) => {
+								// console.log('getuserInfo', res)
+								if(res.code === 200){
+									that.userinfo = res.data
+									that.$u.vuex('vuex_userinfo',res.data)
+								}else{
+									uni.showToast({
+										title: res.msg,
+										icon: 'none'
+									})
+								}
+							})
 						  },
 						  fail(err) {
 						    // 支付失败回调
@@ -256,7 +285,13 @@
 					if(qty === '' || qty === '1'){
 						return 0
 					}
-					return parseFloat(Number.parseInt(qty * 0.5) - price).toFixed(2)
+					//判断vip剩余可减金额
+					let kj = parseFloat((qty * this.vipInfo.discountFactor) - price).toFixed(2);
+					if(kj < this.vipInfo.realitylAmount){
+						return kj;
+					}
+					//可减金额不足
+					return 0;
 				}
 				return 0
 			}
@@ -332,7 +367,7 @@
 
 	.btn {
 		width: 90%;
-		background: linear-gradient(135deg, #00acdd, #47ad13);
+		background: linear-gradient(135deg, #30ad55, #30ad55);
 		margin-top: 45rpx;
 		border-radius: 20rpx;
 		margin-bottom: 35rpx;

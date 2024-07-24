@@ -15,8 +15,8 @@
 				<image src="../../static/vin-bg.png" style="width: 100%;height: 80%;"></image>
 				<view style="display: flex;flex-direction: column;align-items: center;position: absolute;
 						top: 33%;left: 32%;">
-					<uni-icons type="camera" color="#00acdd" size="80rpx"></uni-icons>
-					<text style="font-size: 26rpx;font-weight: bold;color: #00acdd;">上传您的行驶证照片</text>
+					<uni-icons type="camera" color="#30ad55" size="80rpx"></uni-icons>
+					<text style="font-size: 26rpx;font-weight: bold;color: #30ad55;">上传您的行驶证照片</text>
 				</view>
 				<image style="width: 96%;height: 96%;position: absolute;
 						left: 2%;top: 2%;" :src="pic"></image>
@@ -33,22 +33,22 @@
 				<view style="width: 100%;display: flex;flex-direction: row;align-items: center;
 						text-align: center; font-size: 26rpx;justify-content: space-between;">
 					<text url="/pagesA/mine/fiesRecord" style="width: 49%;color: #ff8d1a;padding-top: 20rpx;padding-bottom: 20rpx;
-							font-weight: bold;" @click="openSelectItemPop" >共5个模块 80积分<span style="font-size: 10px;"></span></text>
+							font-weight: bold;" @click="openSelectItemPop" >共5个模块 100积分<span style="font-size: 10px;"></span></text>
 					<view style="width: 1rpx;height: 35rpx;background-color: #DDD;"></view>
-					<text class="iconfont icon-question" style="width: 49%;font-size: 26rpx;color: #00acdd;padding-top: 20rpx;padding-bottom: 20rpx;"
+					<text class="iconfont icon-question" style="width: 49%;font-size: 26rpx;color: #30ad55;padding-top: 20rpx;padding-bottom: 20rpx;"
 						@click="open()">如何找到车架号</text>
 				</view>
 			</view>
 
 			<button class="btn" @click="clickSubmit">立即检测</button>
 
-			<text class="btn-2" style="width: 90%;" @click="openDemoPop">查看检测范例</text>
+			<text class="btn-2" style="width: 90%;" @click="openDemoPop" v-if="false">查看检测范例</text>
 
 			<view style="width: 90%;display: flex;flex-direction: row;justify-content: space-between;color: #383838;
 					font-size: 26rpx;margin-top: 30rpx;">
 				<view style="display: flex;flex-direction: row;align-items: center;">
 					<text>积分余额：{{curPoints}}</text>
-					<navigator url="/pagesA/mine/skuList" style="margin-left: 35rpx;color: #00acdd;display: flex;
+					<navigator url="/pagesA/mine/skuList" style="margin-left: 35rpx;color: #30ad55;display: flex;
 							flex-direction: row;align-items: center;">
 						<text class="iconfont icon-money"></text><span
 							style="margin-left: 5rpx;font-size: 28rpx;">充值</span>
@@ -99,7 +99,7 @@
 						      <text class="title">{{ index + 1 }}.{{ item.title }}</text>
 						      <view class="right">
 						        <text style="color: #ff8d1a;font-weight: bold;">{{ item.value }}积分</text>
-						        <checkbox color="#00acdd" style="margin-left: 30rpx;" shape="circle" size="30rpx"
+						        <checkbox color="#30ad55" style="margin-left: 30rpx;" shape="circle" size="30rpx"
 						                  :value="item.name" :checked="checkboxValue1.includes(item.name)"></checkbox>
 						      </view>
 						    </view>
@@ -344,7 +344,7 @@
 
 	.btn {
 		width: 90%;
-		background: linear-gradient(135deg, #00acdd, #47ad13);
+		background: linear-gradient(135deg, #30ad55, #47ad13);
 		margin-top: 45rpx;
 		border-radius: 20rpx;
 		margin-bottom: 35rpx;
@@ -353,8 +353,8 @@
 	}
 
 	.btn-2 {
-		color: #00acdd;
-		border: 1rpx solid #00acdd;
+		color: #30ad55;
+		border: 1rpx solid #30ad55;
 		font-size: 30rpx;
 		background: #FFF;
 		border-radius: 20rpx;
@@ -410,7 +410,7 @@
 	}
 
 	.btn-3 {
-		background: linear-gradient(135deg, #00acdd, #47ad13);
+		background: linear-gradient(135deg, #30ad55, #47ad13);
 		text-align: center;
 		padding-top: 10rpx;
 		padding-bottom: 10rpx;
@@ -425,8 +425,8 @@
 	}
 
 	.btn-4 {
-		color: #00acdd;
-		border: 1rpx solid #00acdd;
+		color: #30ad55;
+		border: 1rpx solid #30ad55;
 		background: #FFF;
 		text-align: center;
 		padding-top: 10rpx;

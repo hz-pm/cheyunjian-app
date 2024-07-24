@@ -18,7 +18,8 @@
 			"path": "pages/main/main",
 			"style": {
 				"enablePullDownRefresh": false,
-				"navigationStyle": "default"
+				"navigationStyle": "default",
+				"navigationBarBackgroundColor": "#57ca9e"
 			}
 
 		}, {
@@ -212,12 +213,12 @@
 		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "新能源云检",
 		"navigationStyle": "default",
-		"navigationBarBackgroundColor": "#00acdd",
+		"navigationBarBackgroundColor": "#57ca9e",
 		"backgroundColor": "#f7fafa"
 	},
 	"tabBar": {
 		"color": "#a2a2a2",
-		"selectedColor": "#30ad55",
+		"selectedColor": "#57ca9e",
 		"borderStyle": "black",
 		"backgroundColor": "#ffffff",
 		"list": [{

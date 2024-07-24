@@ -41,8 +41,8 @@
 					<view class="p">剩余可减额度</view>
 				</view>
 			</view>
-			<view class="tit">电易估免费查询权益</view>
-			<view class="statisticsList">
+			<view class="tit" v-if="false">电易估免费查询权益</view>
+			<view class="statisticsList" v-if="false">
 				<view class="list">
 					<view class="h1">{{vipInfo.totalUseInterestsQty}}</view>
 					<view class="p">已免费查询</view>

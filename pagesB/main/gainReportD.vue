@@ -26,7 +26,7 @@
 					</view>
 					<view style="margin-right: 4%;">
 						<text class="iconfont icon-question" @click="open()"
-							style="font-size: 28rpx;color: #00acdd;">图例</text>
+							style="font-size: 28rpx;color: #30ad55;">图例</text>
 					</view>
 				</view>
 				<view style="height: 1rpx;width: 100%;background-color: #DDD;"></view>
@@ -41,8 +41,9 @@
 				<view style="width: 100%;display: flex;flex-direction: row;align-items: center;
 						text-align: center; font-size: 28rpx;justify-content: space-around;">
 					<text url="/pagesA/mine/fiesRecord" style="width: 49%;color: #ff8d1a;padding-top: 20rpx;padding-bottom: 20rpx;
-							font-weight: bold;">{{checkPointsStr}}<span style="font-size: 26rpx;color: #808080;
-							font-weight: normal;text-decoration: line-through;" v-if="!vipInfo">40积分</span></text>
+							font-weight: bold;">{{checkPointsStr}}<p style="font-size: 26rpx;color: #808080;
+							font-weight: normal;text-decoration: line-through;" v-if="false">40积分</p></text>
+							<!-- font-weight: normal;text-decoration: line-through;" v-if="!vipInfo">40积分</span></text> -->
 					<view style="width: 1rpx;height: 35rpx;background-color: #DDD;"></view>
 					<!-- <view style="display: flex;flex-direction: row;align-items: center;">
 						<view type="camera" color="#09acc3" size="35rpx" @click="openImagePage()" style="font-weight: bold;"></uni-icons>
@@ -63,7 +64,7 @@
 					font-size: 26rpx;margin-top: 30rpx;">
 				<view style="display: flex;flex-direction: row;align-items: center;">
 					<text>积分余额：{{curPoints}}</text>
-					<navigator url="/pagesA/mine/skuList" style="margin-left: 35rpx;color: #00acdd;display: flex;
+					<navigator url="/pagesA/mine/skuList" style="margin-left: 35rpx;color: #30ad55;display: flex;
 							flex-direction: row;align-items: center;">
 						<text class="iconfont icon-money"></text><span
 							style="margin-left: 5rpx;font-size: 28rpx;">充值</span>
@@ -77,7 +78,8 @@
 			</view>
 
 			<navigator url="/pagesA/mine/vipCard"
-				style="width: 100%;display: flex;flex-direction: row;justify-content: center;margin-top: 35rpx;">
+				style="width: 100%;display: flex;flex-direction: row;justify-content: center;margin-top: 35rpx;"
+				v-if="false">
 				<image :src="baseImageUrl+'banner-dyg.webp'" style="width: 90%;height: 160rpx;border-radius: 20rpx;">
 				</image>
 			</navigator>
@@ -115,22 +117,22 @@
 				<view style="width: 80%;display: flex;flex-direction: row;align-items: center;justify-content: space-around;
 				padding-bottom: 10rpx;">
 					<view style="display: flex;flex-direction: column;align-items: center;margin-top: 10rpx;"
-						:style="curTab === 1?'color: #00acdd':'color: #111'" @click="clickTab(1)">
+						:style="curTab === 1?'color: #30ad55':'color: #111'" @click="clickTab(1)">
 						<text style="font-size: 28rpx;font-weight: bold;">静态数据报告样例</text>
-						<text style="font-size: 26rpx;margin-top: 5rpx;">10积分/会员免费</text>
+						<text style="font-size: 26rpx;margin-top: 5rpx;">20积分</text>
 					</view>
 					<view style="height: 30rpx;width: 2rpx;background-color: #DDD;"></view>
 					<view style="display: flex;flex-direction: column;align-items: center;margin-top: 10rpx;"
-						:style="curTab === 2?'color: #00acdd':'color: #111'" @click="clickTab(2)">
+						:style="curTab === 2?'color: #30ad55':'color: #111'" @click="clickTab(2)">
 						<text style="font-size: 28rpx;font-weight: bold;">完整数据报告样例</text>
 						<text style="font-size: 26rpx;margin-top: 5rpx;">追加20积分</text>
 					</view>
 				</view>
 				<scroll-view scroll-y="true" style="height: 80vh;">
 					<view style="width: 100%;display: flex;flex-direction: column;align-items: center;">
-						<image :src="baseImageUrl+'example-m-dyg2-2.webp'" style="width: 100%;height: 3600rpx;"
+						<image :src="baseImageUrl+'example-m-dyg2-2.webp'" style="width: 100%;height: 2700rpx;"
 							v-if="curTab===1"></image>
-						<image :src="baseImageUrl+'example-m-dyg2-3.webp'" style="width: 100%;height: 3900rpx;"
+						<image :src="baseImageUrl+'example-m-dyg2-3.webp'" style="width: 100%;height: 2900rpx;"
 							v-if="curTab===2"></image>
 						<view style="height: 80rpx;"></view>
 					</view>
@@ -161,7 +163,7 @@
 				vinCode:'',
 				curPoints:'0',
 				vipInfo:'',
-				checkPointsStr:'估价需10积分', //检测积分提示
+				checkPointsStr:'估价需20积分', //检测积分提示
 			}
 		},
 		onShow() {
@@ -186,9 +188,9 @@
 				if(res.code === 200){
 					this.vipInfo = res.data
 					//会员剩余免费检测次数
-					if(this.vipInfo.totalFreeInterestsQty > 0){
-						this.checkPointsStr = '会员免费查询 '+this.vipInfo.totalFreeInterestsQty+' 次'
-					}
+					// if(this.vipInfo.totalFreeInterestsQty > 0){
+					// 	this.checkPointsStr = '会员免费查询 '+this.vipInfo.totalFreeInterestsQty+' 次'
+					// }
 				}
 			})
 		},
@@ -323,7 +325,7 @@
 
 	.btn {
 		width: 90%;
-		background: linear-gradient(135deg, #00acdd, #47ad13);
+		background: linear-gradient(135deg, #30ad55, #47ad13);
 		margin-top: 45rpx;
 		border-radius: 20rpx;
 		margin-bottom: 35rpx;
@@ -332,8 +334,8 @@
 	}
 
 	.btn-2 {
-		color: #00acdd;
-		border: 1rpx solid #00acdd;
+		color: #30ad55;
+		border: 1rpx solid #30ad55;
 		font-size: 30rpx;
 		background: #FFF;
 		border-radius: 20rpx;
@@ -388,7 +390,7 @@
 	}
 
 	.btn-3 {
-		background: linear-gradient(135deg, #00acdd, #47ad13);
+		background: linear-gradient(135deg, #30ad55, #47ad13);
 		text-align: center;
 		padding-top: 10rpx;
 		padding-bottom: 10rpx;
@@ -403,8 +405,8 @@
 	}
 
 	.btn-4 {
-		color: #00acdd;
-		border: 1rpx solid #00acdd;
+		color: #30ad55;
+		border: 1rpx solid #30ad55;
 		background: #FFF;
 		text-align: center;
 		padding-top: 10rpx;
@@ -441,7 +443,7 @@
 	    width: 50%;
 	    flex-grow: 1;
 	    text-align: left;
-	    color: #09acc3;
+	    color: #30ad55;
 		font-weight: bold;
 	}
 	.icon-camera:before {

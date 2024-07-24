@@ -299,7 +299,7 @@
 			}
 
 			&.uni-collapse-item-border {
-				border-bottom: 1px solid #ebeef5;
+				border-bottom: 1px solid #f2fffa;
 			}
 
 			&.is-open {
@@ -351,7 +351,7 @@
 			will-change: height;
 			box-sizing: border-box;
 			/* #endif */
-			background-color: #f5faff;
+			background-color: #f2fffa;
 			overflow: hidden;
 			position: relative;
 			height: 0;

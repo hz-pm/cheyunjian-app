@@ -77,7 +77,7 @@
 				padding-right: 20rpx;">
 						<input placeholder="请输入验证码" border="none" font-size="30rpx" type="number"
 							maxlength="6" v-model="code"></input>
-						<text @click="getCode" style="font-size: 30rpx;color: #00acdd;">{{tips}}</text>
+						<text @click="getCode" style="font-size: 30rpx;color: #30ad55;">{{tips}}</text>
 					</view>
 					<button text="确认提交" class="btn" @click="bindPhone"></button>
 				</view>
@@ -393,7 +393,7 @@
 				margin-top: 30rpx;
 			}
 			.btn {
-				background: linear-gradient(135deg, #00acdd, #47ad13);
+				background: linear-gradient(135deg, #30ad55, #47ad13);
 				margin-top: 45rpx;
 				border-radius: 20rpx;
 				margin-bottom: 35rpx;
