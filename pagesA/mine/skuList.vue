@@ -50,7 +50,8 @@
 				<text style="font-size: 30rpx;color: #a6a6a6;
 						margin-left: 15rpx;">积分充值享58折优惠</text>
 			</view>
-			<view style="display: flex;flex-direction: row;align-items: center;" @click="openPop">
+			<!-- <view style="display: flex;flex-direction: row;align-items: center;" @click="openPop"> -->
+			<view style="display: flex;flex-direction: row;align-items: center;">
 				<text style="font-size: 30rpx;color: #f73939;">{{isUseVip?syYh+' 元':'不使用优惠'}}</text>
 				<uni-icons type="right" size="40rpx" color="#f73939"
 					style="margin-left: 15rpx;margin-right: 35rpx;"></uni-icons>

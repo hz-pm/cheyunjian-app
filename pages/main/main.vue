@@ -31,23 +31,22 @@
 					</view>
 					<view style="display: flex;flex-direction: column;margin-left: 30rpx;">
 						<text style="font-size: 30rpx;color: #111;font-weight: bold;">{{userinfo.userName}}</text>
-						<text style="font-size: 28rpx;color: #808080;
-								margin-top: 8rpx;">您好，欢迎使用新能源云检～</text>
+						<text style="font-size: 28rpx;color: #808080;margin-top: 8rpx;">您好，欢迎使用新能源云检～</text>
 					</view>
 				</view>
 				<view style="display: flex;flex-direction: column;align-items: center;">
-					<text style="font-size: 32rpx;color: #30ad55;font-weight: bold;">{{pointsInfo.realityQty}}</text>
+					<text style="font-size: 32rpx;color: #30ad55;font-weight: bold;">{{pointsInfo.realityQty?pointsInfo.realityQty:0}}</text>
 					<text style="font-size: 26rpx;color: #808080;margin-top: 8rpx;">账户积分</text>
 				</view>
 			</view>
 
 			<view style="width: 93%;display: flex;flex-direction: column;align-items: center; margin-top: 35rpx;">
 				<view style="width: 100%;display: flex;flex-direction: row;align-items: center;
-						justify-content: space-between;height: 190rpx;">
-					<image src="../../static/home-menu1.png" style="width: 50%;height: 100%;
+						justify-content: space-between;height: 230rpx;">
+					<image src="../../static/home-menu1.png" style="width: 100%;height: 100%;
 							border-radius: 20rpx;" @click="clickGrid(0)"></image>
 					<image src="../../static/home-menu2.png" style="width: 50%;height: 100%;
-							border-radius: 20rpx;margin-left: 25rpx;" @click="clickGrid(3)"></image>
+							border-radius: 20rpx;margin-left: 25rpx;" @click="clickGrid(3)" v-if="false"></image>
 				</view>
 				<view style="width: 100%;display: flex;flex-direction: row;align-items: center;
 						justify-content: space-between;margin-top: 25rpx;height: 190rpx;" v-if="false">
@@ -81,8 +80,9 @@
 				</navigator>
 			</view>
 
-			<image :src="baseImageUrl+'img-home-bottom.webp'" style="width: 92%;height: 720rpx;border-radius: 20rpx;
-					margin-top: 35rpx;"></image>
+			<!-- <image :src="baseImageUrl+'img-home-bottom.webp'" style="width: 92%;height: 720rpx;border-radius: 20rpx; -->
+			<image src="../../static/mp-share.png" style="width: 92%;height: 520rpx;border-radius: 20rpx;
+					margin-top: 105rpx;"></image>
 			<text
 				style="width: 92%;font-size: 28rpx;transform: scale(0.8); color: #808080;text-align: center;margin-top: 35rpx;">Copyright
 				© 2024 株洲云检新能源科技有限公司</text>
@@ -107,6 +107,7 @@
 	import projectConfig from '@/common/config.js';
 	import {
 		getPointsInfo,
+		getUserInfo
 	} from '../../apis/modules/user';
 	export default {
 		components: {},
@@ -128,20 +129,49 @@
 			}
 		},
 		onShow() {
-
+			// if(this.userinfo){
+			// 	//获取用户信息
+			// 	getUserInfo().then((res) => {
+			// 		// console.log('getuserInfo', res)
+			// 		if(res.code === 200){
+			// 			this.$u.vuex('vuex_userinfo',res.data)
+			// 			this.userinfo = res.data
+						
+			// 			if(this.userinfo.vip > 0){
+			// 				this.vipImg = 'f-vip2-black.png'
+			// 			}
+			// 		}else{
+			// 			uni.showToast({
+			// 				title: res.msg,
+			// 				icon: 'none'
+			// 			})
+			// 		}
+			// 	})
+				
+			// 	//获取用户积分信息
+			// 	getPointsInfo().then((res) => {
+			// 		console.log('=======>', res)
+			// 		if (res.code == 200) {
+			// 			this.pointsInfo = res.data
+			// 			this.$u.vuex('vuex_points_info',res.data)
+			// 		}
+			// 	})
+			// }
 		},
 		onLoad(op) {
 			this.userinfo =  this.vuex_userinfo
 			this.pointsInfo =  this.vuex_points_info
 			
-			//获取用户积分信息
-			getPointsInfo().then((res) => {
-				console.log('=======>', res)
-				if (res.code == 200) {
-					this.pointsInfo = res.data
-					this.$u.vuex('vuex_points_info',res.data)
-				}
-			})
+			// if(this.userinfo){
+			// 	//获取用户积分信息
+			// 	getPointsInfo().then((res) => {
+			// 		console.log('=======>', res)
+			// 		if (res.code == 200) {
+			// 			this.pointsInfo = res.data
+			// 			this.$u.vuex('vuex_points_info',res.data)
+			// 		}
+			// 	})
+			// }
 			console.log('>>',JSON.stringify(this.userinfo))
 		},
 		methods: {

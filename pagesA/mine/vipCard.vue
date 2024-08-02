@@ -110,7 +110,8 @@
 	import test from '../../utils/test/test.js'
 	import {
 		buyVip,
-		getVipCardInfo
+		getVipCardInfo,
+		queryOrderStatus
 	} from '../../apis/modules/user';
 	export default {
 		components: {},
@@ -184,9 +185,10 @@
 								icon:'success',
 								title:'购买成功'
 							})
-							// setTimeout(() => {
-							// 	uni.navigateBack()
-							// }, 1000)
+							
+							setTimeout(() => {
+								uni.navigateBack()
+							}, 1000)
 						  },
 						  fail(err) {
 						    // 支付失败回调

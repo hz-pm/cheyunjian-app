@@ -6,20 +6,20 @@
 
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
+			"path": "pages/main/main",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "default",
+				"navigationBarBackgroundColor": "#57ca9e"
+			}
+
+		},{
 			"path": "pages/login/login",
 			"name": "login",
 			"style": {
 				"navigationBarTitleText": "登录新能源云检",
 				"enablePullDownRefresh": false,
 				"navigationStyle": "default"
-			}
-
-		}, {
-			"path": "pages/main/main",
-			"style": {
-				"enablePullDownRefresh": false,
-				"navigationStyle": "default",
-				"navigationBarBackgroundColor": "#57ca9e"
 			}
 
 		}, {

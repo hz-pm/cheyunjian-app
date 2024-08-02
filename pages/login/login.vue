@@ -70,7 +70,8 @@
 		loginByCode,
 		getUserInfo,
 		sendSms,
-		loginByWX
+		loginByWX,
+		getOpenId
 	} from '../../apis/modules/user';
 	export default {
 		components: {
@@ -87,6 +88,7 @@
 				checked: false,
 				timer: null,
 				canGetCode: true,
+				openId:''
 			}
 		},
 		options: {
@@ -99,8 +101,7 @@
 			}
 		},
 		methods: {
-			login() {
-
+			async login() {
 				if (test.isEmpty(this.phone)) {
 					uni.showToast({
 						title: '请输入手机号',
@@ -132,13 +133,31 @@
 					})
 					return
 				}
-
-
+				
+				
+				// #ifdef MP-WEIXIN
+				// 微信小程序端执行的逻辑
+				//获取openid
+				  console.log('Running on WeChat Mini Program');
+				  const [, loginInfo] = await uni.login({
+				  	provider: "weixin"
+				  });
+				  console.log(loginInfo, '获取信息')
+				  let wxCode = loginInfo.code; //微信code
+				  await getOpenId({
+					  code:wxCode
+				  }).then((res) => {
+					  console.log('==>',res)
+					  this.openId = res.msg
+				  })
+				// #endif
+				console.log('<====开始登录====>')
 				let that = this
 				if (this.selectTab == 0) {
 					loginByCode({
 						phoneNumber: this.phone,
 						smsCode: this.code,
+						openId:this.openId
 					}).then((res) => {
 						console.log('userLoginByCode', res)
 						if (res.code === 200) {
@@ -159,9 +178,11 @@
 						}
 					})
 				} else {
+					console.log('========>>>'+this.openId)
 					userLogin({
 						username: this.phone,
 						password: this.pwd,
+						openId:this.openId
 					}).then((res) => {
 						console.log('userLogin', res)
 						if (res.code === 200) {

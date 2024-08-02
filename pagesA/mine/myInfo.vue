@@ -7,7 +7,7 @@
 			height: 100vh;">
 				<view style="height: 30rpx;"></view>
 				<view class="cell-v" style="padding-top: 20rpx;padding-bottom: 20rpx;">
-					<image src="../../static/ic-default-avatar.png"
+					<image src="../../static/ic-default-avatar-grey.png"
 						style="width: 80rpx;height: 80rpx;margin-left: 45rpx;"></image>
 					<view style="display: flex;flex-direction: column;align-items: flex-end;
 					margin-right: 45rpx;">
@@ -142,7 +142,10 @@
 				this.email = this.userinfo.email
 			}
 			
-			// this.getUserInfo()
+			//获取用户信息
+			if(!this.userinfo){
+				this.getUserInfo()
+			}
 		},
 		onunload() {
 			if(this.timer){

@@ -38,7 +38,7 @@
 				</view>
 				<navigator url="/pagesA/mine/baseCompany" style="width: 100%;height: 74rpx;color: #f3a54f;background: #fff8ed;text-align: center;font-size: 28rpx;z-index: 99;display: flex;flex-direction: column;
 				justify-content: center;align-items: center;border-bottom: 1px solid rgba(243,165,79,.5);"
-				v-if="userinfo.enterpriseCertification != 1">
+				v-if="false">
 					<view style="display: flex;flex-direction: row;align-items: center;">
 						<image src="../../static/safety_fill.png" style="width: 35rpx;height: 35rpx;"></image>
 						<text style="font-size: 28rpx;margin-left: 5rpx;">申请企业认证，即可获得80积分</text>
@@ -50,17 +50,17 @@
 				margin-top: 25rpx;margin-bottom: 25rpx;">
 					<navigator url="/pagesA/mine/bill" style="width: 33%;display: flex;flex-direction: column;align-items: center;
 					border-right: 0.5px solid rgba(0,0,0,.1);">
-						<text style="font-size: 32rpx;font-weight: bold;color: #30ad55;">{{pointsInfo.realityQty}}</text>
+						<text style="font-size: 32rpx;font-weight: bold;color: #30ad55;">{{pointsInfo.realityQty?pointsInfo.realityQty:0}}</text>
 						<text style="font-size: 28rpx;color: #808080;margin-top: 5rpx;">剩余积分</text>
 					</navigator>
 					<navigator url="/pagesA/mine/bill" style="width: 33%;display: flex;flex-direction: column;align-items: center;
 					border-right: 0.5px solid rgba(0,0,0,.1);">
-						<text style="font-size: 32rpx;font-weight: bold;color: #30ad55;">{{pointsInfo.useQty}}</text>
+						<text style="font-size: 32rpx;font-weight: bold;color: #30ad55;">{{pointsInfo.useQty?pointsInfo.useQty:0}}</text>
 						<text style="font-size: 28rpx;color: #808080;margin-top: 5rpx;">已使用积分</text>
 					</navigator>
 					<navigator url="/pagesA/mine/recharge"
 						style="width: 33%;display: flex;flex-direction: column;align-items: center;">
-						<text style="font-size: 32rpx;font-weight: bold;color: #30ad55;">{{pointsInfo.totalAmount}}</text>
+						<text style="font-size: 32rpx;font-weight: bold;color: #30ad55;">{{pointsInfo.totalAmount?pointsInfo.totalAmount:0}}</text>
 						<text style="font-size: 28rpx;color: #808080;margin-top: 5rpx;">总充值金额</text>
 					</navigator>
 				</view>
@@ -96,7 +96,7 @@
 					</view>
 					<view style="height: 1rpx; width: 84%;align-self: flex-end;background-color: #f5f5f5;"></view>
 				</navigator>
-				<navigator url="/pagesA/mine/eleRecord" class="cell">
+				<navigator url="/pagesA/mine/eleRecord" class="cell" v-if="false">
 					<view class="cell-1">
 						<view class="cell-1-left">
 							<text class="iconfont icon-huishou Licon"></text>电易估记录
@@ -169,32 +169,35 @@
 					this.vipImg = 'f-vip2-black.png'
 				}
 			}
-			//获取用户信息
-			getUserInfo().then((res) => {
-				// console.log('getuserInfo', res)
-				if(res.code === 200){
-					this.$u.vuex('vuex_userinfo',res.data)
-					this.userinfo = res.data
-					
-					if(this.userinfo.vip > 0){
-						this.vipImg = 'f-vip2-black.png'
-					}
-				}else{
-					uni.showToast({
-						title: res.msg,
-						icon: 'none'
-					})
-				}
-			})
 			
-			//获取用户积分信息
-			getPointsInfo().then((res) => {
-				// console.log('=======>', res)
-				if (res.code == 200) {
-					this.pointsInfo = res.data
-					this.$u.vuex('vuex_points_info',res.data)
-				}
-			})
+			if(this.userinfo){
+				//获取用户信息
+				getUserInfo().then((res) => {
+					// console.log('getuserInfo', res)
+					if(res.code === 200){
+						this.$u.vuex('vuex_userinfo',res.data)
+						this.userinfo = res.data
+						
+						if(this.userinfo.vip > 0){
+							this.vipImg = 'f-vip2-black.png'
+						}
+					}else{
+						uni.showToast({
+							title: res.msg,
+							icon: 'none'
+						})
+					}
+				})
+				
+				//获取用户积分信息
+				getPointsInfo().then((res) => {
+					// console.log('=======>', res)
+					if (res.code == 200) {
+						this.pointsInfo = res.data
+						this.$u.vuex('vuex_points_info',res.data)
+					}
+				})
+			}
 		},
 		methods: {
 			goSetting() {

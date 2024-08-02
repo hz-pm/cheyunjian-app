@@ -162,3 +162,8 @@ export function eleDetails(params1){
 	return http.get('/index/ele/getDetails',{params:params1})
 }
 
+//获取openId
+export function getOpenId(params1){
+	return http.get('/index/user/getWxOpenId',{params:params1})
+}
+

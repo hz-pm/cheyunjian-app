@@ -1,6 +1,7 @@
 <template>
 	<view class="content">
 		<view class="top-bg">
+			<image src="../../static/top-bg.png" style="width: 100%;height: 400rpx;position: absolute;"></image>
 			<view style="width: 90%;display: flex;flex-direction: row;align-items: center;
 					margin-top: 20rpx;justify-content: space-between;">
 				<view style="width: 62%; display: flex;flex-direction: column;color: #FFF;">
@@ -439,9 +440,9 @@
 
 	.top-bg {
 		width: 100%;
-		background-image: url('../../static/top-bg.png');
-		background-repeat: no-repeat;
-		background-size: 100% 400rpx;
+		// background-image: url('../../static/top-bg.png');
+		// background-repeat: no-repeat;
+		// background-size: 100% 400rpx;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
