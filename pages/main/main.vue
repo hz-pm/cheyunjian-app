@@ -80,8 +80,8 @@
 				</navigator>
 			</view>
 
-			<!-- <image :src="baseImageUrl+'img-home-bottom.webp'" style="width: 92%;height: 720rpx;border-radius: 20rpx; -->
-			<image src="../../static/mp-share.png" style="width: 92%;height: 520rpx;border-radius: 20rpx;
+			<!-- <image src="../../static/mp-share.png" style="width: 92%;height: 520rpx;border-radius: 20rpx; -->
+			<image :src="baseImageUrl+'img-home-bottom.webp'" style="width: 92%;height: 700rpx;border-radius: 20rpx;
 					margin-top: 105rpx;"></image>
 			<text
 				style="width: 92%;font-size: 28rpx;transform: scale(0.8); color: #808080;text-align: center;margin-top: 35rpx;">Copyright

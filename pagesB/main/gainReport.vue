@@ -43,7 +43,7 @@
 
 			<button class="btn" @click="clickSubmit">立即检测</button>
 
-			<text class="btn-2" style="width: 90%;" @click="openDemoPop" v-if="false">查看检测范例</text>
+			<text class="btn-2" style="width: 90%;" @click="openDemoPop">查看检测范例</text>
 
 			<view style="width: 90%;display: flex;flex-direction: row;justify-content: space-between;color: #383838;
 					font-size: 26rpx;margin-top: 30rpx;">
@@ -80,8 +80,8 @@
 			background-color="#FFF">
 			<view style="display: flex;flex-direction: column;align-items: center;height: 80vh;">
 				<scroll-view scroll-y="true" style="height: 80vh;">
-					<view style="width: 100%;height: 6000rpx;display: flex;flex-direction: column;align-items: center;">
-						<image :src="baseImageUrl+'img-jc-demo.webp'" style="width: 100%;height: 6000rpx;"></image>
+					<view style="width: 100%;height: 4800rpx;display: flex;flex-direction: column;align-items: center;">
+						<image :src="baseImageUrl+'img-jc-demo.webp'" style="width: 100%;height: 4800rpx;"></image>
 					</view>
 				</scroll-view>
 			</view>
