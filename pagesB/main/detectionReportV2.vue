@@ -38,7 +38,7 @@
 					</view>
 					<view class="endurance">
 						<view id="model1" class="tit titList">电池健康模块<text
-								class="tionDate">数据更新于{{detail.resultTxt.latestChargeDate}}</text>
+								class="tionDate" v-if="detail.resultTxt.latestChargeDate">数据更新于{{detail.resultTxt.latestChargeDate}}</text>
 							<view class="signify" @click="open"><text class="iconfont icon-info"></text>指标说明</view>
 						</view>
 						<view class="notModel" v-if="false">
@@ -253,7 +253,7 @@
 					</view>
 					<view class="dataBox">
 						<view id="model3" class="tit titList">车辆行驶模块<text
-								class="tionDate">表显里程更新于{{detail.resultTxt.lastDrivingDate}}</text></view>
+								class="tionDate" v-if="detail.resultTxt.lastDrivingDate">表显里程更新于{{detail.resultTxt.lastDrivingDate}}</text></view>
 						<view class="travel">
 							<view class="tBox" style="width: 49%;">
 								<view class="h1">{{detail.resultTxt.displayMileage}}<text class="tex">Km</text></view>
@@ -288,7 +288,7 @@
 					</view>
 					<view class="dataBox">
 						<view id="model4" class="tit titList">车辆充放电模块<text
-								class="tionDate">数据更新于{{detail.resultTxt.valuationDate}}</text></view>
+								class="tionDate" v-if="detail.resultTxt.valuationDate">数据更新于{{detail.resultTxt.valuationDate}}</text></view>
 						<view class="notModel" v-if="false">
 							<image src="../../static/img-nodata.png" style="width: 90rpx; height: 108rpx;"></image>
 							<view class="text">您当前未选择评估该模块</view>
@@ -347,7 +347,7 @@
 					</view>
 					<view class="dataBox">
 						<view id="model5" class="tit titList" style="position: relative;">电池预警信息<text
-								class="tionDate">数据更新于{{detail.resultTxt.valuationDate}}</text>
+								class="tionDate" v-if="detail.resultTxt.valuationDate">数据更新于{{detail.resultTxt.valuationDate}}</text>
 							<view class="signify" style="top: 2px; right: 0px;" @click="open2"><text
 									class="iconfont icon-info"></text>指标说明</view>
 						</view>
