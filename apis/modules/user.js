@@ -107,6 +107,11 @@ export function buyVip(params){
 	return http.post('/Wx/buyVip',params)
 }
 
+//购买车云检
+export function payCloudCheck(params){
+	return http.post('/Wx/payCloudCheck',params)
+}
+
 //获取已绑定车辆的报告
 export function submitGetMyCarReport(params){
 	return http.post('/car/info/submitGetMyCarReport',params)
@@ -115,6 +120,11 @@ export function submitGetMyCarReport(params){
 //车云检
 export function checkCar(params,config){
 	return http.post('/index/cloud/checkCar',params,config)
+}
+
+//车云检-直接支付
+export function checkCarNew(params,config){
+	return http.post('/index/cloud/checkCarNew',params,config)
 }
 
 //获取车云检记录

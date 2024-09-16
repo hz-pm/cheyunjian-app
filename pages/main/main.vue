@@ -34,7 +34,8 @@
 						<text style="font-size: 28rpx;color: #808080;margin-top: 8rpx;">您好，欢迎使用新能源云检～</text>
 					</view>
 				</view>
-				<view style="display: flex;flex-direction: column;align-items: center;">
+				<view style="display: flex;flex-direction: column;align-items: center;"
+				v-if="false">
 					<text style="font-size: 32rpx;color: #30ad55;font-weight: bold;">{{pointsInfo.realityQty?pointsInfo.realityQty:0}}</text>
 					<text style="font-size: 26rpx;color: #808080;margin-top: 8rpx;">账户积分</text>
 				</view>
@@ -60,7 +61,7 @@
 			<view style="width: 92%;background-color: #FFF;
 					position: relative;box-shadow: 0 0 20rpx 0 rgba(0,0,0,.08);display: flex;
 					height: 248rpx;border-radius: 20rpx;justify-content: center;align-items: center;margin-top: 35rpx;
-					font-size: 28rpx;">
+					font-size: 28rpx;" v-if="false">
 				<image
 					class="vip-bg">
 				</image>
@@ -82,7 +83,7 @@
 
 			<!-- <image src="../../static/mp-share.png" style="width: 92%;height: 520rpx;border-radius: 20rpx; -->
 			<image :src="baseImageUrl+'img-home-bottom.webp'" style="width: 92%;height: 700rpx;border-radius: 20rpx;
-					margin-top: 105rpx;"></image>
+					margin-top: 35rpx;"></image>
 			<text
 				style="width: 92%;font-size: 28rpx;transform: scale(0.8); color: #808080;text-align: center;margin-top: 35rpx;">Copyright
 				© 2024 株洲云检新能源科技有限公司</text>

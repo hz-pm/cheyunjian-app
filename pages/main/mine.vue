@@ -6,7 +6,7 @@
 			align-items: center;
 			">
 				<view style="width: 100%;display: flex;flex-direction: column;align-items: center;
-				background: linear-gradient(180deg,#57ca9e,#47ad13 150%);">
+				background: linear-gradient(180deg,#57ca9e,#47ad13 150%);padding-bottom: 80rpx;">
 					<view style="width: 92%;display: flex;flex-direction: row;align-items: center;margin-top: 40rpx;
 					justify-content: space-between;">
 						<view style="display: flex;flex-direction: row;align-items: center;">
@@ -21,7 +21,7 @@
 						</view>
 						<uni-icons type="settings" color="#FFF" size="26" @click="goSetting"></uni-icons>
 					</view>
-					<view class="vip-bg-top" @click="goVipInfo">
+					<view class="vip-bg-top" @click="goVipInfo" v-if="false">
 						<view style="width: 92%; display: flex;flex-direction: row;align-items: center;
 						justify-content: space-between;color: #111;font-size: 30rpx;">
 							<view style="display: flex;flex-direction: row;align-items: center;">
@@ -47,7 +47,7 @@
 				</navigator>
 
 				<view style="width: 92%;display: flex;flex-direction: row;align-items: center;justify-content: space-between;
-				margin-top: 25rpx;margin-bottom: 25rpx;">
+				margin-top: 25rpx;margin-bottom: 25rpx;" v-if="false">
 					<navigator url="/pagesA/mine/bill" style="width: 33%;display: flex;flex-direction: column;align-items: center;
 					border-right: 0.5px solid rgba(0,0,0,.1);">
 						<text style="font-size: 32rpx;font-weight: bold;color: #30ad55;">{{pointsInfo.realityQty?pointsInfo.realityQty:0}}</text>
@@ -64,9 +64,9 @@
 						<text style="font-size: 28rpx;color: #808080;margin-top: 5rpx;">总充值金额</text>
 					</navigator>
 				</view>
-				<view style="width: 100%;height: 25rpx;background-color: #f5f5f5;"></view>
+				<view style="width: 100%;height: 25rpx;background-color: #f5f5f5;" v-if="false"></view>
 
-				<navigator url="/pagesA/mine/skuList" class="cell">
+				<navigator url="/pagesA/mine/skuList" class="cell" v-if="false">
 					<view class="cell-1">
 						<view class="cell-1-left">
 							<text class="iconfont icon-money Licon" ></text>积分充值
@@ -76,10 +76,10 @@
 					<view style="height: 1rpx; width: 84%;align-self: flex-end;background-color: #f5f5f5;"></view>
 				</navigator>
 
-				<navigator url="/pagesA/mine/recharge" class="cell">
+				<navigator url="/pagesA/mine/recharge" class="cell" v-if="false">
 					<view class="cell-1">
 						<view class="cell-1-left">
-							<text class="iconfont icon-recharge Licon"></text>充值记录
+							<text class="iconfont icon-recharge Licon"></text>消费记录
 						</view>
 						<uni-icons type="right" color="#a6a6a6"></uni-icons>
 					</view>

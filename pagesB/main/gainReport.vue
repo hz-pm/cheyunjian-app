@@ -34,7 +34,7 @@
 				<view style="width: 100%;display: flex;flex-direction: row;align-items: center;
 						text-align: center; font-size: 26rpx;justify-content: space-between;">
 					<text url="/pagesA/mine/fiesRecord" style="width: 49%;color: #ff8d1a;padding-top: 20rpx;padding-bottom: 20rpx;
-							font-weight: bold;" @click="openSelectItemPop" >共5个模块 100积分<span style="font-size: 10px;"></span></text>
+							font-weight: bold;" @click="openSelectItemPop" >共检测 5 个模块<span style="font-size: 10px;"></span></text>
 					<view style="width: 1rpx;height: 35rpx;background-color: #DDD;"></view>
 					<text class="iconfont icon-question" style="width: 49%;font-size: 26rpx;color: #30ad55;padding-top: 20rpx;padding-bottom: 20rpx;"
 						@click="open()">如何找到车架号</text>
@@ -47,7 +47,7 @@
 
 			<view style="width: 90%;display: flex;flex-direction: row;justify-content: space-between;color: #383838;
 					font-size: 26rpx;margin-top: 30rpx;">
-				<view style="display: flex;flex-direction: row;align-items: center;">
+				<view style="display: flex;flex-direction: row;align-items: center;" v-if="false">
 					<text>积分余额：{{curPoints}}</text>
 					<navigator url="/pagesA/mine/skuList" style="margin-left: 35rpx;color: #30ad55;display: flex;
 							flex-direction: row;align-items: center;">
@@ -67,23 +67,15 @@
 
 		<uni-popup ref="popup" type="bottom" border-radius="15rpx 15rpx 0 0" @close="close" @open="open"
 			background-color="#FFF">
-			<view style="display: flex;flex-direction: column;align-items: center;height: 50vh;">
-				<scroll-view scroll-y="true" style="height: 50vh;">
-					<view style="width: 100%;height: 650rpx;display: flex;flex-direction: column;align-items: center;">
-						<image :src="baseImageUrl+'img-rhhdcj.webp'" style="width: 700rpx;height: 650rpx;"></image>
-					</view>
-				</scroll-view>
+			<view class="uPop" style="height: 50vh;">
+				<image :src="baseImageUrl+'img-rhhdcj.webp'" mode="widthFix" class="imgUrl"  style="width: 100%; overflow-y: auto;"></image>
 			</view>
 		</uni-popup>
 
 		<uni-popup ref="popup2" type="bottom" border-radius="15rpx 15rpx 0 0" @close="closeDemoPop" @open="openDemoPop"
 			background-color="#FFF">
-			<view style="display: flex;flex-direction: column;align-items: center;height: 80vh;">
-				<scroll-view scroll-y="true" style="height: 80vh;">
-					<view style="width: 100%;height: 4800rpx;display: flex;flex-direction: column;align-items: center;">
-						<image :src="baseImageUrl+'img-jc-demo.webp'" style="width: 100%;height: 4800rpx;"></image>
-					</view>
-				</scroll-view>
+			<view class="uPop">
+				<image :src="baseImageUrl+'img-jc-demo.webp'" mode="widthFix" class="imgUrl"  style="width: 100%; overflow-y: auto;"></image>
 			</view>
 		</uni-popup>
 
@@ -127,7 +119,9 @@
 
 	import {
 		checkCar,
-		getPointsInfo
+		getPointsInfo,
+		payCloudCheck,
+		checkCarNew
 	} from '../../apis/modules/user';
 	export default {
 		components: {},
@@ -298,27 +292,97 @@
 						icon:'error'})
 					return
 				}
-				//车云检
-				checkCar({
-					vinCode:this.vinCode,
-					points:80,
-				},{custom: {catch: true,}
+				
+				// 车云检
+				// checkCarNew({
+				// 	vinCode:this.vinCode,
+				// 	outTradeNo:'202409131528244092' //202409121733535058
+				// },{custom: {catch: true,}
+				// }).then((res) => {
+				// 	if(!res.data){
+				// 		console.log('=========检测失败========'+res.msg)
+				// 		uni.showModal({
+				// 			title: '提示',
+				// 			content: res.msg,
+				// 			showCancel:false,
+				// 			success: function (res) {
+				// 			}
+				// 		});
+				// 	}else{
+				// 		console.log('=========检测成功========'+res.msg)
+				// 		//进入详情页
+				// 		// uni.navigateTo({
+				// 		// 	url:'/pagesB/main/detectionReportV2?vinCode='+this.vinCode
+				// 		// })
+				// 	}
+				// });
+				
+				
+				// if(1){
+				// 	return;
+				// }
+				let that = this;
+				
+				
+				//支付后自动调用车云检
+				payCloudCheck({
+					vinCode:this.vinCode
 				}).then((res) => {
-					if(!res.data){
-						uni.showModal({
-							title: '提示',
-							content: res.msg,
-							showCancel:false,
-							success: function (res) {
-							}
-						});
-					}else{
-						//进入详情页
-						uni.navigateTo({
-							url:'/pagesB/main/detectionReportV2?vinCode='+this.vinCode
+					console.log(res)
+					if (res.code === 200) {
+						let outTradeNo = res.data.outTradeNo
+						// 调用微信支付
+						uni.requestPayment({
+							  provider: 'wxpay',
+							  timeStamp: res.data.timeStamp,
+							  nonceStr: res.data.nonceStr,
+							  package: res.data.package,
+							  signType: res.data.signType,
+							  paySign: res.data.paySign,
+						  success(res) {
+						    // 支付成功回调
+						    console.log('===Success===>'+JSON.stringify(res))
+							// uni.showToast({
+							// 	icon:'success',
+							// 	title:'支付成功'
+							// })
+							
+							// 车云检
+							checkCarNew({
+								vinCode:that.vinCode,
+								outTradeNo:outTradeNo
+							},{custom: {catch: true,}
+							}).then((res) => {
+								if(!res.data){
+									uni.showModal({
+										title: '提示',
+										content: res.msg,
+										showCancel:false,
+										success: function (res) {
+										}
+									});
+								}else{
+									//进入详情页
+									uni.navigateTo({
+										url:'/pagesB/main/detectionReportV2?vinCode='+that.vinCode
+									})
+								}
+							});
+						  },
+						  fail(err) {
+						    // 支付失败回调
+						    console.log('===Fail===>'+JSON.stringify(err))
+							uni.showModal({
+								title: '提示',
+								content: '支付失败',
+								showCancel:false,
+								success: function (res) {
+								}
+							});
+						  }
 						})
 					}
-				});
+				})
 			}
 		}
 	}
@@ -469,5 +533,32 @@
 
 	.title {
 		flex: 1;
+	}
+	
+	.uPop {
+		overflow-y: auto;
+		height: 71vh;
+	
+		.attestation {
+			background: #fff8ed;
+			color: #f3a54f;
+			border-color: #f3a54f;
+			right: var(--window-right);
+			bottom: var(--window-bottom);
+			height: 37px;
+			text-align: center;
+			font-size: 14px;
+			border-bottom: 1px solid rgba(243, 165, 79, .5);
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+	
+		.imgUrl {
+			user-select: auto;
+			-webkit-touch-callout: default;
+			overflow-clip-margin: content-box;
+			overflow: clip;
+		}
 	}
 </style>
