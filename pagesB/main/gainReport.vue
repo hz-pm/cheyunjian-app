@@ -171,14 +171,14 @@
 			}
 			
 			//获取用户积分信息
-			getPointsInfo().then((res) => {
-				// console.log('=======>', res)
-				if (res.code == 200) {
-					this.pointsInfo = res.data
-					this.curPoints = this.pointsInfo.realityQty
-					this.$u.vuex('vuex_points_info',res.data)
-				}
-			})
+			// getPointsInfo().then((res) => {
+			// 	// console.log('=======>', res)
+			// 	if (res.code == 200) {
+			// 		this.pointsInfo = res.data
+			// 		this.curPoints = this.pointsInfo.realityQty
+			// 		this.$u.vuex('vuex_points_info',res.data)
+			// 	}
+			// })
 		},
 		methods: {
 			open() {
@@ -292,14 +292,16 @@
 						icon:'error'})
 					return
 				}
+				let that = this;
+				
 				
 				// 车云检
 				// checkCarNew({
 				// 	vinCode:this.vinCode,
-				// 	outTradeNo:'202409131528244092' //202409121733535058
+				// 	outTradeNo:'202410011446513033' //202410011446513033
 				// },{custom: {catch: true,}
 				// }).then((res) => {
-				// 	if(!res.data){
+				// 	if(res.code != 200){
 				// 		console.log('=========检测失败========'+res.msg)
 				// 		uni.showModal({
 				// 			title: '提示',
@@ -309,21 +311,26 @@
 				// 			}
 				// 		});
 				// 	}else{
-				// 		console.log('=========检测成功========'+res.msg)
+				// 		console.log('=========检测成功========'+res.version)
 				// 		//进入详情页
-				// 		// uni.navigateTo({
-				// 		// 	url:'/pagesB/main/detectionReportV2?vinCode='+this.vinCode
-				// 		// })
+				// 		if(res.version == 'v3'){
+				// 			uni.navigateTo({
+				// 				url:'/pagesB/main/ReportV3?vinCode='+this.vinCode
+				// 			})
+				// 		}else{
+				// 			uni.navigateTo({
+				// 				url:'/pagesB/main/detectionReportV2?vinCode='+this.vinCode
+				// 			})
+				// 		}
 				// 	}
 				// });
 				
-				
-				// if(1){
-				// 	return;
-				// }
-				let that = this;
-				
-				
+				////////////////////
+					// if(1){
+					// 	return;
+					// }
+				////////////////////
+
 				//支付后自动调用车云检
 				payCloudCheck({
 					vinCode:this.vinCode
@@ -353,7 +360,8 @@
 								outTradeNo:outTradeNo
 							},{custom: {catch: true,}
 							}).then((res) => {
-								if(!res.data){
+								if(res.code != 200){
+									console.log('=========检测失败========'+res.msg)
 									uni.showModal({
 										title: '提示',
 										content: res.msg,
@@ -362,10 +370,17 @@
 										}
 									});
 								}else{
+									console.log('=========检测成功========'+res.version)
 									//进入详情页
-									uni.navigateTo({
-										url:'/pagesB/main/detectionReportV2?vinCode='+that.vinCode
-									})
+									if(res.version == 'v3'){
+										uni.navigateTo({
+											url:'/pagesB/main/ReportV3?vinCode='+that.vinCode
+										})
+									}else{
+										uni.navigateTo({
+											url:'/pagesB/main/detectionReportV2?vinCode='+that.vinCode
+										})
+									}
 								}
 							});
 						  },

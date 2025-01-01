@@ -70,9 +70,15 @@
 		},
 		methods: {
 			clickItem(item){
-				uni.navigateTo({
-					url:'/pagesB/main/detectionReportV2?vinCode='+item.vinCode
-				})
+				if(item.version == 'v3'){
+					uni.navigateTo({
+						url:'/pagesB/main/ReportV3?vinCode='+item.vinCode
+					})
+				}else{
+					uni.navigateTo({
+						url:'/pagesB/main/detectionReportV2?vinCode='+item.vinCode
+					})
+				}
 			},
 			search(res) {
 				uni.showToast({

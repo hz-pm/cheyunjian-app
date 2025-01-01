@@ -472,8 +472,8 @@
 			type="default" plain="true" open-type="contact" size="default"></button>
 		</view>
 		<view class="foot" v-if="isShare != 1">
-			<view class="tiem"><text class="iconfont icon-history"></text>评估时间:{{formatDateOnly(detail.createTime)}}</view>
-			<view class="export"><button class="white-btn">刷新</button>
+			<view class="tiem" style="margin-top: 30rpx;margin-bottom: 30rpx;"><text class="iconfont icon-history"></text>评估时间:{{formatDateOnly(detail.createTime)}}</view>
+			<view class="export" v-if="false"><button class="white-btn">刷新</button>
 				<button class="blue-btn" @click="clickExport"><text class="iconfont icon-export"></text>导出</button>
 			</view>
 		</view>

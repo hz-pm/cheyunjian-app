@@ -205,6 +205,14 @@
 					"enablePullDownRefresh": false,
 					"navigationStyle": "default"
 				}
+			},
+			{
+				"path": "main/ReportV3",
+				"style": {
+					"navigationBarTitleText": "车云检报告",
+					"enablePullDownRefresh": false,
+					"navigationStyle": "default"
+				}
 			}
 		]
 	}
