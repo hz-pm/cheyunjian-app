@@ -17,10 +17,10 @@
 		</view>
 		
 
-		<view style="width: 95%;background-color: #f2fffa;margin-top: 35rpx;
+		<view style="width: 95%;background-color: #f5f5f5;margin-top: 35rpx;
 		display: flex;flex-direction: column;align-items: center;border-radius: 15rpx;">
 			<view style="font-size: 26rpx;color: #413d3c;width: 95%;
-			margin-top: 20rpx;margin-top: 20rpx;">若您对新能源云检提供的“新能源汽车价值评估服务”服务仍有疑问，您可以随时通过公众号或小程序联系相关经纪人或客服等多种方式与我们联系沟通。</view>
+			margin-top: 20rpx;margin-top: 20rpx;">若您对新能源云检提供的“新能源汽车评估服务”服务仍有疑问，您可以随时通过公众号或小程序联系相关经纪人或客服等多种方式与我们联系沟通。</view>
 		</view>
 
 	</view>
@@ -104,12 +104,68 @@
 						'1、车辆长时间未行使/充电；',
 						'2、电池已从车辆上拆下来很久。',
 					]
+				} ],
+				qList3:[{
+					title: '•为什么我这辆车查不到出险记录？',
+					content: [
+						'有可能没出险，也可能是投保公司目前还没有与我们合作（小的保险公司基本都没有合作）。',
+					]
+				},{
+					title: '•这辆车的所有出险记录，都能查出来吗？',
+					content: [
+						'不一定，主要取决于投保公司的大小，因为小的保险公司数据基本都是没有对外开放连接的。大的保险公司基本都可查。如果这辆车换过保险公司，就有可能小的保险公司那段时间查不出来。',
+					]
+				},{
+					title: '•对方全责，并且对方理赔，能查出来吗？',
+					content: [
+						'不管是否对方责任，或对方理赔，只要自己这边有向保险公司保案，就会有记录。',
+					]
+				},{
+					title: '•为什么我的出险记录显示理赔金额为0元',
+					content: [
+						'此情况很大可能为对方车辆全责，对方车辆保险公司负责理赔，己方有向保险公司报案。',
+					]
+				},{
+					title: '•为什么我的出险记录没有列明维修材料',
+					content: [
+						'此情况很大可能为对方车辆全责，对方车辆保险公司负责理赔，己方有向保险公司报案。',
+					]
+				} ],
+				qList4:[{
+					title: '•为什么有的车查不了？',
+					content: [
+						'因为有些品牌的车4S数据没有对外开放，只能依靠人工查。',
+					]
+				},{
+					title: '•为什么跟别家报告部分数据不同？',
+					content: [
+						'因为数据提供方不同。',
+					]
+				},{
+					title: '•为什么有些车出过事故却查不到？？',
+					content: [
+						'如果出了事故没到4S店修，通过4S记录是查不到的。',
+					]
+				},{
+					title: '•为什么中间有几年没有记录？',
+					content: [
+						'因为车主这段时间没在4S店修，所以没有记录。',
+					]
+				},{
+					title: '•查询多长时间出报告，没查到退费吗？',
+					content: [
+						'通常2分钟左右会出报告，部分品牌时间会长一些，并没有微信通知。如果该品牌没开放查询，或查询的记录为空，请联系人工客服退款。',
+					]
 				} ]
 			}
 		},
 		onLoad(op) {
 			if (op.qType == '2') {
 				this.list = this.qList2
+			}else if(op.qType == '3'){
+				this.list = this.qList3
+			}else if(op.qType == '4'){
+				this.list = this.qList4
 			}else {
 				this.list = this.qList
 			}
@@ -192,7 +248,7 @@
 		width: 95vw;
 		margin-top: 35rpx;
 		border-radius: 15rpx;
-		background-color: #f2fffa;
+		background-color: #f5f5f5;
 		.coll-item-t {
 			font-size: 28rpx;
 			color: #413d3c;

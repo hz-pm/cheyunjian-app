@@ -47,14 +47,14 @@
 					<image src="../../static/home-menu1.png" style="width: 100%;height: 100%;
 							border-radius: 20rpx;" @click="clickGrid(0)"></image>
 					<image src="../../static/home-menu2.png" style="width: 50%;height: 100%;
-							border-radius: 20rpx;margin-left: 25rpx;" @click="clickGrid(3)" v-if="false"></image>
+							border-radius: 20rpx;margin-left: 25rpx;" @click="clickGrid(1)" v-if="false"></image>
 				</view>
 				<view style="width: 100%;display: flex;flex-direction: row;align-items: center;
-						justify-content: space-between;margin-top: 25rpx;height: 190rpx;" v-if="false">
+						justify-content: space-between;margin-top: 25rpx;height: 190rpx;">
+					<image src="../../static/home-menu4.png" style="width: 50%;height: 100%;
+							border-radius: 20rpx;" @click="clickGrid(2)"></image>
 					<image src="../../static/home-menu3.png" style="width: 50%;height: 100%;
-							border-radius: 20rpx;" @click="clickGrid(2)" v-if="false"></image>
-					<image src="../../static/home-menu2.png" style="width: 50%;height: 100%;
-							border-radius: 20rpx;" @click="clickGrid(3)"></image>
+							border-radius: 20rpx;margin-left: 30rpx;" @click="clickGrid(3)"></image>
 				</view>
 			</view>
 
@@ -186,9 +186,13 @@
 					uni.switchTab({
 						url: '/pages/main/queryTramFiles',
 					})
+				} else if (index == 2) {
+					uni.navigateTo({
+						url: '/pagesB/main/accidentReport',
+					})
 				} else if (index == 3) {
 					uni.navigateTo({
-						url: '/pagesB/main/gainReportD',
+						url: '/pagesB/main/maintenanceReport',
 					})
 				}
 			},

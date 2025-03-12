@@ -276,7 +276,7 @@
 				let _this = this;
 				console.log('===***===>' + projectConfig.baseUrl)
 				uni.uploadFile({
-					url: projectConfig.baseUrl + '/index/user/vehicleLicenseOCR', //接口地址
+					url: projectConfig.baseUrl + '/index/user/vehicleVinOCR', //接口地址
 					header: {
 						"Authorization": _this.vuex_token,
 					}, //请求token

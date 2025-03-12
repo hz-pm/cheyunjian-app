@@ -213,6 +213,34 @@
 					"enablePullDownRefresh": false,
 					"navigationStyle": "default"
 				}
+			},
+			{
+				"path" : "main/accidentReport",
+				"style" : 
+				{
+					"navigationBarTitleText" : "车辆事故记录查询"
+				}
+			},
+			{
+				"path" : "main/maintenanceReport",
+				"style" : 
+				{
+					"navigationBarTitleText" : "车辆维保记录查询"
+				}
+			},
+			{
+				"path" : "main/authFile",
+				"style" : 
+				{
+					"navigationBarTitleText" : "个人信息授权书"
+				}
+			},
+			{
+				"path" : "main/reportContent",
+				"style" : 
+				{
+					"navigationBarTitleText" : "报告内容"
+				}
 			}
 		]
 	}

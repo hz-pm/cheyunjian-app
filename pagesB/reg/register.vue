@@ -34,9 +34,11 @@
 				style="display: flex;flex-direction: row;align-items: center;font-size: 26rpx;margin-top: 30rpx;"
 				@change="checkboxChange">
 				<checkbox value="cb1" :checked="checked"></checkbox>
-				<text @click="checkedCb">我已阅读并同意<span style="color: #30ad55;"
-						@click="argeement(1)">《用户服务协议》</span><span style="color: #30ad55;"
-						@click="argeement(2)">《隐私政策》</span></text>
+				<view style="display: flex;flex-direction: row;align-items: center;">
+					<text @click="checkedCb">我已阅读并同意</text>
+					<text @click="argeement(1)" style="color: #30ad55;">《用户服务协议》</text>
+					<text @click="argeement(2)" style="color: #30ad55;">《隐私政策》</text>
+				</view>
 			</checkbox-group>
 			
 			<button class="btn" @click="submit">提交注册</button>

@@ -107,8 +107,8 @@ export function buyVip(params){
 	return http.post('/Wx/buyVip',params)
 }
 
-//购买车云检
-export function payCloudCheck(params){
+//支付订单
+export function payOrder(params){
 	return http.post('/Wx/payCloudCheck',params)
 }
 
@@ -175,5 +175,25 @@ export function eleDetails(params1){
 //获取openId
 export function getOpenId(params1){
 	return http.get('/index/user/getWxOpenId',{params:params1})
+}
+
+//车辆事故报告下单
+export function carAccidentsReport(params){
+	return http.post('/index/cloud/carAccidentsReport',params)
+}
+
+//获取车辆事故报告
+export function getSgReport(params1){
+	return http.get('/index/cloud/getSgReport',{params:params1})
+}
+
+//车辆维保报告下单
+export function carWbCreatedReport(params){
+	return http.post('/index/cloud/carWbCreatedReport',params)
+}
+
+//获取车辆维保报告
+export function getWbReport(params1){
+	return http.get('/index/cloud/getWbReport',{params:params1})
 }
 

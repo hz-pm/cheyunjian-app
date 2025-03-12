@@ -4,10 +4,10 @@
 			<image src="../../static/top-bg.png" style="width: 100%;height: 400rpx;position: absolute;"></image>
 			<view style="width: 90%;display: flex;flex-direction: row;align-items: center;
 					margin-top: 20rpx;justify-content: space-between;">
-				<view style="width: 62%; display: flex;flex-direction: column;color: #FFF;">
-					<text style="font-size: 38rpx;font-weight: bold;">车云检</text>
+				<view style="width: 72%; display: flex;flex-direction: column;color: #FFF;z-index: 20;">
+					<text style="font-size: 35rpx;margin-top: 15rpx;font-weight: bold;">买二手车，查过出险才放心</text>
 					<text
-						style="font-size: 28rpx;opacity: 0.8;margin-top: 15rpx;">快速查询车辆五项核心数据报告提供专业准确的车辆使用养护建议及风险提示。</text>
+						style="font-size: 32rpx;opacity: 0.8;margin-top: 15rpx;">出险记录查询专业平台，数据覆盖最全，人工解读报告、维权指导。</text>
 				</view>
 				<image src="../../static/top-icon1.png" style="width: 220rpx;height: 220rpx;"></image>
 			</view>
@@ -28,18 +28,29 @@
 					align-items: center;padding-top: 20rpx;padding-bottom: 20rpx;">
 					<image src="../../static/icon-search.png" style="width: 45rpx;height: 45rpx;
 							margin-left: 20rpx;margin-right: 20rpx;"></image>
-					<input placeholder="请输入17位VIN车架号" fontSize="32rpx" color="#111" border="none" v-model="vinCode"></input>
+					<input placeholder="VIN车架号" fontSize="32rpx" color="#111" border="none" v-model="vinCode" disabled="true"></input>
 				</view>
 				<view style="height: 1rpx;width: 100%;background-color: #DDD;"></view>
-				<view style="width: 100%;display: flex;flex-direction: row;align-items: center;
-						text-align: center; font-size: 26rpx;justify-content: space-between;">
-					<text url="/pagesA/mine/fiesRecord" style="width: 49%;color: #ff8d1a;padding-top: 20rpx;padding-bottom: 20rpx;
-							font-weight: bold;" @click="openSelectItemPop" >共检测 5 个模块<span style="font-size: 10px;"></span></text>
-					<view style="width: 1rpx;height: 35rpx;background-color: #DDD;"></view>
-					<text class="iconfont icon-question" style="width: 49%;font-size: 26rpx;color: #30ad55;padding-top: 20rpx;padding-bottom: 20rpx;"
-						@click="open()">如何找到车架号</text>
+				<view style="width: 93%;display: flex;flex-direction: row;
+					align-items: center;padding-top: 20rpx;padding-bottom: 20rpx;">
+					<image src="../../static/ic-car-owner.png" style="width: 45rpx;height: 45rpx;
+							margin-left: 20rpx;margin-right: 20rpx;"></image>
+					<input placeholder="车辆所有人" fontSize="32rpx" color="#111" border="none" v-model="owner" disabled="true"></input>
 				</view>
+				
 			</view>
+			<checkbox-group
+				style="display: flex;flex-direction: row;font-size: 26rpx;margin-top: 30rpx;width: 90%;"
+				@change="checkboxChange">
+				<checkbox value="cb1" :checked="checked" style="margin-top: 10rpx;" color="#30ad55"></checkbox>
+				<view style="color: #666;">
+				  <text @click="checkedCb">我已阅读并同意</text>
+				  <text style="color: #30ad55;" @click="argeement(1)" v-if="false">《退款协议》</text>
+				  <text style="margin-left: 10rpx;" v-if="false">和</text>
+				  <text style="color: #30ad55;" @click="argeement(2)">《个人信息授权书》</text>
+				  <text>,并且我确认是车主本人或经过车主授权使用该服务</text>
+				</view>
+			</checkbox-group>
 
 			<button class="btn" @click="clickSubmit">立即检测</button>
 
@@ -47,18 +58,13 @@
 
 			<view style="width: 90%;display: flex;flex-direction: row;justify-content: space-between;color: #383838;
 					font-size: 26rpx;margin-top: 30rpx;">
-				<view style="display: flex;flex-direction: row;align-items: center;" v-if="false">
-					<text>积分余额：{{curPoints}}</text>
-					<navigator url="/pagesA/mine/skuList" style="margin-left: 35rpx;color: #30ad55;display: flex;
-							flex-direction: row;align-items: center;">
-						<text class="iconfont icon-money"></text><span
-							style="margin-left: 5rpx;font-size: 28rpx;">充值</span>
-					</navigator>
+				<view style="color: #383838;display: flex;
+						flex-direction: row;align-items: center;" @click="open()">
+						<text class="iconfont icon-question" style="margin-left: 5rpx;font-size: 28rpx;">行驶证拍照规范</text>
 				</view>
-
-				<navigator url="/pagesA/mine/question" style="color: #383838;display: flex;
+				<navigator url="/pagesA/mine/question?qType=3" style="color: #383838;display: flex;
 						flex-direction: row;align-items: center;">
-					<text class="iconfont icon-question" style="margin-left: 5rpx;font-size: 28rpx;">常见问题</text>
+					<text class="iconfont icon-question" style="margin-right: 5rpx;font-size: 28rpx;">常见问题</text>
 				</navigator>
 			</view>
 
@@ -67,47 +73,26 @@
 
 		<uni-popup ref="popup" type="bottom" border-radius="15rpx 15rpx 0 0" @close="close" @open="open"
 			background-color="#FFF">
-			<view class="uPop" style="height: 50vh;">
-				<image :src="baseImageUrl+'img-rhhdcj.webp'" mode="widthFix" class="imgUrl"  style="width: 100%; overflow-y: auto;"></image>
+			<view class="uPop" style="height: 50vh;margin-top: 35rpx;display: flex;flex-direction: column;align-items: center;">
+				<text style="font-size: 35rpx;color: #333;">行驶证拍照示例</text>
+				<view style="width: 95%;">
+					<image :src="baseImageUrl+'img-xszpzsl.webp'" mode="widthFix" class="imgUrl"  style="width: 95%;margin-top: 40rpx;"></image>
+				</view>
+				<text style="font-size: 35rpx;color: #333;margin-top: 60rpx;">拍摄规范</text>
+				<view style="width: 92%;display: flex;flex-direction: column;align-items: center;margin-bottom: 50rpx;">
+					<text style="font-size: 30rpx;color: #333;margin-top: 30rpx;">1、将行驶证主页/登记证1、2页(有车架号)取出平整放置，保证光线均匀，避免反光。</text>
+					<text style="font-size: 30rpx;color: #333;margin-top: 30rpx;">2、打开手机拍照功能，摄像头对准行驶证主页/登记证1、2页(有车架号)，保证证件边缘完整。</text>
+					<text style="font-size: 30rpx;color: #333;margin-top: 30rpx;">3、关闭闪光灯，保证摄像头无遮挡，按下拍照键，避免抖动。</text>
+					<text style="font-size: 30rpx;color: #333;margin-top: 30rpx;">4、上传前检查照片文字是否清晰，如有偏移或模糊，请重新拍照上传。</text>
+					<text style="font-size: 30rpx;color: #333;margin-top: 30rpx;">5、如果因为图片过大造成上传失败，可以将图片进行裁剪后重新上传。</text>
+				</view>
 			</view>
 		</uni-popup>
 
 		<uni-popup ref="popup2" type="bottom" border-radius="15rpx 15rpx 0 0" @close="closeDemoPop" @open="openDemoPop"
 			background-color="#FFF">
 			<view class="uPop">
-				<image :src="baseImageUrl+'img-jc-demo.webp'" mode="widthFix" class="imgUrl"  style="width: 100%; overflow-y: auto;"></image>
-			</view>
-		</uni-popup>
-
-		<uni-popup ref="popup3" type="bottom" @close="closeSelectItemPop" @open="openSelectItemPop"
-			background-color="#FFF">
-			<view style="display: flex;flex-direction: column;align-items: center;">
-				<text style="font-size: 30rpx;color: #383838;margin-top: 25rpx;margin-bottom: 5rpx;">选择你需要的报告数据模块</text>
-				<text style="font-size: 26rpx;color: #808080;margin-bottom: 30rpx;">模块1.3中必需选中一项</text>
-				<scroll-view scroll-y="true">
-					<view style="width: 100%;display: flex;flex-direction: column;align-items: center;
-					background-color: #f5f5f5;">
-						<checkbox-group class="checkbox-group" @change="checkboxChange">
-						    <view class="item" v-for="(item, index) in checkboxList1" :key="item.name">
-						      <text class="title">{{ index + 1 }}.{{ item.title }}</text>
-						      <view class="right">
-						        <text style="color: #ff8d1a;font-weight: bold;">{{ item.value }}积分</text>
-						        <checkbox color="#30ad55" style="margin-left: 30rpx;" shape="circle" size="30rpx"
-						                  :value="item.name" :checked="checkboxValue1.includes(item.name)"></checkbox>
-						      </view>
-						    </view>
-						  </checkbox-group>
-						<view style="width: 100%;background-color: #FFF;display: flex;flex-direction: row;align-items: center;
-						justify-content: space-between;margin-top: 35rpx;">
-							<text style="color: #ff8d1a;font-size: 26rpx;font-weight: bold;
-							margin-left: 3%;">当前总计需要 {{amount}}积分</text>
-							<view style="display: flex;flex-direction: row;align-items: center;margin-right: 3%;">
-								<text class="btn-4" @click="selectAll">全选</text>
-								<text class="btn-3" @click="clickSelectOk">确认选择</text>
-							</view>
-						</view>
-					</view>
-				</scroll-view>
+				<image :src="baseImageUrl+'nimengcha_example_v3.jpg'" mode="widthFix" class="imgUrl"  style="width: 100%; overflow-y: auto;"></image>
 			</view>
 		</uni-popup>
 
@@ -118,10 +103,8 @@
 	import projectConfig from '@/common/config.js';
 
 	import {
-		checkCar,
-		getPointsInfo,
-		payOrder,
-		checkCarNew
+		payCloudCheck,
+		carAccidentsReport
 	} from '../../apis/modules/user';
 	export default {
 		components: {},
@@ -131,37 +114,11 @@
 				showModal: false,
 				pic: '',
 				checked: false,
-				checkboxValue1: [],
-				checkboxList1: [{
-						name: 'cb1',
-						title: '电池健康度评估',
-						value: 25
-					},
-					{
-						name: 'cb2',
-						title: '车辆电池静态数据',
-						value: 10
-					},
-					{
-						name: 'cb3',
-						title: '车辆行驶数据评估（调表识别）',
-						value: 30
-					},
-					{
-						name: 'cb4',
-						title: '车辆充放电数据评估',
-						value: 10
-					},
-					{
-						name: 'cb5',
-						title: '电池异常报警状况评估',
-						value: 5
-					}
-				],
 				amount: 0,
 				baseImageUrl: projectConfig.baseImageUrl,
-				vinCode:'' ,//车架号
-				curPoints:'0'
+				vinCode:'' ,
+				curPoints:'0',
+				owner:'' //车辆所有人
 			}
 		},
 		onShow() {
@@ -170,15 +127,9 @@
 				this.curPoints = this.pointsInfo.realityQty
 			}
 			
-			//获取用户积分信息
-			// getPointsInfo().then((res) => {
-			// 	// console.log('=======>', res)
-			// 	if (res.code == 200) {
-			// 		this.pointsInfo = res.data
-			// 		this.curPoints = this.pointsInfo.realityQty
-			// 		this.$u.vuex('vuex_points_info',res.data)
-			// 	}
-			// })
+			this.vinCode = 'SSVUDDTT2J2022558'
+			this.owner = '郑昆'
+			this.pic = 'https://api.xinnengyuanyunjian.top/profile/upload/2025/03/03/xsz_111_20250303161224A106.jpg'
 		},
 		methods: {
 			open() {
@@ -230,6 +181,7 @@
 						if(data.code == 200){
 							_this.pic = data.data.url
 							_this.vinCode = data.data.vin
+							_this.owner = data.data.owner
 						}else{
 							uni.showToast({
 								title: res.msg,
@@ -239,66 +191,40 @@
 					}
 				});
 			},
-			openSelectItemPop() {
-				// this.showPop = true
-				// this.$refs.popup3.open()
-			},
-			closeSelectItemPop() {
-				this.showPop = false
-				this.$refs.popup3.close()
-			},
-			 checkboxChange(event) {
-				// console.log('change', event);
-				const values = event.detail.value;
-				this.checkboxValue1 = values; // 更新 checkboxValue1
-				this.checked = values.length > 0;
-				this.getAmount(values);
-			},
-			selectAll() {
-				// 全选
-				if (this.checkboxValue1.length == 5) {
-					this.checkboxValue1 = [];
-				} else {
-					this.checkboxValue1 = this.checkboxList1.map(item => item.name);
-				}
-				this.getAmount(this.checkboxValue1);
-			},
-			clickSelectOk() {
-				if (this.checkboxValue1.includes('cb1') || this.checkboxValue1.includes('cb3')) {
-					console.log('========***========');
-
-				} else {
-					uni.showToast({
-						title: '模块1.3中必需选中一项',
-						icon: 'none'
-					});
-				}
-			},
-			getAmount(list) {
-				let value = 0;
-				for (let i = 0; i < list.length; i++) {
-					for (let j = 0; j < this.checkboxList1.length; j++) {
-						if (list[i] == this.checkboxList1[j].name) {
-							value += this.checkboxList1[j].value;
-						}
-					}
-				}
-				this.amount = value;
-			},
 			clickSubmit(){
-				if(this.vinCode === ''){
+				if(this.pic === ''){
 					uni.showToast({
-						title:'请输入车架号',
+						title:'上传行驶证图片',
+						icon:'error'})
+					return
+				}if(this.vinCode === ''){
+					uni.showToast({
+						title:'请确认行驶证信息',
+						icon:'error'})
+					return
+				}
+				if(this.owner === ''){
+					uni.showToast({
+						title:'请确认行驶证信息',
 						icon:'error'})
 					return
 				}
 				let that = this;
+				if (!this.checked) {
+					uni.showToast({
+						title: '请先阅读并同意协议',
+						icon: 'error'
+					})
+					return
+				}
+
 				
-				
-				// 车云检
-				checkCarNew({
-					vinCode:this.vinCode,
-					outTradeNo:'202410011550270438' //202410011550270438
+				//车事故检测下单
+				carAccidentsReport({
+					vinCode:that.vinCode,
+					outTradeNo:'202503041519185499' ,//202503041519185499
+					vinImg:that.pic,
+					personName:that.owner
 				},{custom: {catch: true,}
 				}).then((res) => {
 					if(res.code != 200){
@@ -311,19 +237,15 @@
 							}
 						});
 					}else{
-						console.log('=========检测成功========'+res.version)
+						// this.htmlContent = res.data.data.replace(/\n/g, '')
+						console.log('=========检测成功========'+res)
 						//进入详情页
-						// if(res.version == 'v3'){
-						// 	uni.navigateTo({
-						// 		url:'/pagesB/main/ReportV3?vinCode='+this.vinCode
-						// 	})
-						// }else{
-						// 	uni.navigateTo({
-						// 		url:'/pagesB/main/detectionReportV2?vinCode='+this.vinCode
-						// 	})
-						// }
+							uni.navigateTo({
+								url:'/pagesB/main/reportContent?type=1&checkId='+res.data
+							})
 					}
 				});
+				
 				
 				////////////////////
 					if(1){
@@ -331,10 +253,9 @@
 					}
 				////////////////////
 
-				//支付后自动调用车云检
-				payOrder({
-					vinCode:this.vinCode,
-					product_id:7
+				//支付后自动调用检测
+				payCloudCheck({
+					vinCode:that.vinCode
 				}).then((res) => {
 					console.log(res)
 					if (res.code === 200) {
@@ -355,10 +276,12 @@
 							// 	title:'支付成功'
 							// })
 							
-							// 车云检
-							checkCarNew({
+							//车事故检测下单
+							carAccidentsReport({
 								vinCode:that.vinCode,
-								outTradeNo:outTradeNo
+								outTradeNo:outTradeNo,
+								vinImg:that.pic,
+								personName:that.owner
 							},{custom: {catch: true,}
 							}).then((res) => {
 								if(res.code != 200){
@@ -371,17 +294,11 @@
 										}
 									});
 								}else{
-									console.log('=========检测成功========'+res.version)
+									console.log('=========检测成功========'+res)
 									//进入详情页
-									if(res.version == 'v3'){
-										uni.navigateTo({
-											url:'/pagesB/main/ReportV3?vinCode='+that.vinCode
-										})
-									}else{
-										uni.navigateTo({
-											url:'/pagesB/main/detectionReportV2?vinCode='+that.vinCode
-										})
-									}
+									uni.navigateTo({
+										url:'/pagesB/main/reportContent?type=1&checkId='+res.data
+									})
 								}
 							});
 						  },
@@ -399,6 +316,26 @@
 						})
 					}
 				})
+			},
+			argeement(type){
+				if(type == 1){
+					
+				}else{
+					uni.navigateTo({
+						url:'/pagesB/main/authFile'
+					})
+				}
+			},
+			checkboxChange(n) {
+				// console.log('change', n);
+				if (n.detail.value.length > 0) {
+					this.checked = true
+				} else {
+					this.checked = false
+				}
+			},
+			checkedCb() {
+				this.checked = !this.checked
 			}
 		}
 	}
@@ -523,13 +460,6 @@
 		// background-image: url('../../static/top-bg.png');
 		// background-repeat: no-repeat;
 		// background-size: 100% 400rpx;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-	}
-
-	.checkbox-group {
-		width: 100%;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
