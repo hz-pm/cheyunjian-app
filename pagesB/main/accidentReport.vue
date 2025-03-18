@@ -103,7 +103,7 @@
 	import projectConfig from '@/common/config.js';
 
 	import {
-		payCloudCheck,
+		payOrder,
 		carAccidentsReport
 	} from '../../apis/modules/user';
 	export default {
@@ -127,9 +127,9 @@
 				this.curPoints = this.pointsInfo.realityQty
 			}
 			
-			this.vinCode = 'SSVUDDTT2J2022558'
-			this.owner = '郑昆'
-			this.pic = 'https://api.xinnengyuanyunjian.top/profile/upload/2025/03/03/xsz_111_20250303161224A106.jpg'
+			// this.vinCode = 'SSVUDDTT2J2022558'
+			// this.owner = '郑昆'
+			// this.pic = 'https://api.xinnengyuanyunjian.top/profile/upload/2025/03/03/xsz_111_20250303161224A106.jpg'
 		},
 		methods: {
 			open() {
@@ -167,7 +167,7 @@
 				let _this = this;
 				console.log('===***===>' + projectConfig.baseUrl)
 				uni.uploadFile({
-					url: projectConfig.baseUrl + '/index/user/vehicleVinOCR', //接口地址
+					url: projectConfig.baseUrl + '/index/user/vehicleLicenseOCR', //接口地址
 					header: {
 						"Authorization": _this.vuex_token,
 					}, //请求token
@@ -220,42 +220,43 @@
 
 				
 				//车事故检测下单
-				carAccidentsReport({
-					vinCode:that.vinCode,
-					outTradeNo:'202503041519185499' ,//202503041519185499
-					vinImg:that.pic,
-					personName:that.owner
-				},{custom: {catch: true,}
-				}).then((res) => {
-					if(res.code != 200){
-						console.log('=========检测失败========'+res.msg)
-						uni.showModal({
-							title: '提示',
-							content: res.msg,
-							showCancel:false,
-							success: function (res) {
-							}
-						});
-					}else{
-						// this.htmlContent = res.data.data.replace(/\n/g, '')
-						console.log('=========检测成功========'+res)
-						//进入详情页
-							uni.navigateTo({
-								url:'/pagesB/main/reportContent?type=1&checkId='+res.data
-							})
-					}
-				});
+				// carAccidentsReport({
+				// 	vinCode:that.vinCode,
+				// 	outTradeNo:'202503020200310205' ,//202503020200310205
+				// 	vinImg:that.pic,
+				// 	personName:that.owner
+				// },{custom: {catch: true,}
+				// }).then((res) => {
+				// 	if(res.code != 200){
+				// 		console.log('=========检测失败========'+res.msg)
+				// 		uni.showModal({
+				// 			title: '提示',
+				// 			content: res.msg,
+				// 			showCancel:false,
+				// 			success: function (res) {
+				// 			}
+				// 		});
+				// 	}else{
+				// 		// this.htmlContent = res.data.data.replace(/\n/g, '')
+				// 		console.log('=========检测成功========'+res)
+				// 		//进入详情页
+				// 			uni.navigateTo({
+				// 				url:'/pagesB/main/reportContent?type=2&checkId='+res.data
+				// 			})
+				// 	}
+				// });
 				
 				
 				////////////////////
-					if(1){
-						return;
-					}
+					// if(1){
+					// 	return;
+					// }
 				////////////////////
 
 				//支付后自动调用检测
-				payCloudCheck({
-					vinCode:that.vinCode
+				payOrder({
+					vinCode:that.vinCode,
+					product_id:8
 				}).then((res) => {
 					console.log(res)
 					if (res.code === 200) {
@@ -297,7 +298,7 @@
 									console.log('=========检测成功========'+res)
 									//进入详情页
 									uni.navigateTo({
-										url:'/pagesB/main/reportContent?type=1&checkId='+res.data
+										url:'/pagesB/main/reportContent?type=2&checkId='+res.data
 									})
 								}
 							});

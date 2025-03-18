@@ -128,8 +128,8 @@ export function checkCarNew(params,config){
 }
 
 //获取车云检记录
-export function cloudRecordList(params){
-	return http.get('/index/cloud/list',params)
+export function cloudRecordList(params1){
+	return http.get('/index/cloud/list',{params:params1})
 }
 
 //获取车云检详情

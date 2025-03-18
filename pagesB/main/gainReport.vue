@@ -296,39 +296,39 @@
 				
 				
 				// 车云检
-				checkCarNew({
-					vinCode:this.vinCode,
-					outTradeNo:'202410011550270438' //202410011550270438
-				},{custom: {catch: true,}
-				}).then((res) => {
-					if(res.code != 200){
-						console.log('=========检测失败========'+res.msg)
-						uni.showModal({
-							title: '提示',
-							content: res.msg,
-							showCancel:false,
-							success: function (res) {
-							}
-						});
-					}else{
-						console.log('=========检测成功========'+res.version)
-						//进入详情页
-						// if(res.version == 'v3'){
-						// 	uni.navigateTo({
-						// 		url:'/pagesB/main/ReportV3?vinCode='+this.vinCode
-						// 	})
-						// }else{
-						// 	uni.navigateTo({
-						// 		url:'/pagesB/main/detectionReportV2?vinCode='+this.vinCode
-						// 	})
-						// }
-					}
-				});
+				// checkCarNew({
+				// 	vinCode:this.vinCode,
+				// 	outTradeNo:'202410011550270438' //202410011550270438
+				// },{custom: {catch: true,}
+				// }).then((res) => {
+				// 	if(res.code != 200){
+				// 		console.log('=========检测失败========'+res.msg)
+				// 		uni.showModal({
+				// 			title: '提示',
+				// 			content: res.msg,
+				// 			showCancel:false,
+				// 			success: function (res) {
+				// 			}
+				// 		});
+				// 	}else{
+				// 		console.log('=========检测成功========'+res.version)
+				// 		//进入详情页
+				// 		// if(res.version == 'v3'){
+				// 		// 	uni.navigateTo({
+				// 		// 		url:'/pagesB/main/ReportV3?vinCode='+this.vinCode
+				// 		// 	})
+				// 		// }else{
+				// 		// 	uni.navigateTo({
+				// 		// 		url:'/pagesB/main/detectionReportV2?vinCode='+this.vinCode
+				// 		// 	})
+				// 		// }
+				// 	}
+				// });
 				
 				////////////////////
-					if(1){
-						return;
-					}
+					// if(1){
+					// 	return;
+					// }
 				////////////////////
 
 				//支付后自动调用车云检

@@ -96,6 +96,28 @@
 					</view>
 					<view style="height: 1rpx; width: 84%;align-self: flex-end;background-color: #f5f5f5;"></view>
 				</navigator>
+				<navigator url="/pagesA/mine/carSgRecord?type=2" class="cell">
+					<view class="cell-1">
+						<view class="cell-1-left" style="padding-top: 8rpx;padding-bottom: 8rpx;">
+							<image src="/static/ic-csg-jl.png" style="width: 45rpx;height: 50rpx;
+							margin-left: 30rpx;"></image>
+							<text class="iconfont" style="margin-left: 20rpx;"></text>车事故查询记录
+						</view>
+						<uni-icons type="right" color="#a6a6a6"></uni-icons>
+					</view>
+					<view style="height: 1rpx; width: 84%;align-self: flex-end;background-color: #f5f5f5;"></view>
+				</navigator>
+				<navigator url="/pagesA/mine/carSgRecord?type=3" class="cell">
+					<view class="cell-1">
+						<view class="cell-1-left" style="padding-top: 8rpx;padding-bottom: 8rpx;">
+							<image src="/static/ic-cwb-jl.png" style="width: 55rpx;height: 60rpx;
+							margin-left: 20rpx;"></image>
+							<text class="iconfont" style="margin-left: 20rpx;"></text>车维保查询记录
+						</view>
+						<uni-icons type="right" color="#a6a6a6"></uni-icons>
+					</view>
+					<view style="height: 1rpx; width: 84%;align-self: flex-end;background-color: #f5f5f5;"></view>
+				</navigator>
 				<navigator url="/pagesA/mine/eleRecord" class="cell" v-if="false">
 					<view class="cell-1">
 						<view class="cell-1-left">
@@ -267,6 +289,7 @@
 			display: flex;
 			flex-direction: row;
 			justify-content: space-between;
+			align-items: center;
 			padding-top: 20rpx;
 			padding-bottom: 20rpx;
 

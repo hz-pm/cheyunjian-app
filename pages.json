@@ -146,6 +146,14 @@
 					"navigationStyle": "default"
 				}
 			
+			}, {
+				"path": "mine/carSgRecord",
+				"style": {
+					"navigationBarTitleText": "车事故记录",
+					"enablePullDownRefresh": false,
+					"navigationStyle": "default"
+				}
+			
 			}
 		]
 	},{
@@ -239,7 +247,8 @@
 				"path" : "main/reportContent",
 				"style" : 
 				{
-					"navigationBarTitleText" : "报告内容"
+					"navigationBarTitleText" : "报告内容",
+					"disableScroll": true
 				}
 			}
 		]
@@ -276,5 +285,4 @@
 			"text": "我的"
 		}]
 	}
-
 }

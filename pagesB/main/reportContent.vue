@@ -1,6 +1,9 @@
 <template>
 	<view class="content">
-		<view v-html="htmlContent" v-if="htmlContent != ''" style="width: 100%;"></view>
+		
+		<view class="webview-container">
+		    <web-view :src="htmlContent" v-show="htmlContent != ''"></web-view>
+		  </view>
 		
 		<view style="width: 100%;height: 50vh;display: flex;flex-direction: column;align-items: center;
 		justify-content: center;" v-if="isEmpty">
@@ -25,13 +28,14 @@
 		},
 		onLoad(op) {
 			if(op.checkId){
-				if(op.type == 1){
+				if(op.type == 2){
 					//车事故查询
 					getSgReport({
 						checkId:op.checkId,
 					},{custom: {catch: true,}
 					}).then((res) => {
 						if(res.code != 200){
+							this.isEmpty = true;
 							console.log('=====获取报告失败===='+res.msg)
 							uni.showModal({
 								title: '提示',
@@ -42,7 +46,8 @@
 								}
 							});
 						}else{
-							this.htmlContent = res.data.data.replace(/\n/g, '')
+							
+							this.htmlContent = res.data.data
 							// console.log('=========获取成功========'+res)
 						}
 					});
@@ -53,6 +58,7 @@
 					},{custom: {catch: true,}
 					}).then((res) => {
 						if(res.code != 200){
+							this.isEmpty = true;
 							console.log('=====获取报告失败===='+res.msg)
 							uni.showModal({
 								title: '提示',
@@ -63,7 +69,8 @@
 								}
 							});
 						}else{
-							this.htmlContent = res.data.data.replace(/\n/g, '')
+							this.htmlContent = res.data.data
+							
 							// console.log('=========获取成功========'+res)
 						}
 					});
@@ -81,10 +88,16 @@
 <style lang="scss">
 	.content {
 		width: 100vw;
+		height: 100vh;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 	}
-
 	
+	.webview-container {
+	  overflow: hidden;
+	}
+	::v-deep ::-webkit-scrollbar {
+	  display: none !important;
+	}
 </style>

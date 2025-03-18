@@ -16,7 +16,7 @@
 				@click="clickItem(item)">
 					<view style="display: flex;flex-direction: row;align-items: center;margin-top: 20rpx;
 					margin-bottom: 20rpx;">
-						<image :src="item.resultTxt.brandLogo" style="width: 110rpx;height: 110rpx;border-radius: 10rpx;"></image>
+						<image src="/static/ic-car.png" style="width: 110rpx;height: 110rpx;border-radius: 10rpx;"></image>
 						<view style="display: flex;flex-direction: column;justify-content: flex-end;
 						margin-left: 20rpx;">
 							<text style="font-size: 32rpx;color: #111;">{{item.resultTxt.brand}}</text>
@@ -49,38 +49,42 @@
 			return {
 				list:[],
 				isEmpty:false,
-				searchValue:''
+				searchValue:'',
+				type:2
 			}
 		},
-		onLoad() {
-			cloudRecordList({
-				type:1
-			}).then((res) => {
-				console.log(res)
-				this.list = res.data
-				
-				this.list.forEach(info =>{
-					info.resultTxt = JSON.parse(info.resultTxt)
-				})
-				
-				if(this.list.length === 0){
-					this.isEmpty = true
-				}else{
-					this.isEmpty = false
+		onLoad(op) {
+			if(op.type){
+				if(op.type == 3){
+					uni.setNavigationBarTitle({
+						title:'车维保查询记录'
+					})
 				}
-			})
+				this.type = op.type;
+				cloudRecordList({
+					type:this.type
+				}).then((res) => {
+					console.log(res)
+					this.list = res.data
+					
+					// this.list.forEach(info =>{
+						// info.resultTxt = JSON.parse(info.resultTxt)
+					// })
+					
+					if(this.list.length === 0){
+						this.isEmpty = true
+					}else{
+						this.isEmpty = false
+					}
+				})
+			}
+			
 		},
 		methods: {
 			clickItem(item){
-				if(item.version == 'v3'){
-					uni.navigateTo({
-						url:'/pagesB/main/ReportV3?vinCode='+item.vinCode
-					})
-				}else{
-					uni.navigateTo({
-						url:'/pagesB/main/detectionReportV2?vinCode='+item.vinCode
-					})
-				}
+				uni.navigateTo({
+					url:'/pagesB/main/reportContent?type='+this.type+'&checkId='+item.id
+				})
 			},
 			search(res) {
 				uni.showToast({
