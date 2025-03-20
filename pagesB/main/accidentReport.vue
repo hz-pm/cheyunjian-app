@@ -104,7 +104,8 @@
 
 	import {
 		payOrder,
-		carAccidentsReport
+		carAccidentsReport,
+		getUserInfo
 	} from '../../apis/modules/user';
 	export default {
 		components: {},
@@ -130,6 +131,9 @@
 			// this.vinCode = 'SSVUDDTT2J2022558'
 			// this.owner = '郑昆'
 			// this.pic = 'https://api.xinnengyuanyunjian.top/profile/upload/2025/03/03/xsz_111_20250303161224A106.jpg'
+		},
+		onLoad() {
+			this.reqUserInfo();
 		},
 		methods: {
 			open() {
@@ -284,21 +288,21 @@
 								vinImg:that.pic,
 								personName:that.owner
 							},{custom: {catch: true,}
-							}).then((res) => {
-								if(res.code != 200){
-									console.log('=========检测失败========'+res.msg)
+							}).then((res1) => {
+								if(res1.code != 200){
+									console.log('=========下单失败========'+res1.msg)
 									uni.showModal({
 										title: '提示',
-										content: res.msg,
+										content: res1.msg,
 										showCancel:false,
-										success: function (res) {
+										success: function (res1) {
 										}
 									});
 								}else{
-									console.log('=========检测成功========'+res)
+									console.log('=========下单成功========'+res1)
 									//进入详情页
 									uni.navigateTo({
-										url:'/pagesB/main/reportContent?type=2&checkId='+res.data
+										url:'/pagesB/main/reportContent?type=2&checkId='+res1.data.checkId+'&payOrderId='+res1.data.payOrderId
 									})
 								}
 							});
@@ -337,6 +341,19 @@
 			},
 			checkedCb() {
 				this.checked = !this.checked
+			},
+			reqUserInfo(){
+				getUserInfo({},{ShowLoading: false,}).then((res) => {
+					// console.log('getuserInfo', res)
+					if(res.code === 200){
+						this.$u.vuex('vuex_userinfo',res.data)
+					}else{
+						uni.showToast({
+							title: res.msg,
+							icon: 'none'
+						})
+					}
+				})
 			}
 		}
 	}

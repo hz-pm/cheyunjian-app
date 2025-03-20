@@ -210,15 +210,6 @@
 						})
 					}
 				})
-				
-				//获取用户积分信息
-				getPointsInfo().then((res) => {
-					// console.log('=======>', res)
-					if (res.code == 200) {
-						this.pointsInfo = res.data
-						this.$u.vuex('vuex_points_info',res.data)
-					}
-				})
 			}
 		},
 		methods: {

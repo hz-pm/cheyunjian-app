@@ -113,9 +113,9 @@ http.interceptors.response.use(async (resp) => {
 		//记录本次请求,刷新token后再次执行
 		//是否刷新token中,防止重复刷新
 		console.log("token过期");
-		msg = 'token过期'
+		msg = '请登录'
 		//跳转到登录
-		uni.navigateTo({
+		uni.reLaunch({
 			url:'/pages/login/login'
 		})
 		

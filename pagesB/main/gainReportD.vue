@@ -172,27 +172,17 @@
 				this.curPoints = this.pointsInfo.realityQty
 			}
 			
-			//获取用户积分信息
-			getPointsInfo().then((res) => {
-				// console.log('=======>', res)
-				if (res.code == 200) {
-					this.pointsInfo = res.data
-					this.curPoints = this.pointsInfo.realityQty
-					this.$u.vuex('vuex_points_info',res.data)
-				}
-			})
-			
-			//获取用户VIP信息
-			getUserVipInfo().then((res) => {
-				// console.log(res)
-				if(res.code === 200){
-					this.vipInfo = res.data
-					//会员剩余免费检测次数
-					// if(this.vipInfo.totalFreeInterestsQty > 0){
-					// 	this.checkPointsStr = '会员免费查询 '+this.vipInfo.totalFreeInterestsQty+' 次'
-					// }
-				}
-			})
+			// //获取用户VIP信息
+			// getUserVipInfo().then((res) => {
+			// 	// console.log(res)
+			// 	if(res.code === 200){
+			// 		this.vipInfo = res.data
+			// 		//会员剩余免费检测次数
+			// 		// if(this.vipInfo.totalFreeInterestsQty > 0){
+			// 		// 	this.checkPointsStr = '会员免费查询 '+this.vipInfo.totalFreeInterestsQty+' 次'
+			// 		// }
+			// 	}
+			// })
 		},
 		methods: {
 			open() {

@@ -2,9 +2,9 @@ const CONFIG = {
 	// 开发环境配置
 	development: {
 		// baseUrl: 'http://192.168.0.12:8086',
-		// baseUrl: 'https://api.xinnengyuanyunjian.top',
-		baseUrl: 'https://test.xinnengyuanyunjian.top',
-		baseImageUrl: 'https://test.xinnengyuanyunjian.top/profile/images/',
+		baseUrl: 'https://api.xinnengyuanyunjian.top',
+		// baseUrl: 'https://test.xinnengyuanyunjian.top',
+		baseImageUrl: 'https://api.xinnengyuanyunjian.top/profile/images/',
 		// 请求Header中token的KEY
 		TOKEN_KEY: "Authorizationpas",
 		PLATFORM: "pas",

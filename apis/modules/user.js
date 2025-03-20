@@ -43,13 +43,13 @@ export function resetPwd(params1){
 }
 
 //获取用户信息
-export function getUserInfo(params){
-	return http.get('/index/user/getUserInfo',params)
+export function getUserInfo(params,config){
+	return http.get('/index/user/getUserInfo',{params:params,custom:config})
 }
 
 //获取用户积分信息
-export function getPointsInfo(params){
-	return http.get('/index/points/getPointInfo',params)
+export function getPointsInfo(params,){
+	return http.get('/index/points/getPointInfo',params,{})
 }
 
 //用户绑定的车辆
@@ -183,8 +183,8 @@ export function carAccidentsReport(params){
 }
 
 //获取车辆事故报告
-export function getSgReport(params1){
-	return http.get('/index/cloud/getSgReport',{params:params1})
+export function getSgReport(params1,config){
+	return http.get('/index/cloud/getSgReport',{params:params1,custom:config})
 }
 
 //车辆维保报告下单
@@ -193,7 +193,7 @@ export function carWbCreatedReport(params){
 }
 
 //获取车辆维保报告
-export function getWbReport(params1){
-	return http.get('/index/cloud/getWbReport',{params:params1})
+export function getWbReport(params1,config){
+	return http.get('/index/cloud/getWbReport',{params:params1,custom:config})
 }
 

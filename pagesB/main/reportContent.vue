@@ -27,16 +27,46 @@
 			}
 		},
 		onLoad(op) {
+			
+			// eleCheck({
+			// 	vinCode:this.vinCode,
+			// 	requestIdType:this.companyType,
+			// },{custom: {catch: true,}
+			// }).then((res) => {
+			// 	if(res.code === 200){
+			// 		if(res.data){
+			// 			//进入详情页
+			// 			uni.navigateTo({
+			// 				url:'/pagesB/main/newBattery?vinCode='+this.vinCode
+			// 			})
+			// 			return
+			// 		}
+			// 	}
+			// 	uni.showModal({
+			// 		title: '提示',
+			// 		content: res.msg,
+			// 		showCancel:false,
+			// 		success: function (res) {
+			// 		}
+			// 	});
+			// });
+			
+			// export function eleCheck(params,config){
+			// 	return http.post('/index/ele/eleCheck',params,config)
+			// }
+			
+			
 			if(op.checkId){
 				if(op.type == 2){
 					//车事故查询
 					getSgReport({
 						checkId:op.checkId,
-					},{custom: {catch: true,}
-					}).then((res) => {
+						payOrderId:op.payOrderId?op.payOrderId:'0'
+					},{catch: true,}
+					).then((res) => {
+						console.log('=====获取报告====',res)
 						if(res.code != 200){
 							this.isEmpty = true;
-							console.log('=====获取报告失败===='+res.msg)
 							uni.showModal({
 								title: '提示',
 								content: res.msg,
@@ -46,7 +76,6 @@
 								}
 							});
 						}else{
-							
 							this.htmlContent = res.data.data
 							// console.log('=========获取成功========'+res)
 						}
@@ -55,11 +84,12 @@
 					//车维保报告查询
 					getWbReport({
 						checkId:op.checkId,
+						payOrderId:op.payOrderId?op.payOrderId:'0'
 					},{custom: {catch: true,}
 					}).then((res) => {
+						console.log('=====获取报告====',res)
 						if(res.code != 200){
 							this.isEmpty = true;
-							console.log('=====获取报告失败===='+res.msg)
 							uni.showModal({
 								title: '提示',
 								content: res.msg,
@@ -70,7 +100,6 @@
 							});
 						}else{
 							this.htmlContent = res.data.data
-							
 							// console.log('=========获取成功========'+res)
 						}
 					});

@@ -121,7 +121,8 @@
 		checkCar,
 		getPointsInfo,
 		payOrder,
-		checkCarNew
+		checkCarNew,
+		getUserInfo
 	} from '../../apis/modules/user';
 	export default {
 		components: {},
@@ -169,16 +170,9 @@
 			if(this.pointsInfo){
 				this.curPoints = this.pointsInfo.realityQty
 			}
-			
-			//获取用户积分信息
-			// getPointsInfo().then((res) => {
-			// 	// console.log('=======>', res)
-			// 	if (res.code == 200) {
-			// 		this.pointsInfo = res.data
-			// 		this.curPoints = this.pointsInfo.realityQty
-			// 		this.$u.vuex('vuex_points_info',res.data)
-			// 	}
-			// })
+		},
+		onLoad() {
+			this.reqUserInfo();
 		},
 		methods: {
 			open() {
@@ -396,6 +390,19 @@
 								}
 							});
 						  }
+						})
+					}
+				})
+			},
+			reqUserInfo(){
+				getUserInfo({},{ShowLoading: false,}).then((res) => {
+					// console.log('getuserInfo', res)
+					if(res.code === 200){
+						this.$u.vuex('vuex_userinfo',res.data)
+					}else{
+						uni.showToast({
+							title: res.msg,
+							icon: 'none'
 						})
 					}
 				})
