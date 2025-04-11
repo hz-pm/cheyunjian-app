@@ -264,7 +264,7 @@
 									console.log('=========下单成功========'+res1)
 									//进入详情页
 									uni.navigateTo({
-										url:'/pagesB/main/reportContent?type=3&checkId='+res1.data.checkId+'&payOrderId='+res1.data.payOrderId
+										url:'/pagesB/main/reportContent?type=3&checkId='+res1.data.checkId+'&payOrderId='+res1.data.payOrderId+'&isShare=0'
 									})
 								}
 							});

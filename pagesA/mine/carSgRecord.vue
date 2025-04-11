@@ -19,7 +19,7 @@
 						<image src="/static/ic-car.png" style="width: 110rpx;height: 110rpx;border-radius: 10rpx;"></image>
 						<view style="display: flex;flex-direction: column;justify-content: flex-end;
 						margin-left: 20rpx;">
-							<text style="font-size: 32rpx;color: #111;">{{item.resultTxt.brand}}</text>
+							<!-- <text style="font-size: 32rpx;color: #111;">{{item.resultTxt.brand}}</text> -->
 							<text style="font-size: 30rpx;color: #111;margin-top: 10rpx;">{{maskString(item.vinCode)}}</text>
 							<text style="font-size: 26rpx;color: #a6a6a6;margin-top: 10rpx;">{{item.createTime}}</text>
 						</view>
@@ -83,7 +83,7 @@
 		methods: {
 			clickItem(item){
 				uni.navigateTo({
-					url:'/pagesB/main/reportContent?type='+this.type+'&checkId='+item.id
+					url:'/pagesB/main/reportContent?type='+this.type+'&checkId='+item.id+'&isShare=0'
 				})
 			},
 			search(res) {

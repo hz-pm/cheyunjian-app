@@ -74,7 +74,7 @@
 			clickItem(item){
 				if(item.version == 'v3'){
 					uni.navigateTo({
-						url:'/pagesB/main/ReportV3?vinCode='+item.vinCode
+						url:'/pagesB/main/ReportV3?vinCode='+item.vinCode+'&isShare=0'
 					})
 				}else{
 					uni.navigateTo({

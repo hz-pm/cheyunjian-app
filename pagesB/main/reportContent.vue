@@ -23,7 +23,10 @@
 		data() {
 			return {
 				htmlContent:'',
-				isEmpty:false
+				isEmpty:false,
+				isShare:0,
+				checkId:0,
+				type:2
 			}
 		},
 		onLoad(op) {
@@ -54,19 +57,22 @@
 			// export function eleCheck(params,config){
 			// 	return http.post('/index/ele/eleCheck',params,config)
 			// }
-			
+			this.isShare = op.isShare;
+			this.checkId = op.checkId
+			this.type = op.type
 			
 			if(op.checkId){
 				if(op.type == 2){
 					//车事故查询
 					getSgReport({
 						checkId:op.checkId,
+						isShare:op.isShare,
 						payOrderId:op.payOrderId?op.payOrderId:'0'
-					},{catch: true,}
-					).then((res) => {
+					},{catch: true}).then((res) => {
 						console.log('=====获取报告====',res)
 						if(res.code != 200){
 							this.isEmpty = true;
+							uni.hideShareMenu();
 							uni.showModal({
 								title: '提示',
 								content: res.msg,
@@ -77,6 +83,7 @@
 							});
 						}else{
 							this.htmlContent = res.data.data
+							uni.showShareMenu();
 							// console.log('=========获取成功========'+res)
 						}
 					});
@@ -84,12 +91,13 @@
 					//车维保报告查询
 					getWbReport({
 						checkId:op.checkId,
+						isShare:op.isShare,
 						payOrderId:op.payOrderId?op.payOrderId:'0'
-					},{custom: {catch: true,}
-					}).then((res) => {
+					},{catch: true}).then((res) => {
 						console.log('=====获取报告====',res)
 						if(res.code != 200){
 							this.isEmpty = true;
+							uni.hideShareMenu();
 							uni.showModal({
 								title: '提示',
 								content: res.msg,
@@ -100,6 +108,7 @@
 							});
 						}else{
 							this.htmlContent = res.data.data
+							uni.showShareMenu();
 							// console.log('=========获取成功========'+res)
 						}
 					});
@@ -109,7 +118,11 @@
 			}
 		},
 		methods: {
-			
+			onShareAppMessage() {
+			  return {
+			    path: `/pagesB/main/reportContent?checkId=${this.checkId}&type=${this.type}&isShare=1`,  // 携带参数
+			  }
+			}
 		}
 	}
 </script>

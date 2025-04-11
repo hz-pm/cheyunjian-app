@@ -251,7 +251,7 @@
 				class="tips-info">本报告提供的评估结果仅基于用户自主填写的车辆信息，结合新能源汽车充电及工况大数据模型进行测算，结果仅供参考。评估方不对任何用户基于本报告内容所做的决策或行动承担任何直接或间接的责任。</text>
 		</view>
 		
-		<view class="customer">
+		<view class="customer" v-if="isShare == undefined || isShare == 0">
 			<view class="iconfont icon-kefu"></view>
 			<view class="tx">客服</view>
 			<button style="display: flex;flex-direction: column;align-items: center;border: none;background-color: #00000000;
@@ -259,7 +259,7 @@
 			type="default" plain="true" open-type="contact" size="default"></button>
 		</view>
 
-		<view class="foot">
+		<view class="foot" v-if="isShare == undefined || isShare == 0">
 			<view class="tiem"><text class="iconfont icon-history"></text>评估时间:{{formatDateOnly(detail.createTime)}}
 			</view>
 			<view class="export"><button class="white-btn">刷新</button>
@@ -301,7 +301,8 @@
 				volumeScoreRecessionLvColor:'',
 				batteryHabitAssessColor:'',
 				batteryHabitAssessBGColor:'',
-				checkDisplayMileageListJson:[]
+				checkDisplayMileageListJson:[],
+				isShare:0
 			}
 		},
 		computed: {
@@ -316,8 +317,9 @@
 			// op.vinCode = 'LUZEJAJC6PA007400'
 			if (op) {
 				this.vinCode = op.vinCode;
-				// this.isShare = op.share;
+				this.isShare = op.isShare;
 				console.log(this.vinCode)
+				console.log(op.isShare)
 				
 				this.getCloudDetails()
 				
@@ -572,11 +574,12 @@
 				}
 				return color;
 			},
-			cliackYanbao(){
-				uni.navigateTo({
-					url:'/pagesA/warranty/index'
-				})
+			onShareAppMessage() {
+			  return {
+			    path: `/pagesB/main/ReportV3?vinCode=${this.vinCode}&isShare=1`,  // 携带参数
+			  }
 			}
+
 		}
 	}
 </script>

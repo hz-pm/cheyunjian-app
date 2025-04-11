@@ -369,7 +369,7 @@
 									//进入详情页
 									if(res.version == 'v3'){
 										uni.navigateTo({
-											url:'/pagesB/main/ReportV3?vinCode='+that.vinCode
+											url:'/pagesB/main/ReportV3?vinCode='+that.vinCode+'&isShare=0'
 										})
 									}else{
 										uni.navigateTo({
