@@ -34,7 +34,7 @@
 				<view style="width: 100%;display: flex;flex-direction: row;align-items: center;
 						text-align: center; font-size: 26rpx;justify-content: space-between;">
 					<text url="/pagesA/mine/fiesRecord" style="width: 49%;color: #ff8d1a;padding-top: 20rpx;padding-bottom: 20rpx;
-							font-weight: bold;" @click="openSelectItemPop" >共检测 5 个模块<span style="font-size: 10px;"></span></text>
+							font-weight: bold;" @click="openSelectItemPop" >共检测 4 个模块<span style="font-size: 10px;"></span></text>
 					<view style="width: 1rpx;height: 35rpx;background-color: #DDD;"></view>
 					<text class="iconfont icon-question" style="width: 49%;font-size: 26rpx;color: #30ad55;padding-top: 20rpx;padding-bottom: 20rpx;"
 						@click="open()">如何找到车架号</text>
@@ -61,8 +61,11 @@
 					<text class="iconfont icon-question" style="margin-left: 5rpx;font-size: 28rpx;">常见问题</text>
 				</navigator>
 			</view>
-
-			<view style="height: 150rpx;"></view>
+			
+			<view style="width: 90%;margin-top: 20rpx;font-size: 26rpx;color: #808080;">
+				免责声明:本报告提供的评估结果仅基于用户自主填写的车辆信息，结合新能源汽车充电及工况大数据模型进行测算，结果仅供参考。评估方不对任何用户基于本报告内容所做的决策或行动承担任何直接或间接的责任。
+			</view>
+			<view style="height: 80rpx;"></view>
 		</view>
 
 		<uni-popup ref="popup" type="bottom" border-radius="15rpx 15rpx 0 0" @close="close" @open="open"

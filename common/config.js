@@ -1,8 +1,8 @@
 const CONFIG = {
 	// 开发环境配置
 	development: {
-		baseUrl: 'http://192.168.0.14:8086',
-		// baseUrl: 'https://api.xinnengyuanyunjian.top',
+		// baseUrl: 'http://192.168.0.14:8086',
+		baseUrl: 'https://api.xinnengyuanyunjian.top',
 		// baseUrl: 'https://test.xinnengyuanyunjian.top',
 		baseImageUrl: 'https://api.xinnengyuanyunjian.top/profile/images/',
 		// 请求Header中token的KEY
