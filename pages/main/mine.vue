@@ -1,306 +1,261 @@
 <template>
-	<view class="content">
-		<scroll-view scroll-y="true" height="100vh">
-			<view style="display: flex;
-			flex-direction: column;
-			align-items: center;
-			">
-				<view style="width: 100%;display: flex;flex-direction: column;align-items: center;
-				background: linear-gradient(180deg,#57ca9e,#47ad13 150%);padding-bottom: 80rpx;">
-					<view style="width: 92%;display: flex;flex-direction: row;align-items: center;margin-top: 40rpx;
-					justify-content: space-between;">
-						<view style="display: flex;flex-direction: row;align-items: center;">
-							<view style="width: 110rpx;">
-								<image src="../../static/ic-default-avatar.png" style="width: 110rpx;height: 110rpx;">
-								</image>
-							</view>
-							<view style="display: flex;flex-direction: column;margin-left: 35rpx;color: #FFF;">
-								<text style="font-size: 30rpx;font-weight: bold;">{{userinfo.nickName}}</text>
-								<text style="font-size: 26rpx;margin-top: 10rpx;">ID：{{userinfo.userId}}</text>
-							</view>
-						</view>
-						<uni-icons type="settings" color="#FFF" size="26" @click="goSetting"></uni-icons>
-					</view>
-					<view class="vip-bg-top" @click="goVipInfo" v-if="false">
-						<view style="width: 92%; display: flex;flex-direction: row;align-items: center;
-						justify-content: space-between;color: #111;font-size: 30rpx;">
-							<view style="display: flex;flex-direction: row;align-items: center;">
-								<image :src="'../../static/'+vipImg" style="width: 50rpx;height: 50rpx;"></image>
-								<text style="margin-left: 10rpx;font-weight: bold;">{{userinfo.vip > 0?userinfo.vipName:'升级新能源云检VIP'}}</text>
-							</view>
-							<view style="display: flex;flex-direction: row;align-items: center;">
-								<!-- <text>{{userinfo.vip > 0?'查看详情':'最高享全年5折'}}</text> -->
-								<text>享全年58折</text>
-								<uni-icons type="right" size="32rpx"></uni-icons>
-							</view>
-						</view>
-					</view>
-				</view>
-				<navigator url="/pagesA/mine/baseCompany" style="width: 100%;height: 74rpx;color: #f3a54f;background: #fff8ed;text-align: center;font-size: 28rpx;z-index: 99;display: flex;flex-direction: column;
-				justify-content: center;align-items: center;border-bottom: 1px solid rgba(243,165,79,.5);"
-				v-if="false">
-					<view style="display: flex;flex-direction: row;align-items: center;">
-						<image src="../../static/safety_fill.png" style="width: 35rpx;height: 35rpx;"></image>
-						<text style="font-size: 28rpx;margin-left: 5rpx;">申请企业认证，即可获得80积分</text>
-						<uni-icons type="forward" color="#f3a54f" size="18"></uni-icons>
-					</view>
-				</navigator>
+  <view class="mine-page">
+    <!-- 用户信息头部 -->
+    <view class="user-header">
+      <view class="avatar-wrap" @click="goMyInfo">
+        <image v-if="userStore.avatar" :src="userStore.avatar" class="avatar-img" mode="aspectFill" />
+        <image v-else src="/static/ic-default-avatar.png" class="avatar-img" mode="aspectFit" />
+      </view>
+      <view class="user-info">
+        <text class="username">{{ userStore.nickname }}</text>
+        <text class="user-phone">{{ maskedPhone }}</text>
+      </view>
+      <view class="vip-status-wrap" @click="goMyVip">
+        <view v-if="userStore.isVip" class="vip-active">
+          <image src="/static/vip-crown-2-fill.png" class="vip-crown-img" mode="aspectFit" />
+          <view class="vip-info">
+            <text class="vip-label">VIP有效期</text>
+            <text class="vip-date">{{ formatDate(userStore.vipExpireTime) }}</text>
+          </view>
+        </view>
+        <view v-else class="vip-inactive" @click="goVipCard">
+          <image src="/static/vip-crown-2-fill.png" class="vip-crown-img" mode="aspectFit" />
+          <text class="vip-open">开通VIP</text>
+        </view>
+      </view>
+    </view>
 
-				<view style="width: 92%;display: flex;flex-direction: row;align-items: center;justify-content: space-between;
-				margin-top: 25rpx;margin-bottom: 25rpx;" v-if="false">
-					<navigator url="/pagesA/mine/bill" style="width: 33%;display: flex;flex-direction: column;align-items: center;
-					border-right: 0.5px solid rgba(0,0,0,.1);">
-						<text style="font-size: 32rpx;font-weight: bold;color: #30ad55;">{{pointsInfo.realityQty?pointsInfo.realityQty:0}}</text>
-						<text style="font-size: 28rpx;color: #808080;margin-top: 5rpx;">剩余积分</text>
-					</navigator>
-					<navigator url="/pagesA/mine/bill" style="width: 33%;display: flex;flex-direction: column;align-items: center;
-					border-right: 0.5px solid rgba(0,0,0,.1);">
-						<text style="font-size: 32rpx;font-weight: bold;color: #30ad55;">{{pointsInfo.useQty?pointsInfo.useQty:0}}</text>
-						<text style="font-size: 28rpx;color: #808080;margin-top: 5rpx;">已使用积分</text>
-					</navigator>
-					<navigator url="/pagesA/mine/recharge"
-						style="width: 33%;display: flex;flex-direction: column;align-items: center;">
-						<text style="font-size: 32rpx;font-weight: bold;color: #30ad55;">{{pointsInfo.totalAmount?pointsInfo.totalAmount:0}}</text>
-						<text style="font-size: 28rpx;color: #808080;margin-top: 5rpx;">总充值金额</text>
-					</navigator>
-				</view>
-				<view style="width: 100%;height: 25rpx;background-color: #f5f5f5;" v-if="false"></view>
+    <!-- 我的记录 -->
+    <view class="menu-group">
+      <text class="group-title">我的记录</text>
+      <view class="menu-list">
+        <view class="menu-item" @click="goCheckRecord">
+          <u-icon name="list" size="30" color="#57ca9e" />
+          <text class="menu-label">车云检记录</text>
+          <u-icon name="arrow-right" size="20" color="#ccc" />
+        </view>
+        <view class="menu-item" @click="goAccidentRecord">
+          <u-icon name="warning" size="30" color="#57ca9e" />
+          <text class="menu-label">事故查询记录</text>
+          <u-icon name="arrow-right" size="20" color="#ccc" />
+        </view>
+        <view class="menu-item" @click="goMaintenanceRecord">
+          <u-icon name="clock" size="28" color="#57ca9e" />
+          <text class="menu-label">维保查询记录</text>
+          <u-icon name="arrow-right" size="20" color="#ccc" />
+        </view>
+      </view>
+    </view>
 
-				<navigator url="/pagesA/mine/skuList" class="cell" v-if="false">
-					<view class="cell-1">
-						<view class="cell-1-left">
-							<text class="iconfont icon-money Licon" ></text>积分充值
-						</view>
-						<uni-icons type="right" color="#a6a6a6"></uni-icons>
-					</view>
-					<view style="height: 1rpx; width: 84%;align-self: flex-end;background-color: #f5f5f5;"></view>
-				</navigator>
+    <!-- 账户服务 -->
+    <view class="menu-group">
+      <text class="group-title">账户服务</text>
+      <view class="menu-list">
+        <view class="menu-item" @click="goVipCard">
+		  <u-icon name="integral" size="30" color="#57ca9e" />
+          <text class="menu-label">购买VIP会员</text>
+          <u-icon name="arrow-right" size="20" color="#ccc" />
+        </view>
+        <view class="menu-item" @click="goMyInfo">
+          <u-icon name="account" size="30" color="#57ca9e" />
+          <text class="menu-label">个人信息</text>
+          <u-icon name="arrow-right" size="20" color="#ccc" />
+        </view>
+        <view class="menu-item" @click="goUpdatePwd">
+          <u-icon name="lock" size="30" color="#57ca9e" />
+          <text class="menu-label">修改密码</text>
+          <u-icon name="arrow-right" size="20" color="#ccc" />
+        </view>
+      </view>
+    </view>
 
-				<navigator url="/pagesA/mine/recharge" class="cell" v-if="false">
-					<view class="cell-1">
-						<view class="cell-1-left">
-							<text class="iconfont icon-recharge Licon"></text>消费记录
-						</view>
-						<uni-icons type="right" color="#a6a6a6"></uni-icons>
-					</view>
-					<view style="height: 1rpx; width: 84%;align-self: flex-end;background-color: #f5f5f5;"></view>
-				</navigator>
+    <!-- 帮助与支持 -->
+    <view class="menu-group">
+      <text class="group-title">帮助与支持</text>
+      <view class="menu-list">
+        <view class="menu-item" @click="goQuestion">
+          <u-icon name="question-circle" size="28" color="#57ca9e" />
+          <text class="menu-label">常见问题</text>
+          <u-icon name="arrow-right" size="20" color="#ccc" />
+        </view>
+      </view>
+    </view>
 
-				<view style="width: 100%;height: 25rpx;background-color: #f5f5f5;"></view>
-				<navigator url="/pagesA/mine/carRecord" class="cell">
-					<view class="cell-1">
-						<view class="cell-1-left">
-							<text class="iconfont icon-search Licon"></text>车云检记录
-						</view>
-						<uni-icons type="right" color="#a6a6a6"></uni-icons>
-					</view>
-					<view style="height: 1rpx; width: 84%;align-self: flex-end;background-color: #f5f5f5;"></view>
-				</navigator>
-				<navigator url="/pagesA/mine/eleRecord" class="cell" v-if="false">
-					<view class="cell-1">
-						<view class="cell-1-left">
-							<text class="iconfont icon-huishou Licon"></text>电易估记录
-						</view>
-						<uni-icons type="right" color="#a6a6a6"></uni-icons>
-					</view>
-					<view style="height: 1rpx; width: 84%;align-self: flex-end;background-color: #f5f5f5;"></view>
-				</navigator>
-				<view style="width: 100%;height: 25rpx;background-color: #f5f5f5;"></view>
-
-				<view style="display: flex;flex-direction: column;align-items: center;margin-top: 15rpx;
-				margin-bottom: 15rpx;">
-					<text style="font-size: 30rpx;color: #333;">客服咨询</text>
-					<text style="font-size: 26rpx;color: #AAA;transform: scale(0.8);">工作日09:00-18:00</text>
-				</view>
-				<view style="height: 1rpx;width: 100%;background-color: #f5f5f5;"></view>
-
-				<view style="width: 92%;display: flex;flex-direction: row;align-items: center;justify-content: space-between;
-				margin-top: 25rpx;margin-bottom: 25rpx;color: #111;font-size: 28rpx;">
-					<view style="width: 50%;display: flex;flex-direction: column;align-items: center;"
-						@click="clickKfPhone">
-						<text class="iconfont icon-call" style="color: #30ad55;font-size: 50rpx;"></text>
-						<text style="margin-top: 10rpx;">电话咨询</text>
-					</view>
-					<view style="width: 1rpx;height: 90rpx;background-color: #f5f5f5;"></view>
-					
-					<view style="display: flex;flex-direction: column;align-items: center;color:#111;
-					width: 50%;">
-						<text class="iconfont icon-msg" style="color: #30ad55;font-size: 50rpx;"></text>
-						<text style="margin-top: 5rpx;font-size: 28rpx;">在线客服</text>
-						<button style="display: flex;flex-direction: column;align-items: center;border: none;background-color: #33000000;
-						position: absolute;width: 50%;height: 85rpx;"
-						type="default" plain="true" open-type="contact" size="default"></button>
-					</view>
-					
-				</view>
-				<view style="height: 1rpx;width: 100%;background-color: #f5f5f5;"></view>
-
-				<view style="height: 150rpx;"></view>
-			</view>
-		</scroll-view>
-	</view>
+    <!-- 退出登录 -->
+    <view class="logout-wrap">
+      <u-button text="退出登录" type="error" plain @click="handleLogout" />
+    </view>
+  </view>
 </template>
 
-<script>
-	import projectConfig from '@/common/config.js';
-	import {
-		getUserInfo,
-		getPointsInfo
-	} from '../../apis/modules/user';
-	export default {
-		components: {},
-		data() {
-			return {
-				phoneList: ['18673356612', '呼叫'],
-				userinfo: {},
-				pointsInfo: {},
-				vipImg:'ic-VIP.png',
-			}
-		},
-		onLoad() {
-			
-		},
-		onShow() {
-			this.pointsInfo =  this.vuex_points_info
-			this.userinfo =  this.vuex_userinfo
-			
-			if(this.userinfo){
-				if(this.userinfo.vip > 0){
-					this.vipImg = 'f-vip2-black.png'
-				}
-			}
-			
-			if(this.userinfo){
-				//获取用户信息
-				getUserInfo().then((res) => {
-					// console.log('getuserInfo', res)
-					if(res.code === 200){
-						this.$u.vuex('vuex_userinfo',res.data)
-						this.userinfo = res.data
-						
-						if(this.userinfo.vip > 0){
-							this.vipImg = 'f-vip2-black.png'
-						}
-					}else{
-						uni.showToast({
-							title: res.msg,
-							icon: 'none'
-						})
-					}
-				})
-				
-				//获取用户积分信息
-				getPointsInfo().then((res) => {
-					// console.log('=======>', res)
-					if (res.code == 200) {
-						this.pointsInfo = res.data
-						this.$u.vuex('vuex_points_info',res.data)
-					}
-				})
-			}
-		},
-		methods: {
-			goSetting() {
-				uni.navigateTo({
-					url: '/pagesA/mine/myInfo'
-				})
-			},
-			clickKfPhone() {
-				let __this = this
-				uni.showActionSheet({
-					itemList: __this.phoneList,
-					success: function(res) {
-						uni.makePhoneCall({
-							phoneNumber: __this.phoneList[0],
-							success() {
-								console.log('电话拨打成功');
-							},
-							fail(err) {
-								console.error('电话拨打失败', err);
-							}
-						});
-					},
-					fail: function(res) {
-						console.log(res.errMsg);
-					}
-				});
-			},
-			onlineKefu() {
-				console.log('==============')
-			},
-			goVipInfo(){
-				// if(this.userinfo.vip > 0){
-				// 	//查看vip详情
-				// 	uni.navigateTo({
-				// 		url:'/pagesA/mine/myVip'
-				// 	})
-				// }else{
-					uni.navigateTo({
-						url:'/pagesA/mine/vipCard'
-					})
-				// }
-			}
-		}
-	}
+<script setup>
+import { computed } from 'vue'
+import { onShow } from '@dcloudio/uni-app'
+import { useUserStore } from '@/store/user'
+import { getUserInfo } from '@/utils/api'
+
+const userStore = useUserStore()
+
+const maskedPhone = computed(() => {
+  const p = userStore.phone
+  if (!p) return '未绑定手机号'
+  return p.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')
+})
+
+onShow(async () => {
+  if (!userStore.isLoggedIn) {
+    uni.reLaunch({ url: '/pages/login/login' })
+    return
+  }
+  try {
+    const res = await getUserInfo()
+    if (res.code === 200) userStore.setUserInfo(res.data)
+  } catch (e) {
+    console.error(e)
+  }
+})
+
+function formatDate(dateStr) {
+  if (!dateStr) return ''
+  return dateStr.split('T')[0] || dateStr.substring(0, 10)
+}
+
+function goMyInfo() { uni.navigateTo({ url: '/pages/mine/myInfo' }) }
+function goMyVip() { uni.navigateTo({ url: '/pages/vip/myVip' }) }
+function goVipCard() { uni.navigateTo({ url: '/pages/vip/vipCard' }) }
+function goCheckRecord() { uni.navigateTo({ url: '/pages/check/record' }) }
+function goAccidentRecord() { uni.navigateTo({ url: '/pages/accident/record' }) }
+function goMaintenanceRecord() { uni.navigateTo({ url: '/pages/maintenance/record' }) }
+function goUpdatePwd() { uni.navigateTo({ url: '/pages/reg/updatePassword' }) }
+function goQuestion() { uni.navigateTo({ url: '/pages/mine/question' }) }
+
+function handleLogout() {
+  uni.showModal({
+    title: '提示',
+    content: '确定要退出登录吗？',
+    success: (res) => {
+      if (res.confirm) userStore.logout()
+    }
+  })
+}
 </script>
 
-<style lang="scss">
-	.content {
-		width: 100vw;
-		height: 100vh;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		color: #FFF;
-	}
+<style lang="scss" scoped>
+.mine-page {
+  min-height: 100vh;
+  background-color: #f7fafa;
+  padding-bottom: 60rpx;
+}
 
-	.cell {
-		width: 100%;
-		display: flex;
-		flex-direction: column;
-		color: #333;
-		font-size: 32rpx;
-		align-items: center;
+/* 顶部用户信息 */
+.user-header {
+  background: linear-gradient(160deg, #57ca9e, #30ad55);
+  padding: 60rpx 40rpx 40rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 24rpx;
 
-		.cell-1 {
-			width: 94%;
-			display: flex;
-			flex-direction: row;
-			justify-content: space-between;
-			padding-top: 20rpx;
-			padding-bottom: 20rpx;
+  .avatar-wrap {
+    width: 120rpx;
+    height: 120rpx;
+    border-radius: 50%;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    .avatar-img { width: 100%; height: 100%; }
+  }
 
-			.cell-1-left {
-				display: flex;
-				flex-direction: row;
-				align-items: center;
-				justify-content: center;
-			}
-		}
-	}
-	.Licon{
-		height: 80rpx;
-		line-height: 80rpx;
-		width: 100rpx;
-		text-align: center;
-		background: linear-gradient(135deg, #00acdd 30%, #47ad13 90%);
-		-webkit-background-clip: text;
-		color: transparent;
-		font-size: 50rpx;
-	}
-	
-	.vip-bg-top{
-		width: 92%;
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-		justify-content: center;
-		background-image: url('../../static/vip-menu-bg.png');
-		background-repeat: no-repeat;
-		background-size: 100% 100%;
-		height: 80rpx;
-		margin-top: 40rpx;
-		border-top-left-radius: 15rpx;
-		border-top-right-radius: 15rpx;
-	}
+  .user-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    .username { font-size: 36rpx; font-weight: bold; color: #fff; }
+    .user-phone { font-size: 26rpx; color: rgba(255,255,255,0.85); margin-top: 8rpx; }
+  }
+
+  .vip-status-wrap {
+    flex-shrink: 0;
+
+    .vip-active {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 14rpx 20rpx;
+      border-radius: 16rpx;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 10rpx;
+      .vip-crown-img { width: 36rpx; height: 36rpx; }
+      .vip-info {
+        display: flex;
+        flex-direction: column;
+        .vip-label { font-size: 20rpx; color: #ffe082; font-weight: bold; }
+        .vip-date { font-size: 18rpx; color: rgba(255,255,255,0.85); margin-top: 4rpx; }
+      }
+    }
+
+    .vip-inactive {
+      background: linear-gradient(135deg, #ffb300, #ff5833);
+      padding: 14rpx 22rpx;
+      border-radius: 30rpx;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 8rpx;
+      .vip-crown-img { width: 30rpx; height: 30rpx; }
+      .vip-open { font-size: 26rpx; color: #fff; font-weight: bold; }
+    }
+  }
+}
+
+/* 菜单分组 */
+.menu-group {
+  margin: 28rpx 30rpx 0;
+
+  .group-title {
+    font-size: 26rpx;
+    color: #999;
+    padding: 0 10rpx 14rpx;
+    display: block;
+  }
+
+  .menu-list {
+    background: #fff;
+    border-radius: 20rpx;
+    overflow: hidden;
+    box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.05);
+  }
+
+  .menu-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 22rpx 28rpx;
+    border-bottom: 1rpx solid #f5f5f5;
+    gap: 18rpx;
+    &:last-child { border-bottom: none; }
+
+    .menu-label {
+      flex: 1;
+      font-size: 26rpx;
+      color: #333;
+    }
+  }
+}
+
+
+/* VIP 图片图标，与 u-icon 视觉尺寸对齐 */
+.plain-icon-img {
+  width: 36rpx;
+  height: 36rpx;
+  flex-shrink: 0;
+}
+
+/* 退出按钮 */
+.logout-wrap {
+  margin: 40rpx 30rpx 0;
+}
 </style>

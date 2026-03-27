@@ -1,244 +1,211 @@
 {
-	"easycom": {
-		// 自定义组件
-		"^cl-(.*)": "@/components/cl-$1/cl-$1.vue"
-	},
-
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
-			"path": "pages/main/main",
+			"path": "pages/main/index",
 			"style": {
-				"enablePullDownRefresh": false,
-				"navigationStyle": "default",
-				"navigationBarBackgroundColor": "#57ca9e"
-			}
-
-		},{
-			"path": "pages/login/login",
-			"name": "login",
-			"style": {
-				"navigationBarTitleText": "登录新能源云检",
-				"enablePullDownRefresh": false,
-				"navigationStyle": "default"
-			}
-
-		}, {
-			"path": "pages/main/queryTramFiles",
-			"style": {
-				"enablePullDownRefresh": false,
-				"navigationStyle": "default"
-			}
-
-		}, {
-			"path": "pages/main/mine",
-			"style": {
-				"navigationBarTitleText": "我的",
-				"enablePullDownRefresh": false,
-				"navigationStyle": "default"
-			}
-
-		}
-	],
-	"subPackages": [
+				"navigationBarTitleText": "新能源云检",
+				"navigationBarBackgroundColor": "#57ca9e",
+				"navigationBarTextStyle": "white",
+				"enablePullDownRefresh": false
+		  }
+		},
 		{
-		"root": "pagesA",
-		"pages": [{
-				"path": "mine/bill",
-				"style": {
-					"navigationBarTitleText": "消费账单",
-					"enablePullDownRefresh": false,
-					"navigationStyle": "default"
-				}
-			},
-			{
-				"path": "mine/carRecord",
-				"style": {
-					"navigationBarTitleText": "车云检记录",
-					"enablePullDownRefresh": false,
-					"navigationStyle": "default"
-				}
-			},
-			{
-				"path": "mine/eleRecord",
-				"style": {
-					"navigationBarTitleText": "电易估记录",
-					"enablePullDownRefresh": false,
-					"navigationStyle": "default"
-				}
-			},
-			{
-				"path": "mine/appraiseRecord",
-				"style": {
-					"navigationBarTitleText": "电易估记录",
-					"enablePullDownRefresh": false,
-					"navigationStyle": "default"
-				}
-			},
-			{
-				"path": "mine/question",
-				"style": {
-					"navigationBarTitleText": "常见问题",
-					"enablePullDownRefresh": false,
-					"navigationStyle": "default"
-				}
-			},
-			{
-				"path": "mine/fiesRecord",
-				"style": {
-					"navigationBarTitleText": "车智驾记录",
-					"enablePullDownRefresh": false,
-					"navigationStyle": "default"
-				}
-			},
-			{
-				"path": "mine/myInfo",
-				"style": {
-					"navigationBarTitleText": "个人设置",
-					"enablePullDownRefresh": false,
-					"navigationStyle": "default"
-				}
-			
-			}, {
-				"path": "mine/baseCompany",
-				"style": {
-					"navigationBarTitleText": "企业认证",
-					"enablePullDownRefresh": false,
-					"navigationStyle": "default"
-				}
-			
-			}, {
-				"path": "mine/vipCard",
-				"style": {
-					"navigationBarTitleText": "购买会员权益",
-					"enablePullDownRefresh": false,
-					"navigationStyle": "default"
-				}
-			
-			}, {
-				"path": "mine/skuList",
-				"style": {
-					"navigationBarTitleText": "积分充值",
-					"enablePullDownRefresh": false,
-					"navigationStyle": "default"
-				}
-			
-			}, {
-				"path": "mine/recharge",
-				"style": {
-					"navigationBarTitleText": "充值记录",
-					"enablePullDownRefresh": false,
-					"navigationStyle": "default"
-				}
-			
-			}, {
-				"path": "mine/rechargeDetails",
-				"style": {
-					"navigationBarTitleText": "订单详情",
-					"enablePullDownRefresh": false,
-					"navigationStyle": "default"
-				}
-			
-			}, {
-				"path": "mine/myVip",
-				"style": {
-					"navigationBarTitleText": "我的会员",
-					"enablePullDownRefresh": false,
-					"navigationStyle": "default"
-				}
-			
-			}
-		]
-	},{
-		"root":"pagesB",
-		"pages": [
-			{
-				"path": "reg/webView",
-				"style": {
-					"enablePullDownRefresh": false,
-					"navigationStyle": "default"
-				}
-			},
-			{
-				"path": "reg/register",
-				"style": {
-					"navigationBarTitleText": "注册新能源云检",
-					"enablePullDownRefresh": false,
-					"navigationStyle": "default"
-				}
-			},
-			{
-				"path": "reg/updatePassword",
-				"style": {
-					"navigationBarTitleText": "修改密码",
-					"enablePullDownRefresh": false,
-					"navigationStyle": "default"
-				}
-			},
-			{
-				"path": "main/newBattery",
-				"style": {
-					"navigationBarTitleText": "电易估报告",
-					"enablePullDownRefresh": false,
-					"navigationStyle": "default"
-				}
-			},
-			{
-				"path": "main/detectionReportV2",
-				"style": {
-					"navigationBarTitleText": "车云检报告",
-					"enablePullDownRefresh": false,
-					"navigationStyle": "default"
-				}
-			},
-			{
-				"path": "main/gainReport",
-				"style": {
-					"navigationBarTitleText": "",
-					"enablePullDownRefresh": false,
-					"navigationStyle": "default"
-				}
-			},
-			{
-				"path": "main/gainReportD",
-				"style": {
-					"navigationBarTitleText": "",
-					"enablePullDownRefresh": false,
-					"navigationStyle": "default"
-				}
-			}
-		]
-	}
+		  "path": "pages/login/login",
+		  "style": {
+			"navigationBarTitleText": "登录",
+			"navigationBarBackgroundColor": "#57ca9e",
+			"navigationBarTextStyle": "white",
+			"enablePullDownRefresh": false
+		  }
+		},
+		{
+		  "path": "pages/main/mine",
+		  "style": {
+			"navigationBarTitleText": "我的",
+			"navigationBarBackgroundColor": "#57ca9e",
+			"navigationBarTextStyle": "white",
+			"enablePullDownRefresh": false
+		  }
+		},
+		{
+		  "path": "pages/check/vinInput",
+		  "style": {
+			"navigationBarTitleText": "车云检",
+			"navigationBarBackgroundColor": "#57ca9e",
+			"navigationBarTextStyle": "white",
+			"enablePullDownRefresh": false
+		  }
+		},
+		{
+		  "path": "pages/check/result",
+		  "style": {
+			"navigationBarTitleText": "车云检报告",
+			"navigationBarBackgroundColor": "#57ca9e",
+			"navigationBarTextStyle": "white",
+			"enablePullDownRefresh": false
+		  }
+		},
+		{
+		  "path": "pages/check/record",
+		  "style": {
+			"navigationBarTitleText": "车云检记录",
+			"navigationBarBackgroundColor": "#57ca9e",
+			"navigationBarTextStyle": "white",
+			"enablePullDownRefresh": false
+		  }
+		},
+		{
+		  "path": "pages/accident/vinInput",
+		  "style": {
+			"navigationBarTitleText": "事故查询",
+			"navigationBarBackgroundColor": "#57ca9e",
+			"navigationBarTextStyle": "white",
+			"enablePullDownRefresh": false
+		  }
+		},
+		{
+		  "path": "pages/accident/report",
+		  "style": {
+			"navigationBarTitleText": "事故报告",
+			"navigationBarBackgroundColor": "#57ca9e",
+			"navigationBarTextStyle": "white",
+			"enablePullDownRefresh": false,
+			"disableScroll": true
+		  }
+		},
+		{
+		  "path": "pages/accident/record",
+		  "style": {
+			"navigationBarTitleText": "事故查询记录",
+			"navigationBarBackgroundColor": "#57ca9e",
+			"navigationBarTextStyle": "white",
+			"enablePullDownRefresh": false
+		  }
+		},
+		{
+		  "path": "pages/maintenance/vinInput",
+		  "style": {
+			"navigationBarTitleText": "维保查询",
+			"navigationBarBackgroundColor": "#57ca9e",
+			"navigationBarTextStyle": "white",
+			"enablePullDownRefresh": false
+		  }
+		},
+		{
+		  "path": "pages/maintenance/report",
+		  "style": {
+			"navigationBarTitleText": "维保报告",
+			"navigationBarBackgroundColor": "#57ca9e",
+			"navigationBarTextStyle": "white",
+			"enablePullDownRefresh": false,
+			"disableScroll": true
+		  }
+		},
+		{
+		  "path": "pages/maintenance/record",
+		  "style": {
+			"navigationBarTitleText": "维保查询记录",
+			"navigationBarBackgroundColor": "#57ca9e",
+			"navigationBarTextStyle": "white",
+			"enablePullDownRefresh": false
+		  }
+		},
+		{
+		  "path": "pages/vip/vipCard",
+		  "style": {
+			"navigationBarTitleText": "购买VIP会员",
+			"navigationBarBackgroundColor": "#57ca9e",
+			"navigationBarTextStyle": "white",
+			"enablePullDownRefresh": false
+		  }
+		},
+		{
+		  "path": "pages/vip/myVip",
+		  "style": {
+			"navigationBarTitleText": "我的会员",
+			"navigationBarBackgroundColor": "#57ca9e",
+			"navigationBarTextStyle": "white",
+			"enablePullDownRefresh": false
+		  }
+		},
+		{
+		  "path": "pages/mine/myInfo",
+		  "style": {
+			"navigationBarTitleText": "个人信息",
+			"navigationBarBackgroundColor": "#57ca9e",
+			"navigationBarTextStyle": "white",
+			"enablePullDownRefresh": false
+		  }
+		},
+		{
+		  "path": "pages/mine/question",
+		  "style": {
+			"navigationBarTitleText": "常见问题",
+			"navigationBarBackgroundColor": "#57ca9e",
+			"navigationBarTextStyle": "white",
+			"enablePullDownRefresh": false
+		  }
+		},
+		{
+		  "path": "pages/reg/register",
+		  "style": {
+			"navigationBarTitleText": "注册账号",
+			"navigationBarBackgroundColor": "#57ca9e",
+			"navigationBarTextStyle": "white",
+			"enablePullDownRefresh": false
+		  }
+		},
+		{
+		  "path": "pages/reg/updatePassword",
+		  "style": {
+			"navigationBarTitleText": "修改密码",
+			"navigationBarBackgroundColor": "#57ca9e",
+			"navigationBarTextStyle": "white",
+			"enablePullDownRefresh": false
+		  }
+		},
+		{
+		  "path": "pages/pay/payResult",
+		  "style": {
+			"navigationBarTitleText": "支付结果",
+			"navigationBarBackgroundColor": "#57ca9e",
+			"navigationBarTextStyle": "white",
+			"enablePullDownRefresh": false
+		  }
+		}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "新能源云检",
-		"navigationStyle": "default",
 		"navigationBarBackgroundColor": "#57ca9e",
 		"backgroundColor": "#f7fafa"
 	},
 	"tabBar": {
-		"color": "#a2a2a2",
-		"selectedColor": "#57ca9e",
-		"borderStyle": "black",
-		"backgroundColor": "#ffffff",
-		"list": [{
-			"pagePath": "pages/main/main",
-			"iconPath": "static/tab-1-n.png",
-			"selectedIconPath": "static/tab-1-s.png",
-			"text": "首页"
-		}, 
-		// {
-		// 	"pagePath": "pages/main/queryTramFiles",
-		// 	"iconPath": "static/tab-2-n.png",
-		// 	"selectedIconPath": "static/tab-2-s.png",
-		// 	"text": "车智驾"
-		// }, 
-		{
-			"pagePath": "pages/main/mine",
-			"iconPath": "static/tab-3-n.png",
-			"selectedIconPath": "static/tab-3-s.png",
-			"text": "我的"
-		}]
+	    "color": "#a2a2a2",
+	    "selectedColor": "#57ca9e",
+	    "borderStyle": "black",
+	    "backgroundColor": "#ffffff",
+	    "list": [
+	      {
+	        "pagePath": "pages/main/index",
+	        "text": "首页",
+	        "iconPath": "static/tab-home.png",
+	        "selectedIconPath": "static/tab-home-active.png"
+	      },
+	      {
+	        "pagePath": "pages/main/mine",
+	        "text": "我的",
+	        "iconPath": "static/tab-mine.png",
+	        "selectedIconPath": "static/tab-mine-active.png"
+	      }
+	    ]
+	  },
+	"uniIdRouter": {},
+	"easycom": {
+		"autoscan": true,
+		"custom": {
+			"^u-(.*)": "uview-plus/components/u-$1/u-$1.vue",
+			"^up-(.*)": "uview-plus/components/u-$1/u-$1.vue"
+		}
 	}
-
 }

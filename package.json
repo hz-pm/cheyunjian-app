@@ -1,1 +1,13 @@
-{}
+{
+  "name": "cheyunjian",
+  "version": "1.0.0",
+  "description": "新能源云检小程序",
+  "scripts": {
+    "dev:mp-weixin": "uni -p mp-weixin",
+    "build:mp-weixin": "uni build -p mp-weixin"
+  },
+  "dependencies": {
+    "uview-plus": "^3.4.3",
+    "pinia": "^2.1.7"
+  }
+}
