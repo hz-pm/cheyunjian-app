@@ -8,244 +8,303 @@
 
     <!-- 加载失败 -->
     <view v-else-if="!report" class="status-wrap">
-      <text class="status-icon">🔍</text>
       <text class="status-text">报告获取失败，请返回重试</text>
       <u-button text="返回" type="primary" color="#57ca9e" @click="uni.navigateBack()" />
     </view>
 
     <!-- 报告内容 -->
-    <view v-else>
-      <!-- 头部：品牌信息 -->
-      <view class="report-header">
+    <view v-else style="width:100%;display:flex;flex-direction:column;align-items:center;">
+      <!-- 头部：品牌 + VIN -->
+      <view class="header-card">
         <view class="brand-row">
-          <image v-if="report.brandLogo" :src="report.brandLogo" class="brand-logo" mode="aspectFit" />
-          <view class="brand-info">
-            <text class="brand-name">{{ report.brand || '未知品牌' }}</text>
-            <text class="vin-text">VIN：{{ vinCode }}</text>
+          <image v-if="report.brandLogo" :src="report.brandLogo"
+            style="width:80rpx;height:80rpx;background-color:#fff;border-radius:10rpx;padding:6rpx;" mode="aspectFit" />
+          <view style="display:flex;flex-direction:column;color:#fff;font-size:30rpx;margin-left:25rpx;">
+            <text style="font-size:32rpx;font-weight:bold;">{{ report.brand }}</text>
+            <text style="margin-top:5rpx;">VIN:{{ vinCode }}</text>
           </view>
         </view>
-        <view class="disclaimer">
-          <text class="disclaimer-text">⚠️ 本查询结果仅供参考，不做准确性、完整性承诺</text>
+        <view class="disclaimer-bar">
+          <text class="iconfont icon-warning" style="color:#fff;width:40rpx;font-size:32rpx;"></text>
+          <text style="font-size:26rpx;color:#fff;">本查询结果仅供参考，对结果不做准确性、完整性承若</text>
         </view>
       </view>
 
-      <!-- Tab切换 -->
+      <!-- Tabs（全部模块同时展示，tab 仅做视觉标记） -->
       <view class="tabs">
-        <text class="tab-item" :class="{ active: tabIndex === 0 }" @click="tabIndex = 0">电池健康</text>
-        <text class="tab-item" :class="{ active: tabIndex === 1 }" @click="tabIndex = 1">行驶模块</text>
-        <text class="tab-item" :class="{ active: tabIndex === 2 }" @click="tabIndex = 2">静态数据</text>
-        <text class="tab-item" :class="{ active: tabIndex === 3 }" @click="tabIndex = 3">充电模块</text>
+        <text class="t" :class="tabIndex===0?'t-selected':''" @click="tabIndex=0">电池健康</text>
+        <text class="t" :class="tabIndex===1?'t-selected':''" @click="tabIndex=1">行驶模块</text>
+        <text class="t" :class="tabIndex===2?'t-selected':''" @click="tabIndex=2">静态数据</text>
+        <text class="t" :class="tabIndex===3?'t-selected':''" @click="tabIndex=3">充电模块</text>
       </view>
 
-      <!-- 电池健康模块 -->
-      <view v-show="tabIndex === 0">
-        <view class="card">
-          <view class="card-title-row">
-            <view class="dot" />
-            <text class="card-title">电池健康模块</text>
-          </view>
+      <!-- ===== 电池健康模块 ===== -->
+      <view class="card">
+        <view class="title-v">
+          <view class="dot"></view>
+          <text class="title">电池健康模块</text>
+        </view>
 
-          <!-- 参考续航 -->
-          <view class="mileage-center">
-            <text class="mileage-label">当前参考续航</text>
-            <view class="mileage-num-wrap">
-              <text class="mileage-num">{{ report.referRateMileage }}</text>
-              <text class="mileage-unit">km</text>
+        <!-- 参考续航 + canvas 进度条 -->
+        <view class="ehr">
+          <view class="power">当前参考续航</view>
+        </view>
+        <view style="width:100%;display:flex;flex-direction:row;align-items:center;justify-content:center;margin-top:10rpx;">
+          <canvas class="progress-canvas" canvas-id="progressCanvas" v-if="!canvasSrc"></canvas>
+          <image class="progress-canvas" :src="canvasSrc" v-if="canvasSrc"></image>
+          <view style="display:flex;flex-direction:column;position:absolute;margin-top:85rpx;align-items:center;">
+            <view style="display:flex;flex-direction:row;font-weight:bold;">
+              <text style="font-size:82rpx;color:#00acdd;">{{ report.referRateMileage }}</text>
+              <text style="font-size:30rpx;color:#00acdd;margin-top:0rpx;">km</text>
             </view>
-            <view class="mileage-assess-tag">{{ report.referRateMileageAssess }}</view>
+            <view style="display:flex;flex-direction:row;background-color:#fff9ed;border:1rpx solid #f3a550;
+              padding-left:6rpx;padding-right:6rpx;border-radius:8rpx;align-items:center;
+              margin-top:30rpx;justify-content:center;width:130rpx;font-weight:bold;">
+              <text style="font-size:28rpx;color:#f3a550;">{{ report.referRateMileageAssess }}</text>
+            </view>
           </view>
-          <view class="tip-box yellow">
-            ℹ️ 参考续航：实际满电行驶里程数的参考值，会因温度、行驶环境不同而不同。
-          </view>
+        </view>
 
-          <!-- SOH 电池健康度 -->
-          <view class="soh-card" :class="batterySohColor">
-            <view class="soh-icon-wrap">
-              <text class="soh-icon">🔋</text>
-            </view>
-            <view class="soh-info">
-              <text class="soh-label">SOH（电池健康度）</text>
-              <view class="soh-val-row">
-                <text class="soh-val">{{ report.batterySoh }}<text class="soh-unit">%</text></text>
-                <view class="soh-tag">{{ report.batterySohLvStr }}</view>
-              </view>
+        <!-- 参考续航说明 -->
+        <view class="referV2">
+          <text class="iconfont icon-info" style="margin-right:8rpx;font-size:32rpx;"></text>参考续航：实际满电行驶里程数的参考值，会因为温度、行驶环境的不同而不同，北方春秋季节一般会比冬季高。
+        </view>
+
+        <!-- SOH 电池健康度 -->
+        <view class="sohBattery" :class="batterySohBgClass">
+          <view class="iconBox">
+            <text class="iconfont icon-battery" style="font-size:80rpx;"></text>
+          </view>
+          <view class="battertTxt">
+            <view class="txT">SOH(电池健康度)</view>
+            <view class="txBox">
+              <view class="txB">{{ report.batterySoh }}<text class="text">%</text></view>
+              <view class="txBr">{{ report.batterySohLvStr }}</view>
             </view>
           </view>
+        </view>
 
-          <!-- 安全风险 -->
-          <view class="soh-card" :class="safetyColor">
-            <view class="soh-icon-wrap">
-              <text class="soh-icon">🛡️</text>
-            </view>
-            <view class="soh-info">
-              <text class="soh-label">安全风险</text>
-              <view class="soh-val-row">
-                <text class="soh-val"><text class="soh-unit">衰退倍率 </text>{{ report.volumeScoreRecession }}</text>
-                <view class="soh-tag">{{ report.volumeScoreRecessionLvStr }}</view>
-              </view>
+        <!-- 安全风险 -->
+        <view class="sohBattery" :class="safetyBgClass">
+          <view class="iconBox">
+            <text class="iconfont anquan" style="font-size:90rpx;"></text>
+          </view>
+          <view class="battertTxt">
+            <view class="txT">安全风险</view>
+            <view class="txBox">
+              <view class="txB"><text class="text">衰退倍率</text>{{ report.volumeScoreRecession }}</view>
+              <view class="txBr">{{ report.volumeScoreRecessionLvStr }}</view>
             </view>
           </view>
+        </view>
 
-          <!-- 解析文字 -->
-          <view v-if="safetyNarrateList.length" class="narrate-box">
-            <view class="narrate-title">💡 解析</view>
-            <view v-for="(item, i) in safetyNarrateList" :key="i" class="narrate-item">
-              <rich-text :nodes="item" />
-            </view>
+        <!-- 解析 -->
+        <view v-if="safetyNarrateList.length" style="width:100%;display:flex;flex-direction:column;background-color:#edfaf9;margin-top:20rpx;border-radius:20rpx;margin-bottom:20rpx;">
+          <view class="tips-title">
+            <image src="/static/ic-jiedu.png" style="width:40rpx;height:40rpx;"></image>
+            <text style="font-weight:bold;color:#000;">解析</text>
+          </view>
+          <view v-for="(item, i) in safetyNarrateList" :key="i" class="tips-info">
+            <rich-text style="white-space:pre-wrap;" :nodes="item"></rich-text>
           </view>
         </view>
       </view>
 
-      <!-- 行驶模块 -->
-      <view v-show="tabIndex === 1">
-        <view class="card">
-          <view class="card-title-row">
-            <view class="dot" />
-            <text class="card-title">车辆行驶模块</text>
-            <text class="card-time">表显里程更新于 {{ report.lastDrivingDate }}</text>
+      <!-- ===== 行驶模块 ===== -->
+      <view class="card">
+        <view class="title-v">
+          <view class="dot"></view>
+          <text class="title">车辆行驶模块</text>
+          <text class="time">表显里程更新于{{ report.lastDrivingDate }}</text>
+        </view>
+
+        <view style="width:80%;display:flex;flex-direction:row;align-items:center;justify-content:space-between;
+          align-self:center;margin-top:35rpx;">
+          <view style="display:flex;flex-direction:column;align-items:center;">
+            <text style="font-size:40rpx;font-weight:bold;color:#00acdd;">{{ report.displayMileage }}Km</text>
+            <text style="font-size:30rpx;color:#333;margin-top:10rpx;">表显行驶里程</text>
+          </view>
+          <view style="display:flex;flex-direction:column;align-items:center;">
+            <text style="font-size:40rpx;font-weight:bold;color:#00acdd;">{{ report.manufacturerDate }}年</text>
+            <text style="font-size:30rpx;color:#333;margin-top:10rpx;">车辆生产年份</text>
+          </view>
+        </view>
+
+        <!-- 里程核验 -->
+        <view class="mileage-check-box" :style="report.suspectedAdjust?{backgroundColor:'#ffeaec'}:{}">
+          <view style="width:95%;display:flex;flex-direction:row;justify-content:space-between;margin-left:20rpx;">
+            <view style="display:flex;flex-direction:column;color:#333;margin-bottom:20rpx;">
+              <text style="font-weight:bold;font-size:32rpx;">里程核验</text>
+              <text style="margin-top:40rpx;font-size:28rpx;" v-if="!report.suspectedAdjust">根据模型测算，暂未发现里程异常</text>
+              <view style="margin-top:40rpx;font-size:28rpx;" v-else>
+                根据模型测算，该车辆存在<text style="color:#fc5b50;font-weight:bold;">里程异常</text>
+              </view>
+            </view>
+            <image :src="report.suspectedAdjust?'/static/ic-ybdd-red.png':'/static/ic-ybdd-green.png'"
+              style="width:180rpx;height:130rpx;"></image>
           </view>
 
-          <view class="stat-row">
-            <view class="stat-item">
-              <text class="stat-val">{{ report.displayMileage }} km</text>
-              <text class="stat-key">表显行驶里程</text>
-            </view>
-            <view class="stat-item">
-              <text class="stat-val">{{ report.manufacturerDate }} 年</text>
-              <text class="stat-key">车辆生产年份</text>
+          <view v-if="mileageList.length" style="width:93%;background-color:#FFF;border:#f0555a solid 1rpx;
+            border-radius:20rpx;align-self:center;padding-top:10rpx;padding-bottom:10rpx;margin-top:15rpx;">
+            <view style="display:flex;flex-direction:column;align-items:center;" v-for="(item, i) in mileageList" :key="i">
+              <view style="width:90%;display:flex;flex-direction:row;align-items:center;justify-content:space-between;
+                margin-top:10rpx;margin-bottom:10rpx;font-weight:bold;color:#555;font-size:30rpx;">
+                <text>{{ item.month }}</text>
+                <text>{{ item.displayMileage }}km</text>
+                <text :style="item.hasErr?{color:'#fc4731'}:{}">{{ item.remark }}</text>
+              </view>
             </view>
           </view>
 
-          <!-- 里程核验 -->
-          <view class="mileage-check-box" :class="report.suspectedAdjust ? 'danger' : 'safe'">
-            <view class="mileage-check-header">
+          <view class="tips-title">
+            <image src="/static/ic-safe.png" style="width:40rpx;height:40rpx;"></image>
+            <text style="font-weight:bold;color:#000;">注意</text>
+          </view>
+          <text class="tips-info">1.报告仅展示最近一次里程异常情况，不表示只出现过一次异常，请结合实际车况判断！</text>
+        </view>
+      </view>
+
+      <!-- ===== 静态数据 ===== -->
+      <view class="card">
+        <view class="title-v">
+          <view class="dot"></view>
+          <text class="title">车辆电池静态数据</text>
+        </view>
+
+        <view class="cell-v" style="margin-top:35rpx;">
+          <text class="t1">电池厂商</text>
+          <text class="t2">{{ report.batteryManufacturer || '--' }}</text>
+        </view>
+        <view class="cell-v" style="background-color:#FFF;">
+          <text class="t1">标称容量</text>
+          <text class="t2">{{ report.rateCapacity || '--' }} Ah</text>
+        </view>
+        <view class="cell-v">
+          <text class="t1">标称能量</text>
+          <text class="t2">{{ report.nominalEnergy || '--' }} kWh</text>
+        </view>
+        <view class="cell-v" style="background-color:#FFF;">
+          <text class="t1">标称续航</text>
+          <text class="t2">{{ report.rateMileage || '--' }} km</text>
+        </view>
+        <view class="cell-v">
+          <text class="t1">电池类型</text>
+          <text class="t2">{{ report.batteryType || '--' }}</text>
+        </view>
+      </view>
+
+      <!-- ===== 充放电模块 ===== -->
+      <view class="card">
+        <view class="title-v">
+          <view class="dot"></view>
+          <text class="title">车辆充放电模块</text>
+        </view>
+
+        <view style="width:100%;display:flex;flex-direction:row;align-items:center;justify-content:space-between;margin-top:30rpx;">
+          <view style="width:30%;display:flex;flex-direction:column;align-items:center;background-color:#edfaf9;border-radius:20rpx;">
+            <text class="iconfont dianchi" :class="habitBgClass"
+              style="font-size:64rpx;color:#FFF;border-radius:50%;line-height:130rpx;width:130rpx;
+              text-align:center;margin-top:20rpx;"></text>
+            <text style="font-size:28rpx;margin-top:20rpx;color:#333;">电池使用习惯</text>
+            <text style="font-size:50rpx;font-weight:bold;margin-top:20rpx;margin-bottom:30rpx;"
+              :style="{color: habitTextColor}">{{ report.batteryHabitAssess }}</text>
+          </view>
+          <view style="width:70%;display:flex;flex-direction:column;align-items:center;margin-left:20rpx;">
+            <view class="cell-v">
+              <text class="t1">总充电次数</text>
+              <text class="t2">{{ report.totalChargeCount }}次</text>
+            </view>
+            <view class="cell-v" style="background-color:#FFF;">
+              <text class="t1">循环次数</text>
+              <text class="t2">{{ report.totalChargeSoc }}次</text>
+            </view>
+            <view class="cell-v">
+              <text class="t1">快充占比</text>
               <view>
-                <text class="mileage-check-title">里程核验</text>
-                <text class="mileage-check-desc" v-if="!report.suspectedAdjust">
-                  根据模型测算，暂未发现里程异常
-                </text>
-                <view class="mileage-check-desc" v-else>
-                  根据模型测算，该车辆存在<text style="color:#fc5b50;font-weight:bold;">里程异常</text>
-                </view>
-              </view>
-              <text class="mileage-check-icon">{{ report.suspectedAdjust ? '⚠️' : '✅' }}</text>
-            </view>
-
-            <view v-if="mileageList.length" class="mileage-list">
-              <view v-for="(m, i) in mileageList" :key="i" class="mileage-row" :class="{ err: m.hasErr }">
-                <text class="ml-month">{{ m.month }}</text>
-                <text class="ml-km">{{ m.displayMileage }} km</text>
-                <text class="ml-remark" :class="{ 'err-text': m.hasErr }">{{ m.remark }}</text>
+                <text class="t2">{{ report.fastRatio }} %</text>
+                <text style="background-color:#fff9ed;border:1rpx solid #f3a550;font-size:26rpx;
+                  padding:5rpx 10rpx;color:#f3a550;border-radius:5rpx;margin-right:10rpx;">{{ report.fastRatioAssess }}</text>
               </view>
             </view>
+          </view>
+        </view>
 
-            <text class="mileage-tip">1. 报告仅展示最近一次里程异常情况，请结合实际车况判断！</text>
+        <view style="width:100%;display:flex;flex-direction:column;background-color:#edfaf9;margin-top:20rpx;
+          border-radius:20rpx;margin-bottom:20rpx;">
+          <view v-if="attentionList.length" class="tips-title">
+            <image src="/static/info-fill.png" style="width:40rpx;height:40rpx;"></image>
+            <text style="font-weight:bold;color:#000;">注意</text>
+          </view>
+          <view v-for="(item, i) in attentionList" :key="'att'+i" class="tips-info" style="margin-bottom:0;">
+            <rich-text style="white-space:pre-wrap;" :nodes="item"></rich-text>
+          </view>
+          <view v-if="suggestList.length" class="tips-title">
+            <image src="/static/ic-safe.png" style="width:40rpx;height:40rpx;"></image>
+            <text style="font-weight:bold;color:#000;">建议</text>
+          </view>
+          <view v-for="(item, i) in suggestList" :key="'sug'+i" class="tips-info">
+            <rich-text style="white-space:pre-wrap;" :nodes="item"></rich-text>
           </view>
         </view>
       </view>
 
-      <!-- 静态数据 -->
-      <view v-show="tabIndex === 2">
-        <view class="card">
-          <view class="card-title-row">
-            <view class="dot" />
-            <text class="card-title">车辆电池静态数据</text>
-          </view>
-
-          <view class="cell-row stripe">
-            <text class="cell-key">电池厂商</text>
-            <text class="cell-val">{{ report.batteryManufacturer || '--' }}</text>
-          </view>
-          <view class="cell-row">
-            <text class="cell-key">标称容量</text>
-            <text class="cell-val">{{ report.rateCapacity || '--' }} Ah</text>
-          </view>
-          <view class="cell-row stripe">
-            <text class="cell-key">标称能量</text>
-            <text class="cell-val">{{ report.nominalEnergy || '--' }} kWh</text>
-          </view>
-          <view class="cell-row">
-            <text class="cell-key">标称续航</text>
-            <text class="cell-val">{{ report.rateMileage || '--' }} km</text>
-          </view>
-          <view class="cell-row stripe">
-            <text class="cell-key">电池类型</text>
-            <text class="cell-val">{{ report.batteryType || '--' }}</text>
-          </view>
+      <!-- ===== 免责声明 ===== -->
+      <view class="card" style="margin-bottom:120rpx;">
+        <view class="tips-title" style="margin-top:0;">
+          <image src="/static/ic-safe.png" style="width:40rpx;height:40rpx;"></image>
+          <text style="font-weight:bold;color:#000;">评估方：株洲云检新能源科技有限公司</text>
         </view>
-      </view>
-
-      <!-- 充电模块 -->
-      <view v-show="tabIndex === 3">
-        <view class="card">
-          <view class="card-title-row">
-            <view class="dot" />
-            <text class="card-title">车辆充放电模块</text>
-          </view>
-
-          <view class="charge-layout">
-            <view class="charge-habit" :class="habitColor">
-              <text class="habit-icon">⚡</text>
-              <text class="habit-label">电池使用习惯</text>
-              <text class="habit-val">{{ report.batteryHabitAssess }}</text>
-            </view>
-            <view class="charge-stats">
-              <view class="cell-row stripe">
-                <text class="cell-key">总充电次数</text>
-                <text class="cell-val">{{ report.totalChargeCount }} 次</text>
-              </view>
-              <view class="cell-row">
-                <text class="cell-key">循环次数</text>
-                <text class="cell-val">{{ report.totalChargeSoc }} 次</text>
-              </view>
-              <view class="cell-row stripe">
-                <text class="cell-key">快充占比</text>
-                <text class="cell-val">{{ report.fastRatio }} %
-                  <text class="assess-tag">{{ report.fastRatioAssess }}</text>
-                </text>
-              </view>
-            </view>
-          </view>
-
-          <!-- 注意 -->
-          <view v-if="attentionList.length" class="narrate-box">
-            <view class="narrate-title">⚠️ 注意</view>
-            <view v-for="(item, i) in attentionList" :key="i" class="narrate-item">
-              <rich-text :nodes="item" />
-            </view>
-          </view>
-          <!-- 建议 -->
-          <view v-if="suggestList.length" class="narrate-box">
-            <view class="narrate-title">✅ 建议</view>
-            <view v-for="(item, i) in suggestList" :key="i" class="narrate-item">
-              <rich-text :nodes="item" />
-            </view>
-          </view>
+        <view class="tips-title">
+          <image src="/static/info-fill.png" style="width:40rpx;height:40rpx;"></image>
+          <text style="font-weight:bold;color:#000;">免责申明</text>
         </view>
+        <text class="tips-info">本报告提供的评估结果仅基于用户自主填写的车辆信息，结合新能源汽车充电及工况大数据模型进行测算，结果仅供参考。评估方不对任何用户基于本报告内容所做的决策或行动承担任何直接或间接的责任。</text>
       </view>
+    </view>
 
-      <!-- 免责声明 -->
-      <view class="card disclaimer-card">
-        <text class="disclaimer-footer">
-          评估方：株洲云检新能源科技有限公司{{ '\n' }}本报告提供的评估结果仅基于用户自主填写的车辆信息，结合新能源汽车充电及工况大数据模型进行测算，结果仅供参考。评估方不对任何用户基于本报告内容所做的决策或行动承担任何直接或间接的责任。
-        </text>
+    <!-- 客服浮动按钮 -->
+    <view class="customer" v-if="report">
+      <view class="iconfont icon-kefu" style="font-size:36rpx;color:#fff;"></view>
+      <view style="font-size:24rpx;color:#fff;">客服</view>
+      <button style="display:flex;flex-direction:column;align-items:center;border:none;background-color:#00000000;
+        position:absolute;width:90%;height:70rpx;" type="default" plain="true" open-type="contact" size="default"></button>
+    </view>
+
+    <!-- 底部操作栏（分享预览模式不显示） -->
+    <view class="foot" v-if="report && outTradeNo">
+      <view class="tiem">
+        <text class="iconfont icon-history" style="font-size:35rpx;margin-right:15rpx;color:#30ad55;"></text>
+        评估时间:{{ detail.createTime ? detail.createTime.substring(0,10) : '--' }}
       </view>
+      <view class="export">
+        <button class="white-btn" @click="fetchReport">刷新</button>
+        <button class="blue-btn" @click="handleExport">
+          <text class="iconfont icon-export" style="font-size:30rpx;"></text>导出
+        </button>
+      </view>
+    </view>
 
-      <!-- 底部操作栏 -->
-      <view class="footer-bar">
-        <text class="footer-time">评估时间：{{ detail.createTime ? detail.createTime.substring(0, 10) : '--' }}</text>
-        <view class="footer-btns">
-          <u-button text="导出报告" size="small" type="primary" color="#57ca9e" @click="handleExport" />
+    <!-- 导出图片弹窗 -->
+    <view v-if="showPopup" class="popup-mask" @click.self="showPopup=false">
+      <view class="popup-sheet">
+        <view class="attestation">
+          <text class="iconfont icon-info" style="font-size:28rpx;margin-right:6rpx;"></text>长按报告可保存至手机相册
         </view>
+        <scroll-view scroll-y style="flex:1;">
+          <image :src="imgUrl" mode="widthFix" style="width:100%;" @longpress="saveImage"></image>
+        </scroll-view>
       </view>
     </view>
   </view>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import { onLoad } from '@dcloudio/uni-app'
+import { ref, computed, getCurrentInstance } from 'vue'
+import { onLoad, onShareAppMessage } from '@dcloudio/uni-app'
 import { getCheckDetails, getReportImgUrl } from '@/utils/api'
+import { BASE_URL_IMG } from '@/utils/request'
+
+const instance = getCurrentInstance()
 
 const vinCode = ref('')
 const outTradeNo = ref('')
@@ -257,6 +316,9 @@ const mileageList = ref([])
 const safetyNarrateList = ref([])
 const attentionList = ref([])
 const suggestList = ref([])
+const canvasSrc = ref('')
+const imgUrl = ref('')
+const showPopup = ref(false)
 
 onLoad((options) => {
   vinCode.value = options.vinCode || ''
@@ -264,8 +326,15 @@ onLoad((options) => {
   if (vinCode.value) fetchReport()
 })
 
+onShareAppMessage(() => ({
+  title: `新能源云检报告 - ${vinCode.value || 'VIN'}`,
+  path: `/pages/check/result?vinCode=${vinCode.value}`,
+  imageUrl: BASE_URL_IMG + 'mp-share.png'
+}))
+
 async function fetchReport() {
   loading.value = true
+  canvasSrc.value = ''
   try {
     const params = { vinCode: vinCode.value }
     if (outTradeNo.value) params.outTradeNo = outTradeNo.value
@@ -276,37 +345,21 @@ async function fetchReport() {
       if (raw) {
         try {
           report.value = typeof raw === 'string' ? JSON.parse(raw) : raw
-          // 解析里程异常列表
-          if (report.value.checkDisplayMileageListJson) {
-            try {
-              mileageList.value = typeof report.value.checkDisplayMileageListJson === 'string'
-                ? JSON.parse(report.value.checkDisplayMileageListJson)
-                : report.value.checkDisplayMileageListJson
-            } catch (e) { mileageList.value = [] }
+          const r = report.value
+          if (r.checkDisplayMileageListJson) {
+            try { mileageList.value = typeof r.checkDisplayMileageListJson === 'string' ? JSON.parse(r.checkDisplayMileageListJson) : r.checkDisplayMileageListJson } catch (e) { mileageList.value = [] }
           }
-          // 解析安全风险说明
-          if (report.value.volumeScoreRecessionNarrate) {
-            try {
-              safetyNarrateList.value = typeof report.value.volumeScoreRecessionNarrate === 'string'
-                ? JSON.parse(report.value.volumeScoreRecessionNarrate)
-                : report.value.volumeScoreRecessionNarrate
-            } catch (e) { safetyNarrateList.value = [] }
+          if (r.volumeScoreRecessionNarrate) {
+            try { safetyNarrateList.value = typeof r.volumeScoreRecessionNarrate === 'string' ? JSON.parse(r.volumeScoreRecessionNarrate) : r.volumeScoreRecessionNarrate } catch (e) { safetyNarrateList.value = [] }
           }
-          // 解析充放电注意/建议
-          if (report.value.dischargingAttention) {
-            try {
-              attentionList.value = typeof report.value.dischargingAttention === 'string'
-                ? JSON.parse(report.value.dischargingAttention)
-                : report.value.dischargingAttention
-            } catch (e) { attentionList.value = [] }
+          if (r.dischargingAttention) {
+            try { attentionList.value = typeof r.dischargingAttention === 'string' ? JSON.parse(r.dischargingAttention) : r.dischargingAttention } catch (e) { attentionList.value = [] }
           }
-          if (report.value.dischargingSuggest) {
-            try {
-              suggestList.value = typeof report.value.dischargingSuggest === 'string'
-                ? JSON.parse(report.value.dischargingSuggest)
-                : report.value.dischargingSuggest
-            } catch (e) { suggestList.value = [] }
+          if (r.dischargingSuggest) {
+            try { suggestList.value = typeof r.dischargingSuggest === 'string' ? JSON.parse(r.dischargingSuggest) : r.dischargingSuggest } catch (e) { suggestList.value = [] }
           }
+          // 延迟绘制，等 canvas 元素渲染完成
+          setTimeout(() => drawHalfCircleProgress(), 300)
         } catch (e) {
           console.error('解析resultTxt失败', e)
         }
@@ -319,34 +372,105 @@ async function fetchReport() {
   }
 }
 
-// 颜色映射
-const batterySohColor = computed(() => {
+function extractedPercentage(str) {
+  if (!str) return null
+  const match = str.match(/[-+]?\d*\.\d+|\d+/)
+  return match ? parseFloat(match[0]) : null
+}
+
+function getPx(value) {
+  if (/^\d+(\.\d+)?$/.test(String(value))) return Number(value)
+  if (/(rpx|upx)$/.test(value)) return uni.upx2px(parseInt(value))
+  return parseInt(value)
+}
+
+function drawHalfCircleProgress() {
+  const assess = report.value?.referRateMileageAssess || ''
+  const extracted = extractedPercentage(assess)
+  const percentage = extracted != null ? Math.max(0, Math.min(100, 100 - extracted)) : 80
+
+  const ctx = uni.createCanvasContext('progressCanvas', instance.proxy)
+  const x = getPx('280rpx')
+  const y = getPx('270rpx')
+  const radius = getPx('240rpx')
+
+  ctx.beginPath()
+  ctx.arc(x, y, radius, Math.PI, 0, false)
+  ctx.setLineWidth(getPx('40rpx'))
+  ctx.setStrokeStyle('#e5e5e5')
+  ctx.stroke()
+
+  ctx.beginPath()
+  ctx.arc(x, y, radius, Math.PI, Math.PI * (1 + percentage / 100), false)
+  ctx.setLineWidth(getPx('40rpx'))
+  ctx.setStrokeStyle('#00acdd')
+  ctx.stroke()
+
+  for (let i = 0; i < 7; i++) {
+    ctx.beginPath()
+    ctx.moveTo(x, y)
+    const angle = Math.PI + (-Math.PI / 6) * i
+    const ext = radius - getPx('20rpx')
+    ctx.lineTo(x + ext * Math.cos(angle), y - ext * Math.sin(angle))
+    ctx.setLineWidth(getPx('1rpx'))
+    ctx.setStrokeStyle('#e8f2fb')
+    ctx.stroke()
+  }
+
+  for (let j = 1; j <= 3; j++) {
+    ctx.beginPath()
+    ctx.arc(x, y, ((radius / 3) - getPx('24rpx')) * j, Math.PI, 0, false)
+    ctx.setLineWidth(getPx('1rpx'))
+    ctx.setStrokeStyle('#e8f2fb')
+    ctx.stroke()
+  }
+
+  ctx.draw(false, () => {
+    uni.canvasToTempFilePath({
+      canvasId: 'progressCanvas',
+      success: (res) => { canvasSrc.value = res.tempFilePath }
+    }, instance.proxy)
+  })
+}
+
+// SOH 颜色
+const batterySohBgClass = computed(() => {
   const v = report.value?.batterySohLvStr || ''
-  if (v === '优秀') return 'color-green'
-  if (v === '良好') return 'color-blue'
-  if (v === '中等') return 'color-yellow'
-  if (v === '较差') return 'color-orange'
-  if (v === '差') return 'color-red'
-  return 'color-green'
+  if (v === '优秀') return 'bt-green'
+  if (v === '良好') return 'bt-blue'
+  if (v === '中等') return 'bt-yellow'
+  if (v === '较差') return 'bt-orange'
+  if (v === '差') return 'bt-red'
+  return 'bt-green'
 })
 
-const safetyColor = computed(() => {
+const safetyBgClass = computed(() => {
   const v = report.value?.volumeScoreRecessionLvStr || ''
-  if (v === '低') return 'color-green'
-  if (v === '较低') return 'color-blue'
-  if (v === '较高') return 'color-yellow'
-  if (v === '高') return 'color-orange'
-  return 'color-green'
+  if (v === '低') return 'bt-green'
+  if (v === '较低') return 'bt-blue'
+  if (v === '较高') return 'bt-yellow'
+  if (v === '高') return 'bt-orange'
+  return 'bt-green'
 })
 
-const habitColor = computed(() => {
+const habitBgClass = computed(() => {
   const v = report.value?.batteryHabitAssess || ''
-  if (v === '优秀') return 'color-green'
-  if (v === '良好') return 'color-blue'
-  if (v === '中等') return 'color-yellow'
-  if (v === '较差') return 'color-orange'
-  if (v === '差') return 'color-red'
-  return 'color-green'
+  if (v === '优秀') return 'bt-green'
+  if (v === '良好') return 'bt-blue'
+  if (v === '中等') return 'bt-yellow'
+  if (v === '较差') return 'bt-orange'
+  if (v === '差') return 'bt-red'
+  return 'bt-green'
+})
+
+const habitTextColor = computed(() => {
+  const v = report.value?.batteryHabitAssess || ''
+  if (v === '优秀') return '#50dd7c'
+  if (v === '良好') return '#18bbf8'
+  if (v === '中等') return '#fedb64'
+  if (v === '较差') return '#fea72d'
+  if (v === '差') return '#fc5b50'
+  return '#50dd7c'
 })
 
 async function handleExport() {
@@ -362,22 +486,60 @@ async function handleExport() {
       vinCode: vinCode.value
     })
     uni.hideLoading()
-    if (res.msg || res.data) {
-      const imgUrl = res.msg || res.data
-      uni.previewImage({ urls: [imgUrl] })
+    const url = res.msg || res.data
+    if (url) {
+      imgUrl.value = url
+      showPopup.value = true
     }
   } catch (e) {
     uni.hideLoading()
     uni.showToast({ title: '导出失败', icon: 'none' })
   }
 }
+
+function saveImage() {
+  uni.showModal({
+    title: '提示',
+    content: '是否保存图片到相册？',
+    success: (res) => {
+      if (res.confirm) {
+        uni.showLoading({ title: 'Loading...' })
+        uni.downloadFile({
+          url: imgUrl.value,
+          success: (downloadResult) => {
+            uni.hideLoading()
+            if (downloadResult.statusCode === 200) {
+              uni.saveImageToPhotosAlbum({
+                filePath: downloadResult.tempFilePath,
+                success: () => uni.showToast({ title: '图片保存成功' }),
+                fail: () => uni.showToast({ title: '图片保存失败', icon: 'none' })
+              })
+            }
+          },
+          fail: () => { uni.hideLoading(); uni.showToast({ title: '图片下载失败', icon: 'none' }) }
+        })
+      }
+    }
+  })
+}
 </script>
 
 <style lang="scss" scoped>
 .page {
-  min-height: 100vh;
-  background: linear-gradient(180deg, #1b9f90 0%, #27a46c 40%, #3cc6f3 100%);
-  padding-bottom: 120rpx;
+  background: linear-gradient(180deg, #1b9f90, 17%, #27a46c 46%, #3cc6f3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100vw;
+  font-size: 30rpx;
+}
+
+.page::after {
+  content: " ";
+  display: block;
+  height: 84rpx;
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 .status-wrap {
@@ -386,300 +548,383 @@ async function handleExport() {
   align-items: center;
   padding-top: 300rpx;
   gap: 30rpx;
-  .status-icon { font-size: 100rpx; }
   .status-text { font-size: 30rpx; color: #fff; }
 }
 
 /* 头部 */
-.report-header {
-  margin: 30rpx 30rpx 0;
-  background: rgba(57, 235, 189, 0.2);
-  border-radius: 16rpx;
-  overflow: hidden;
+.header-card {
+  width: 95%;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(57, 235, 189, 0.2);
+  margin-top: 30rpx;
+  border-radius: 10rpx;
+  align-self: center;
+  align-content: center;
+
   .brand-row {
     display: flex;
     flex-direction: row;
+    margin-top: 35rpx;
+    margin-left: 20rpx;
+    margin-bottom: 35rpx;
     align-items: center;
-    padding: 30rpx;
-    gap: 24rpx;
-    .brand-logo { width: 80rpx; height: 80rpx; border-radius: 10rpx; background: #fff; }
-    .brand-info { display: flex; flex-direction: column; gap: 8rpx;
-      .brand-name { font-size: 34rpx; font-weight: bold; color: #fff; }
-      .vin-text { font-size: 24rpx; color: rgba(255,255,255,0.85); }
-    }
   }
-  .disclaimer {
-    background: rgba(34, 163, 109, 0.6);
-    padding: 18rpx 24rpx;
-    .disclaimer-text { font-size: 24rpx; color: #fff; }
+
+  .disclaimer-bar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: rgba(34, 163, 109, 0.6);
+    line-height: 70rpx;
+    justify-content: center;
+    border-bottom-left-radius: 10rpx;
+    border-bottom-right-radius: 10rpx;
   }
 }
 
 /* Tabs */
 .tabs {
+  width: 95%;
   display: flex;
   flex-direction: row;
-  margin: 24rpx 30rpx 0;
-  background: #fff;
-  border-radius: 16rpx;
-  padding: 8rpx;
-  gap: 4rpx;
-  .tab-item {
-    flex: 1;
-    text-align: center;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #FFF;
+  border-radius: 15rpx;
+  padding-top: 5rpx;
+  padding-bottom: 10rpx;
+  margin-top: 25rpx;
+  align-self: center;
+
+  .t {
     line-height: 70rpx;
-    font-size: 26rpx;
-    color: #555;
-    border-radius: 12rpx;
-    &.active {
-      background: linear-gradient(135deg, #57ca9e, #30ad55);
-      color: #fff;
-      font-weight: bold;
-    }
+    width: 25%;
+    border-radius: 15rpx;
+    margin-left: 5rpx;
+    margin-right: 5rpx;
+    text-align: center;
+    color: #333;
+    font-size: 30rpx;
+    font-weight: normal;
+  }
+
+  .t-selected {
+    background: linear-gradient(144.27deg, #00aede, #47ad13);
+    color: #FFF;
+    font-weight: bold;
   }
 }
 
 /* 卡片 */
 .card {
-  margin: 24rpx 30rpx 0;
-  background: #fff;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
   border-radius: 20rpx;
-  padding: 30rpx;
-  .card-title-row {
+  padding: 30rpx 20rpx 20rpx 20rpx;
+  margin-top: 20rpx;
+  align-self: center;
+
+  .title-v {
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-bottom: 24rpx;
-    .dot { width: 10rpx; height: 34rpx; background: linear-gradient(180deg, #57ca9e, #30ad55); border-radius: 5rpx; margin-right: 14rpx; }
-    .card-title { font-size: 30rpx; font-weight: bold; color: #111; }
-    .card-time { font-size: 22rpx; color: #999; margin-left: 16rpx; }
+
+    .dot {
+      width: 12rpx;
+      height: 35rpx;
+      background: linear-gradient(180deg, #00acdd, #47ad13);
+      border-radius: 5rpx;
+    }
+
+    .title {
+      font-weight: bold;
+      color: #111;
+      margin-left: 15rpx;
+    }
+
+    .time {
+      font-size: 26rpx;
+      color: #666;
+      margin-left: 15rpx;
+    }
   }
 }
 
 /* 参考续航 */
-.mileage-center {
+.ehr {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  padding: 20rpx 0;
-  .mileage-label { font-size: 28rpx; color: #333; font-weight: bold; }
-  .mileage-num-wrap {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-end;
-    margin-top: 16rpx;
-    .mileage-num { font-size: 96rpx; font-weight: bold; color: #00acdd; line-height: 1; }
-    .mileage-unit { font-size: 32rpx; color: #00acdd; margin-bottom: 10rpx; margin-left: 6rpx; }
-  }
-  .mileage-assess-tag {
-    margin-top: 16rpx;
-    background: #fff9ed;
-    border: 1rpx solid #f3a550;
-    color: #f3a550;
-    font-size: 26rpx;
-    font-weight: bold;
-    padding: 6rpx 20rpx;
-    border-radius: 10rpx;
+  font-size: 3rpx;
+  width: 314rpx;
+  margin: 40rpx auto 0;
+
+  .power {
+    font-size: 30rpx;
+    font-weight: 600;
+    margin: 0 10rpx;
+    color: #333;
   }
 }
 
-.tip-box {
+.ehr:before, .ehr:after {
+  content: " ";
+  height: 1px;
+  background-color: #e5e5e5;
+  font-size: 0;
+  flex-grow: 1;
+}
+
+.progress-canvas {
+  width: 85%;
+  height: 280rpx;
+}
+
+/* 参考续航说明框 */
+.referV2 {
   border-radius: 10rpx;
-  padding: 16rpx;
+  background: rgba(255, 251, 230, 0.49);
+  border: 1rpx solid #ffe58f;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 10rpx;
   font-size: 24rpx;
-  line-height: 1.6;
+  font-weight: 400;
+  color: #faad14;
+  line-height: 30rpx;
   margin-top: 20rpx;
-  &.yellow {
-    background: rgba(255, 251, 230, 0.6);
-    border: 1rpx solid #ffe58f;
-    color: #faad14;
-  }
 }
 
-/* SOH卡片 */
-.soh-card {
+/* SOH 电池卡片 */
+.sohBattery {
+  width: 100%;
+  border-radius: 12rpx;
   display: flex;
-  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
-  border-radius: 16rpx;
-  padding: 20rpx;
-  margin-top: 20rpx;
   color: #fff;
-  .soh-icon-wrap {
-    width: 100rpx;
-    height: 100rpx;
-    border-radius: 12rpx;
-    background: rgba(255,255,255,0.2);
+  background: linear-gradient(to bottom, #18bbf8, #149eda 100%);
+  margin-top: 20rpx;
+
+  .iconBox {
+    width: 124rpx;
+    height: 124rpx;
     display: flex;
-    align-items: center;
     justify-content: center;
-    flex-shrink: 0;
-    .soh-icon { font-size: 56rpx; }
-  }
-  .soh-info {
-    flex: 1;
+    align-items: center;
+    border-radius: 10rpx;
+    background: linear-gradient(135.41deg, hsla(0, 0%, 100%, 0), hsla(0, 0%, 100%, 0.36));
     margin-left: 20rpx;
-    .soh-label { font-size: 28rpx; display: block; margin-bottom: 10rpx; }
-    .soh-val-row {
+    margin-top: 20rpx;
+    margin-bottom: 20rpx;
+  }
+
+  .battertTxt {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+    margin-right: 20rpx;
+
+    .txT {
+      font-size: 32rpx;
+      font-weight: bold;
+      width: 100%;
+      text-align: right;
+    }
+
+    .txBox {
+      width: 100%;
       display: flex;
-      flex-direction: row;
-      align-items: flex-end;
-      gap: 16rpx;
-      .soh-val { font-size: 56rpx; font-weight: bold; line-height: 1;
-        .soh-unit { font-size: 26rpx; } }
-      .soh-tag {
-        background: rgba(255,255,255,0.2);
-        padding: 6rpx 16rpx;
+      justify-content: flex-end;
+      margin-top: 10rpx;
+
+      .txB {
+        font-size: 60rpx;
+        font-weight: 900;
+        margin-right: 20rpx;
+        align-self: flex-end;
+        .text { font-size: 28rpx; }
+      }
+
+      .txBr {
+        height: 68rpx;
+        width: 120rpx;
         border-radius: 10rpx;
-        font-size: 24rpx;
-        margin-bottom: 8rpx;
+        background: hsla(0, 0%, 100%, 0.2);
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
     }
   }
 }
 
 /* 颜色 */
-.color-green { background: linear-gradient(to bottom, #50dd7c, #3fcc6c); }
-.color-blue  { background: linear-gradient(to bottom, #18bbf8, #149eda); }
-.color-yellow{ background: linear-gradient(to bottom, #fedb64, #ffc93d); }
-.color-orange{ background: linear-gradient(to bottom, #fea72d, #fd7a11); }
-.color-red   { background: linear-gradient(to bottom, #fc5b50, #fa2b32); }
+.bt-green  { background: linear-gradient(to bottom, #50dd7c, #3fcc6c 100%); }
+.bt-blue   { background: linear-gradient(to bottom, #18bbf8, #149eda 100%); }
+.bt-yellow { background: linear-gradient(to bottom, #fedb64, #ffc93d 100%); }
+.bt-orange { background: linear-gradient(to bottom, #fea72d, #fd7a11 100%); }
+.bt-red    { background: linear-gradient(to bottom, #fc5b50, #fa2b32 100%); }
 
-/* 解析文字块 */
-.narrate-box {
-  background: #edfaf9;
-  border-radius: 16rpx;
-  padding: 20rpx;
-  margin-top: 20rpx;
-  .narrate-title { font-size: 28rpx; font-weight: bold; color: #111; margin-bottom: 14rpx; }
-  .narrate-item { font-size: 26rpx; color: #555; line-height: 1.7; margin-bottom: 8rpx; }
-}
-
-/* 行驶模块 */
-.stat-row {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  margin-bottom: 24rpx;
-  .stat-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10rpx;
-    .stat-val { font-size: 38rpx; font-weight: bold; color: #00acdd; }
-    .stat-key { font-size: 26rpx; color: #333; }
-  }
-}
-
+/* 里程核验 */
 .mileage-check-box {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #ecfaf2;
+  margin-top: 30rpx;
   border-radius: 20rpx;
-  padding: 24rpx;
-  &.safe { background: #ecfaf2; }
-  &.danger { background: #ffeaec; }
-  .mileage-check-header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 16rpx;
-    .mileage-check-title { font-size: 30rpx; font-weight: bold; color: #333; display: block; margin-bottom: 10rpx; }
-    .mileage-check-desc { font-size: 26rpx; color: #555; }
-    .mileage-check-icon { font-size: 60rpx; }
-  }
-  .mileage-list {
-    background: #fff;
-    border-radius: 14rpx;
-    overflow: hidden;
-    margin-bottom: 16rpx;
-    .mileage-row {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-      padding: 16rpx 20rpx;
-      border-bottom: 1rpx solid #f5f5f5;
-      &:last-child { border-bottom: none; }
-      &.err { background: #fff3f3; }
-      .ml-month, .ml-km, .ml-remark { font-size: 28rpx; color: #555; }
-      .ml-remark.err-text { color: #fc4731; font-weight: bold; }
-    }
-  }
-  .mileage-tip { font-size: 24rpx; color: #888; line-height: 1.6; }
+  padding-top: 25rpx;
+  margin-bottom: 20rpx;
 }
 
-/* 静态数据和充电模块的表格行 */
-.cell-row {
+/* 静态数据行 */
+.cell-v {
+  width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   align-items: center;
-  line-height: 80rpx;
-  border-radius: 8rpx;
-  padding: 0 16rpx;
-  font-size: 28rpx;
-  &.stripe { background: #edfaf9; }
-  .cell-key { color: #666; }
-  .cell-val { color: #333; font-weight: bold; }
+  justify-content: space-between;
+  background-color: #edfaf9;
+  line-height: 85rpx;
+  border-radius: 10rpx;
+  font-size: 30rpx;
+
+  .t1 { color: #666; margin-left: 20rpx; }
+  .t2 { color: #333; margin-right: 20rpx; }
 }
 
-/* 充电模块布局 */
-.charge-layout {
+/* tips 标题行 */
+.tips-title {
   display: flex;
   flex-direction: row;
-  gap: 16rpx;
-  margin-bottom: 16rpx;
-  .charge-habit {
-    width: 200rpx;
-    border-radius: 20rpx;
-    padding: 20rpx;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10rpx;
-    flex-shrink: 0;
-    .habit-icon { font-size: 60rpx; }
-    .habit-label { font-size: 22rpx; color: #fff; text-align: center; }
-    .habit-val { font-size: 44rpx; font-weight: bold; color: #fff; }
-  }
-  .charge-stats { flex: 1; }
+  align-items: center;
+  margin-top: 35rpx;
+  margin-left: 20rpx;
+  gap: 10rpx;
 }
 
-.assess-tag {
-  font-size: 22rpx;
-  background: #fff9ed;
-  border: 1rpx solid #f3a550;
-  color: #f3a550;
-  padding: 2rpx 10rpx;
-  border-radius: 6rpx;
-  margin-left: 8rpx;
+.tips-info {
+  width: 93%;
+  font-size: 28rpx;
+  color: #666;
+  margin-top: 20rpx;
+  align-self: center;
+  margin-bottom: 45rpx;
 }
 
-/* 免责声明 */
-.disclaimer-card {
-  .disclaimer-footer {
-    font-size: 24rpx;
-    color: #666;
-    line-height: 1.8;
-    display: block;
-  }
+/* 客服悬浮按钮 */
+.customer {
+  position: fixed;
+  right: 20rpx;
+  bottom: 185rpx;
+  z-index: 7;
+  width: 82rpx;
+  height: 82rpx;
+  border-radius: 50%;
+  background: #30ad55;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 8rpx rgba(0, 0, 0, 0.15);
 }
 
 /* 底部操作栏 */
-.footer-bar {
+.foot {
+  z-index: 99;
   position: fixed;
   bottom: 0;
-  left: 0;
-  right: 0;
-  background: #fff;
-  padding: 20rpx 30rpx;
+  left: var(--window-left);
+  right: var(--window-right);
+  padding: 0 20rpx;
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 -2rpx 10rpx rgba(0,0,0,0.08);
-  padding-bottom: calc(20rpx + constant(safe-area-inset-bottom));
-  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
-  .footer-time { font-size: 24rpx; color: #888; }
-  .footer-btns { display: flex; flex-direction: row; gap: 16rpx; }
+  background-color: #fff;
+  box-sizing: border-box;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-top: 1px solid #e8e8e8;
+  padding-bottom: calc(constant(safe-area-inset-bottom) - 20rpx);
+  padding-bottom: calc(env(safe-area-inset-bottom) - 20rpx);
+
+  .tiem {
+    color: #383838;
+    display: flex;
+    align-items: center;
+    line-height: 1;
+    font-size: 28rpx;
+  }
+
+  .export {
+    display: flex;
+    align-items: center;
+    padding: 20rpx 0;
+
+    .white-btn {
+      width: auto;
+      height: 66rpx;
+      line-height: 66rpx;
+      border-radius: 10rpx;
+      padding: 0 20rpx;
+      margin-left: 20rpx;
+      background: #fff;
+      font-size: 30rpx;
+      color: #30ad55;
+      border: 1rpx solid #30ad55;
+    }
+
+    .blue-btn {
+      width: auto;
+      height: 66rpx;
+      line-height: 66rpx;
+      border-radius: 10rpx;
+      padding: 0 20rpx;
+      margin-left: 20rpx;
+      background: linear-gradient(135deg, #30ad55, #47ad13);
+      color: #fff;
+      font-size: 30rpx;
+    }
+
+    .white-btn::after { border: 0; }
+  }
+}
+
+/* 导出图片弹窗 */
+.popup-mask {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.popup-sheet {
+  background: #fff;
+  border-radius: 15rpx 15rpx 0 0;
+  height: 71vh;
+  display: flex;
+  flex-direction: column;
+
+  .attestation {
+    background: #fff8ed;
+    color: #f3a54f;
+    height: 74rpx;
+    text-align: center;
+    font-size: 28rpx;
+    border-bottom: 1px solid rgba(243, 165, 79, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+  }
 }
 </style>

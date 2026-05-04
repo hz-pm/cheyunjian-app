@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+import { post } from '@/utils/request'
 
 export const useUserStore = defineStore('user', () => {
   // state
@@ -7,6 +8,7 @@ export const useUserStore = defineStore('user', () => {
   const userInfo = ref({})
   const isVip = ref(false)
   const vipExpireTime = ref('')
+  const vipCardName = ref('')
 
   // getters
   const isLoggedIn = computed(() => !!token.value)
@@ -22,7 +24,10 @@ export const useUserStore = defineStore('user', () => {
 
   function setUserInfo(info) {
     userInfo.value = info
-    isVip.value = info.isVip || false
+    // AppUser 实体无 isVip 字段，从 vipExpireTime 计算
+    isVip.value = typeof info.isVip === 'boolean'
+      ? info.isVip
+      : !!(info.vipExpireTime && new Date(info.vipExpireTime) > new Date())
     vipExpireTime.value = info.vipExpireTime || ''
     uni.setStorageSync('userInfo', JSON.stringify(info))
   }
@@ -30,23 +35,31 @@ export const useUserStore = defineStore('user', () => {
   function updateVipStatus(vipInfo) {
     isVip.value = vipInfo.isVip || false
     vipExpireTime.value = vipInfo.vipExpireTime || ''
+    vipCardName.value = vipInfo.cardName || ''
     userInfo.value.isVip = vipInfo.isVip
     userInfo.value.vipExpireTime = vipInfo.vipExpireTime
     uni.setStorageSync('userInfo', JSON.stringify(userInfo.value))
+    uni.setStorageSync('vipCardName', vipInfo.cardName || '')
   }
 
   function initFromStorage() {
     const savedToken = uni.getStorageSync('token')
     const savedUserInfo = uni.getStorageSync('userInfo')
+    const savedVipCardName = uni.getStorageSync('vipCardName')
 
     if (savedToken) {
       token.value = savedToken
+    }
+    if (savedVipCardName) {
+      vipCardName.value = savedVipCardName
     }
     if (savedUserInfo) {
       try {
         const info = typeof savedUserInfo === 'string' ? JSON.parse(savedUserInfo) : savedUserInfo
         userInfo.value = info
-        isVip.value = info.isVip || false
+        isVip.value = typeof info.isVip === 'boolean'
+          ? info.isVip
+          : !!(info.vipExpireTime && new Date(info.vipExpireTime) > new Date())
         vipExpireTime.value = info.vipExpireTime || ''
       } catch (e) {
         console.error('解析用户信息失败', e)
@@ -55,13 +68,17 @@ export const useUserStore = defineStore('user', () => {
   }
 
   function logout() {
+    post('/index/user/logout', null, { silent: true, loading: false }).catch(() => {})
     token.value = ''
     userInfo.value = {}
     isVip.value = false
     vipExpireTime.value = ''
+    vipCardName.value = ''
     uni.removeStorageSync('token')
     uni.removeStorageSync('userInfo')
-    uni.reLaunch({ url: '/pages/login/login' })
+    uni.removeStorageSync('vipCardName')
+    // 回到个人中心展示游客态，不强制跳登录页
+    uni.reLaunch({ url: '/pages/main/mine' })
   }
 
   /**
@@ -80,6 +97,7 @@ export const useUserStore = defineStore('user', () => {
     userInfo,
     isVip,
     vipExpireTime,
+    vipCardName,
     isLoggedIn,
     nickname,
     avatar,

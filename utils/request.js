@@ -3,6 +3,8 @@
  * 基于 uni.request，支持 token 自动注入、loading、统一错误处理
  */
 
+const BASE_URL_IMG = 'https://xinnengyuanyunjian.top/images/'
+// const BASE_URL = 'http://192.168.9.114:8099'
 const BASE_URL = 'https://api.xinnengyuanyunjian.top'
 const TOKEN_KEY = 'Authorization'
 
@@ -32,9 +34,10 @@ function hideLoading() {
  * @param {Object} [options.data] - 请求参数
  * @param {boolean} [options.loading=true] - 是否显示 loading
  * @param {boolean} [options.auth=true] - 是否需要 token
+ * @param {boolean} [options.silent=false] - 静默模式：不弹 toast，不自动跳转登录
  * @returns {Promise}
  */
-function request({ url, method = 'GET', data = {}, loading = true, auth = true } = {}) {
+function request({ url, method = 'GET', data = {}, loading = true, auth = true, silent = false } = {}) {
   return new Promise((resolve, reject) => {
     const token = uni.getStorageSync('token')
 
@@ -43,7 +46,7 @@ function request({ url, method = 'GET', data = {}, loading = true, auth = true }
     }
 
     if (auth && token) {
-      header[TOKEN_KEY] = token
+      header[TOKEN_KEY] = 'Bearer ' + token
     }
 
     if (loading) showLoading()
@@ -62,28 +65,39 @@ function request({ url, method = 'GET', data = {}, loading = true, auth = true }
           if (resData.code === 200 || resData.code === undefined) {
             resolve(resData)
           } else if (resData.code === 401 || resData.code === 403) {
-            // token 失效，跳转登录
-            uni.removeStorageSync('token')
-            uni.removeStorageSync('userInfo')
-            uni.showToast({ title: '登录已过期，请重新登录', icon: 'none' })
-            setTimeout(() => {
-              uni.reLaunch({ url: '/pages/login/login' })
-            }, 1500)
+            if (!silent) {
+              const savedToken = uni.getStorageSync('token')
+              if (savedToken) {
+                // 有token但服务端返回401：token已过期，清除并跳转登录
+                uni.removeStorageSync('token')
+                uni.removeStorageSync('userInfo')
+                uni.showToast({ title: '登录已过期，请重新登录', icon: 'none' })
+                setTimeout(() => {
+                  uni.reLaunch({ url: '/pages/login/login' })
+                }, 1500)
+              }
+            }
+            // 无token时（游客状态）：静默拒绝，由调用方处理
             reject(resData)
           } else {
-            uni.showToast({ title: resData.msg || '请求失败', icon: 'none' })
+            if (!silent) uni.showToast({ title: resData.msg || '请求失败', icon: 'none' })
             reject(resData)
           }
         } else if (statusCode === 401) {
-          uni.removeStorageSync('token')
-          uni.removeStorageSync('userInfo')
-          uni.showToast({ title: '登录已过期，请重新登录', icon: 'none' })
-          setTimeout(() => {
-            uni.reLaunch({ url: '/pages/login/login' })
-          }, 1500)
+          if (!silent) {
+            const savedToken = uni.getStorageSync('token')
+            if (savedToken) {
+              uni.removeStorageSync('token')
+              uni.removeStorageSync('userInfo')
+              uni.showToast({ title: '登录已过期，请重新登录', icon: 'none' })
+              setTimeout(() => {
+                uni.reLaunch({ url: '/pages/login/login' })
+              }, 1500)
+            }
+          }
           reject(res)
         } else {
-          uni.showToast({ title: `请求错误(${statusCode})`, icon: 'none' })
+          if (!silent) uni.showToast({ title: `请求错误(${statusCode})`, icon: 'none' })
           reject(res)
         }
       },
@@ -101,4 +115,5 @@ function request({ url, method = 'GET', data = {}, loading = true, auth = true }
 export const get = (url, data, options = {}) => request({ url, method: 'GET', data, ...options })
 export const post = (url, data, options = {}) => request({ url, method: 'POST', data, ...options })
 
+export { BASE_URL, BASE_URL_IMG }
 export default request

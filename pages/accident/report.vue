@@ -22,10 +22,9 @@
 <script setup>
 import { ref } from 'vue'
 import { onLoad, onUnload } from '@dcloudio/uni-app'
-import { getSgReport } from '@/utils/api'
+import { getAccidentReport } from '@/utils/api'
 
-const checkId = ref('')
-const payOrderId = ref('')
+const taskId = ref('')
 const status = ref('loading') // loading | done | fail
 const reportUrl = ref('')
 const pollCount = ref(0)
@@ -34,13 +33,12 @@ let pollTimer = null
 const MAX_POLL = 10
 
 onLoad((options) => {
-  checkId.value = options.checkId || ''
-  payOrderId.value = options.payOrderId || '0'
-  if (checkId.value) {
+  taskId.value = options.taskId || ''
+  if (taskId.value) {
     startPolling()
   } else {
     status.value = 'fail'
-    errorMsg.value = '缺少报告ID'
+    errorMsg.value = '缺少任务ID'
   }
 })
 
@@ -59,17 +57,14 @@ async function pollReport() {
     return
   }
   try {
-    const res = await getSgReport({ checkId: checkId.value, payOrderId: payOrderId.value, isShare: 0 })
+    const res = await getAccidentReport({ taskId: taskId.value })
     if (res.code === 200 && res.data) {
-      // 兼容 res.data.data / res.data.reportUrl / res.data(字符串) 三种结构
-      const url = typeof res.data === 'string' ? res.data
-        : (res.data.data || res.data.reportUrl || null)
-      if (url && url.startsWith('http')) {
-        reportUrl.value = url
+      if (res.data.status === 'generated' && res.data.reportUrl) {
+        reportUrl.value = res.data.reportUrl
         status.value = 'done'
         return
       }
-      // 报告尚未生成，继续轮询
+      // status === 'generating'，继续轮询
       pollCount.value++
       pollTimer = setTimeout(pollReport, 3000)
       return

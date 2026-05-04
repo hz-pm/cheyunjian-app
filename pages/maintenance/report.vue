@@ -19,10 +19,9 @@
 <script setup>
 import { ref } from 'vue'
 import { onLoad, onUnload } from '@dcloudio/uni-app'
-import { getWbReport } from '@/utils/api'
+import { getMaintenanceReport } from '@/utils/api'
 
-const checkId = ref('')
-const payOrderId = ref('')
+const taskId = ref('')
 const status = ref('loading')
 const reportUrl = ref('')
 const pollCount = ref(0)
@@ -31,13 +30,12 @@ let pollTimer = null
 const MAX_POLL = 10
 
 onLoad((options) => {
-  checkId.value = options.checkId || ''
-  payOrderId.value = options.payOrderId || ''
-  if (checkId.value) {
+  taskId.value = options.taskId || ''
+  if (taskId.value) {
     startPolling()
   } else {
     status.value = 'fail'
-    errorMsg.value = '缺少报告ID'
+    errorMsg.value = '缺少任务ID'
   }
 })
 
@@ -50,14 +48,11 @@ async function startPolling() {
     return
   }
   try {
-    const res = await getWbReport({ checkId: checkId.value, payOrderId: payOrderId.value, isShare: 0 })
-    if (res.code === 200 && res.data) {
-      const url = typeof res.data === 'string' ? res.data : res.data.data || res.data
-      if (url && url.startsWith('http')) {
-        reportUrl.value = url
-        status.value = 'done'
-        return
-      }
+    const res = await getMaintenanceReport({ taskId: taskId.value, isShare: '0' })
+    if (res.code === 200 && res.data && res.data.data) {
+      reportUrl.value = res.data.data
+      status.value = 'done'
+      return
     }
     pollCount.value++
     pollTimer = setTimeout(startPolling, 3000)

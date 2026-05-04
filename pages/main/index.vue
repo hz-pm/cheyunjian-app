@@ -13,7 +13,7 @@
     >
       <swiper-item>
         <image
-          src="https://api.xinnengyuanyunjian.top/profile/images/img-banner.webp"
+          :src="BASE_URL_IMG + 'img-banner.webp'"
           class="banner-img"
           mode="aspectFill"
         />
@@ -21,11 +21,11 @@
     </swiper>
 
     <!-- 用户信息浮层 -->
-    <view class="user-card">
+    <view class="user-card" @click="!userStore.isLoggedIn && goLogin()">
       <view class="user-left">
         <view class="avatar-wrap">
           <image
-            v-if="userStore.avatar"
+            v-if="userStore.isLoggedIn && userStore.avatar"
             :src="userStore.avatar"
             class="avatar-img"
             mode="aspectFill"
@@ -38,13 +38,16 @@
           />
         </view>
         <view class="user-info">
-          <text class="username">{{ userStore.nickname }}</text>
-          <text class="welcome">您好，欢迎使用新能源云检～</text>
+          <text class="username">{{ userStore.isLoggedIn ? userStore.nickname : '点击登录' }}</text>
+          <text class="welcome">{{ userStore.isLoggedIn ? '您好，欢迎使用新能源云检～' : '登录后享受VIP专属优惠' }}</text>
         </view>
       </view>
-      <view v-if="userStore.isVip" class="vip-badge">
+      <view v-if="userStore.isLoggedIn && userStore.isVip" class="vip-badge">
         <image src="/static/vip-crown-2-fill.png" class="vip-icon" mode="aspectFit" />
         <text class="vip-text">VIP</text>
+      </view>
+      <view v-else-if="!userStore.isLoggedIn" class="login-arrow">
+        <text class="login-arrow-text">去登录 ›</text>
       </view>
     </view>
 
@@ -76,7 +79,7 @@
     </view>
 
     <!-- VIP 推广 -->
-    <view class="vip-section" @click="goVip" v-if="!userStore.isVip">
+    <view v-if="VIP_ENABLED" class="vip-section" @click="goVip">
       <view class="vip-content">
         <view class="vip-left">
           <!-- <image src="/static/vip-crown-2-fill.png" class="vip-crown-img" mode="aspectFit" /> -->
@@ -97,17 +100,22 @@
 </template>
 
 <script setup>
-import { onShow } from '@dcloudio/uni-app'
+import { onShow, onShareAppMessage } from '@dcloudio/uni-app'
 import { useUserStore } from '@/store/user'
 import { getUserInfo } from '@/utils/api'
+import { BASE_URL_IMG } from '@/utils/request'
+import { VIP_ENABLED } from '@/utils/config'
 
 const userStore = useUserStore()
 
+onShareAppMessage(() => ({
+  title: '新能源云检 - 二手车检测必备',
+  path: '/pages/main/index',
+  imageUrl: BASE_URL_IMG + 'mp-share.png'
+}))
+
 onShow(async () => {
-  if (!userStore.isLoggedIn) {
-    uni.reLaunch({ url: '/pages/login/login' })
-    return
-  }
+  if (!userStore.isLoggedIn) return
   try {
     const res = await getUserInfo()
     if (res.code === 200) userStore.setUserInfo(res.data)
@@ -115,6 +123,10 @@ onShow(async () => {
     console.error(e)
   }
 })
+
+function goLogin() {
+  uni.navigateTo({ url: '/pages/login/login' })
+}
 
 function goCheck() {
   uni.navigateTo({ url: '/pages/check/vinInput' })
@@ -186,7 +198,7 @@ function goVip() {
   .user-info {
     display: flex;
     flex-direction: column;
-    .username { font-size: 30rpx; font-weight: bold; color: #111; }
+    .username { font-size: 30rpx; font-weight: bold; color: #111; max-width: 260rpx; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
     .welcome { font-size: 24rpx; color: #888; margin-top: 6rpx; }
   }
 
@@ -200,6 +212,11 @@ function goVip() {
     gap: 8rpx;
     .vip-icon { width: 30rpx; height: 30rpx; }
     .vip-text { font-size: 24rpx; color: #fff; font-weight: bold; }
+  }
+
+  .login-arrow {
+    flex-shrink: 0;
+    .login-arrow-text { font-size: 26rpx; color: #57ca9e; font-weight: bold; }
   }
 }
 

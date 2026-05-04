@@ -1,8 +1,8 @@
 <template>
   <view class="page">
     <view class="header">
-      <text class="header-title">注册账号</text>
-      <text class="header-desc">创建您的新能源云检账号</text>
+      <text class="header-title">绑定手机号</text>
+      <text class="header-desc">绑定后可用手机号登录和接收通知</text>
     </view>
 
     <view class="form-card">
@@ -29,37 +29,23 @@
           </view>
         </view>
       </view>
-
-      <view class="form-item">
-        <text class="label">设置密码</text>
-        <u-input v-model="password" placeholder="请设置6-16位密码" type="password" border="surround" clearable />
-      </view>
-
-      <view class="form-item">
-        <text class="label">确认密码</text>
-        <u-input v-model="confirmPassword" placeholder="请再次输入密码" type="password" border="surround" clearable />
-      </view>
     </view>
 
     <view class="btn-wrap">
-      <u-button text="立即注册" type="primary" color="#57ca9e" :loading="loading" @click="handleRegister" />
-    </view>
-
-    <view class="login-link">
-      <text class="link-text">已有账号？</text>
-      <text class="link-action" @click="uni.navigateBack()">返回登录</text>
+      <u-button text="立即绑定" type="primary" color="#57ca9e" :loading="loading" @click="handleBind" />
     </view>
   </view>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import { phoneReg, sendSms } from '@/utils/api'
+import { sendSms, bindPhone } from '@/utils/api'
+import { useUserStore } from '@/store/user'
+import { getUserInfo } from '@/utils/api'
 
+const userStore = useUserStore()
 const phone = ref('')
 const smsCode = ref('')
-const password = ref('')
-const confirmPassword = ref('')
 const loading = ref(false)
 const codeText = ref('获取验证码')
 const canGetCode = ref(true)
@@ -71,7 +57,7 @@ async function getSmsCode() {
     return
   }
   try {
-    await sendSms({ phone: phone.value, type: 'register' })
+    await sendSms({ phone: phone.value, type: 'bindPhone' })
     uni.showToast({ title: '验证码已发送', icon: 'none' })
     canGetCode.value = false
     let s = 60
@@ -84,26 +70,25 @@ async function getSmsCode() {
   } catch (e) { console.error(e) }
 }
 
-async function handleRegister() {
+async function handleBind() {
   if (!phone.value || !/^1[3-9]\d{9}$/.test(phone.value)) {
     uni.showToast({ title: '请输入正确的手机号', icon: 'none' }); return
   }
   if (!smsCode.value) { uni.showToast({ title: '请输入验证码', icon: 'none' }); return }
-  if (!password.value || password.value.length < 6) {
-    uni.showToast({ title: '密码不能少于6位', icon: 'none' }); return
-  }
-  if (password.value !== confirmPassword.value) {
-    uni.showToast({ title: '两次密码不一致', icon: 'none' }); return
-  }
 
   loading.value = true
   try {
-    const res = await phoneReg({ phone: phone.value, code: smsCode.value, password: password.value })
+    const res = await bindPhone({ phone: phone.value, code: smsCode.value })
     if (res.code === 200) {
-      uni.showToast({ title: '注册成功', icon: 'success' })
+      uni.showToast({ title: '手机号绑定成功', icon: 'success' })
+      // 刷新本地用户信息
+      const infoRes = await getUserInfo()
+      if (infoRes.code === 200) {
+        userStore.setUserInfo(infoRes.data)
+      }
       setTimeout(() => uni.navigateBack(), 1000)
     } else {
-      uni.showToast({ title: res.msg || '注册失败', icon: 'none' })
+      uni.showToast({ title: res.msg || '绑定失败', icon: 'none' })
     }
   } catch (e) { console.error(e) }
   finally { loading.value = false }
@@ -134,9 +119,4 @@ async function handleRegister() {
 }
 
 .btn-wrap { margin: 0 30rpx; }
-
-.login-link { display: flex; flex-direction: row; justify-content: center; align-items: center;
-  padding: 30rpx; gap: 10rpx;
-  .link-text { font-size: 28rpx; color: #888; }
-  .link-action { font-size: 28rpx; color: #57ca9e; } }
 </style>

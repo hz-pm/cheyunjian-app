@@ -22,14 +22,15 @@
           />
         </view>
       </view>
-      <view class="info-item">
+      <view class="info-item" @click="userStore.phone ? null : goBindPhone()">
         <text class="info-label">手机号</text>
-        <text class="info-value">{{ maskedPhone }}</text>
+        <text class="info-value" :class="{ 'bind-tip': !userStore.phone }">{{ maskedPhone }}</text>
+        <text v-if="!userStore.phone" class="arrow">›</text>
       </view>
       <view class="info-item">
         <text class="info-label">VIP状态</text>
         <text class="info-value" :class="userStore.isVip ? 'vip-active' : ''">
-          {{ userStore.isVip ? 'VIP会员' : '普通用户' }}
+          {{ userStore.isVip ? (userStore.vipCardName || 'VIP会员') : '普通用户' }}
         </text>
       </view>
     </view>
@@ -53,6 +54,10 @@ const maskedPhone = computed(() => {
   if (!p) return '未绑定'
   return p.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')
 })
+
+function goBindPhone() {
+  uni.navigateTo({ url: '/pages/reg/bindPhone' })
+}
 
 function changeAvatar() {
   uni.chooseImage({
@@ -108,7 +113,9 @@ async function handleSave() {
     .info-label { font-size: 30rpx; color: #333; width: 140rpx; flex-shrink: 0; }
     .info-right { flex: 1; }
     .info-value { flex: 1; text-align: right; font-size: 28rpx; color: #666;
-      &.vip-active { color: #57ca9e; font-weight: bold; } }
+      &.vip-active { color: #57ca9e; font-weight: bold; }
+      &.bind-tip { color: #57ca9e; } }
+    .arrow { font-size: 36rpx; color: #ccc; margin-left: 8rpx; }
   }
 }
 

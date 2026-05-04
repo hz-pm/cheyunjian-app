@@ -14,16 +14,16 @@
 
     <!-- 表单卡片 -->
     <view class="form-card">
-      <!-- VIN 图片识别 -->
-      <view class="section-label">上传行驶证 / VIN码图片（可自动识别）</view>
-      <view class="upload-wrap" @click="chooseVinImage">
-        <image src="/static/vin-bg.png" class="vin-bg-img" mode="scaleToFill" />
-        <view v-if="!vinImgPath" class="upload-overlay">
-          <u-icon name="camera" size="60" color="#30ad55" />
-          <text class="upload-text">上传您的行驶证照片</text>
-        </view>
-        <image v-if="vinImgPath" :src="vinImgPath" class="preview-img" mode="aspectFill" />
-      </view>
+	  <!-- 行驶证上传卡片 -->
+	  <view class="card" @click="openImagePage" style="height: 350rpx;">
+	    <image src="/static/vin-bg.png" style="width: 100%;height: 80%;"></image>
+	    <view style="display: flex;flex-direction: column;align-items: center;position: absolute;top: 33%;left: 32%;">
+	      <uni-icons type="camera" color="#30ad55" size="80rpx"></uni-icons>
+	      <text style="font-size: 26rpx;font-weight: bold;color: #30ad55;">上传您的行驶证照片</text>
+	    </view>
+	    <image style="width: 96%;height: 96%;position: absolute;left: 2%;top: 2%;border-radius: 20rpx;" :src="vinImgPath"></image>
+	  </view>
+	  
       <text v-if="ocrLoading" class="ocr-tip">识别中...</text>
 
       <!-- VIN 码输入 -->
@@ -49,10 +49,29 @@
       </view>
     </view>
 
-    <!-- VIP 说明 -->
-    <view class="vip-tip" v-if="!userStore.isVip">
-      <text class="vip-tip-text">💡 开通VIP享超值优惠，</text>
-      <text class="vip-link" @click="goVip">立即开通 ></text>
+    <!-- 价格展示 -->
+    <view class="price-bar" v-if="priceInfo">
+      <view class="price-bar-left">
+        <text class="price-bar-label">本次费用</text>
+        <view class="price-bar-amount">
+          <text v-if="priceInfo.discountAvailable" class="price-bar-origin">¥{{ formatPrice(priceInfo.normalPrice) }}</text>
+          <text class="price-bar-final" :class="{ 'price-vip': priceInfo.discountAvailable }">
+            ¥{{ formatPrice(priceInfo.discountAvailable ? priceInfo.discountedPrice : priceInfo.normalPrice) }}
+          </text>
+        </view>
+      </view>
+      <!-- 已开通VIP且有优惠：显示已抵扣金额 -->
+      <view v-if="priceInfo.discountAvailable" class="price-badge badge-deducted">
+        <text class="badge-text">已优惠¥{{ formatPrice(priceInfo.savedAmount) }}</text>
+      </view>
+      <!-- 非VIP且有最优VIP价：引导开通 -->
+      <view v-else-if="VIP_ENABLED && priceInfo.bestVipPrice" class="price-badge badge-promo" @click="goVip">
+        <text class="badge-text">VIP可低至¥{{ formatPrice(priceInfo.bestVipPrice) }} ›</text>
+      </view>
+      <!-- 未登录 -->
+      <view v-else-if="VIP_ENABLED && !userStore.isLoggedIn" class="price-badge badge-login" @click="goLogin">
+        <text class="badge-text">登录享VIP优惠 ›</text>
+      </view>
     </view>
 
     <!-- 检测按钮 -->
@@ -74,11 +93,12 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useUserStore } from '@/store/user'
-import { payCloudCheck, checkCarNew } from '@/utils/api'
-
-const BASE_URL = 'https://api.xinnengyuanyunjian.top'
+import { createCheckTask, executeCheckTask, queryTaskPrice, VEHICLE_VIN_OCR_PATH } from '@/utils/api'
+import { requestWechatPay } from '@/composables/useWechatPay'
+import { BASE_URL } from '@/utils/request'
+import { VIP_ENABLED } from '@/utils/config'
 
 const userStore = useUserStore()
 const vinCode = ref('')
@@ -86,6 +106,34 @@ const vinError = ref('')
 const vinImgPath = ref('')
 const loading = ref(false)
 const ocrLoading = ref(false)
+const priceInfo = ref(null)
+
+function formatPrice(val) {
+  return val != null ? Number(val).toFixed(2) : '0.00'
+}
+
+function goLogin() {
+  uni.navigateTo({ url: '/pages/login/login' })
+}
+1767
+function showMaintenanceTip() {
+  uni.showModal({
+    title: '服务维护中',
+    content: '该服务正在维护升级中，暂时无法使用，请稍后再试',
+    showCancel: false,
+    confirmText: '知道了'
+  })
+}
+
+onMounted(async () => {
+  try {
+    const res = await queryTaskPrice({ type: 1 })
+    priceInfo.value = res.data
+    if (priceInfo.value?.maintenance) showMaintenanceTip()
+  } catch (e) {
+    // 静默失败，不影响主流程
+  }
+})
 
 function onVinInput(e) {
   vinCode.value = (e.detail.value || '').toUpperCase()
@@ -110,7 +158,8 @@ function showVinGuide() {
   })
 }
 
-function chooseVinImage() {
+function openImagePage() {
+  if (!userStore.checkLogin()) return
   uni.chooseImage({
     count: 1,
     sizeType: ['compressed'],
@@ -124,8 +173,8 @@ function uploadVinImage(filePath) {
   ocrLoading.value = true
   const token = uni.getStorageSync('token') || ''
   uni.uploadFile({
-    url: BASE_URL + '/index/user/vehicleVinOCR',
-    header: { Authorization: token },
+    url: BASE_URL + VEHICLE_VIN_OCR_PATH,
+    header: { Authorization: 'Bearer ' + token },
     filePath,
     name: 'file',
     success: (res) => {
@@ -154,31 +203,36 @@ function uploadVinImage(filePath) {
 
 async function handleSubmit() {
   if (!userStore.checkLogin()) return
+  if (priceInfo.value?.maintenance) { showMaintenanceTip(); return }
   if (!validateVin()) return
 
   loading.value = true
   try {
-    const payRes = await payCloudCheck({ payType: 3, vinCode: vinCode.value })
-    if (payRes.code !== 200) {
-      uni.showToast({ title: payRes.msg || '下单失败', icon: 'none' })
-      return
-    }
+    // 1. 创建检测任务，获取 taskId
+    const taskRes = await createCheckTask({
+		type: 1, 
+		vinCode: vinCode.value, 
+		vinImg: vinImgPath.value ,
+		personName: ''
+	})
+    const taskId = taskRes.data
 
+    // 2. 创建预支付订单（含自动绑定微信兜底）
+    const payRes = await requestWechatPay({ payType: 3, taskId })
     const { outTradeNo, timeStamp, nonceStr, paySign, signType } = payRes.data
     const packageVal = payRes.data['package']
 
+    // 3. 发起微信支付
     await uni.requestPayment({ provider: 'wxpay', timeStamp, nonceStr, package: packageVal, signType, paySign })
 
+    // 4. 执行检测
     uni.showLoading({ title: '检测中...', mask: true })
-    const checkRes = await checkCarNew({ vinCode: vinCode.value, outTradeNo })
+    await executeCheckTask(taskId)
     uni.hideLoading()
 
-    if (checkRes.code === 200) {
-      uni.navigateTo({ url: `/pages/check/result?vinCode=${vinCode.value}&outTradeNo=${outTradeNo}` })
-    } else {
-      uni.showToast({ title: checkRes.msg || '检测失败', icon: 'none' })
-    }
+    uni.navigateTo({ url: `/pages/check/result?vinCode=${vinCode.value}` })
   } catch (e) {
+    uni.hideLoading()
     if (e?.errMsg?.includes('cancel')) {
       uni.navigateTo({ url: '/pages/pay/payResult?status=cancel' })
     } else {
@@ -260,10 +314,10 @@ async function handleSubmit() {
 }
 
 .section-label {
-  font-size: 28rpx;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 16rpx;
+  font-size: 22rpx;
+  color: #666;
+  margin-bottom: 10rpx;
+  margin-top: 10rpx;
   display: block;
 }
 
@@ -306,6 +360,15 @@ async function handleSubmit() {
     top: 0;
     left: 0;
   }
+}
+
+.card {
+  width: 90%;
+  background-color: #FFF;
+  border-radius: 20rpx;
+  box-shadow: 0 0 40rpx 0 rgba(0, 0, 0, .1);
+  position: relative;
+  margin-top: 20rpx;
 }
 
 .ocr-tip {
@@ -386,14 +449,81 @@ async function handleSubmit() {
   }
 }
 
-/* VIP 提示 */
-.vip-tip {
+/* 价格栏 */
+.price-bar {
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 16rpx 40rpx;
-  .vip-tip-text { font-size: 26rpx; color: #888; }
-  .vip-link { font-size: 26rpx; color: #30ad55; }
+  justify-content: space-between;
+  margin: 16rpx 5% 0;
+  padding: 24rpx 30rpx;
+  background: #fff;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.06);
+
+  .price-bar-left {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 16rpx;
+  }
+
+  .price-bar-label {
+    font-size: 26rpx;
+    color: #888;
+  }
+
+  .price-bar-amount {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 8rpx;
+  }
+
+  .price-bar-origin {
+    font-size: 24rpx;
+    color: #bbb;
+    text-decoration: line-through;
+  }
+
+  .price-bar-final {
+    font-size: 40rpx;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .price-bar-final.price-vip {
+    color: #30ad55;
+  }
+}
+
+/* 价格右侧徽标 */
+.price-badge {
+  display: flex;
+  align-items: center;
+  border-radius: 30rpx;
+  padding: 8rpx 20rpx;
+  flex-shrink: 0;
+
+  .badge-text {
+    font-size: 24rpx;
+    white-space: nowrap;
+  }
+}
+
+.badge-deducted {
+  background: linear-gradient(135deg, #ffb74d, #ff8c00);
+  .badge-text { color: #fff; }
+}
+
+.badge-promo {
+  background: #f0fdf8;
+  border: 1rpx solid #30ad55;
+  .badge-text { color: #30ad55; }
+}
+
+.badge-login {
+  .badge-text { color: #30ad55; font-size: 26rpx; }
 }
 
 /* 按钮 */

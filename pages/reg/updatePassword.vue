@@ -17,15 +17,16 @@
           <view class="code-input">
             <u-input v-model="smsCode" placeholder="请输入验证码" type="number" border="surround" :maxlength="6" />
           </view>
-          <u-button
-            class="code-btn"
-            :text="codeText"
-            :disabled="!canGetCode"
-            size="small"
-            type="primary"
-            :color="canGetCode ? '#57ca9e' : '#ccc'"
-            @click="getSmsCode"
-          />
+          <view class="code-btn-wrap">
+            <u-button
+              :text="codeText"
+              :disabled="!canGetCode"
+              size="small"
+              type="primary"
+              :color="canGetCode ? '#57ca9e' : '#ccc'"
+              @click="getSmsCode"
+            />
+          </view>
         </view>
       </view>
 
@@ -113,7 +114,7 @@ async function handleSubmit() {
   .form-item { margin-bottom: 30rpx; &:last-child { margin-bottom: 0; }
     .label { font-size: 28rpx; font-weight: bold; color: #333; display: block; margin-bottom: 14rpx; } }
   .code-row { display: flex; flex-direction: row; gap: 16rpx;
-    .code-input { flex: 1; } .code-btn { width: 220rpx; flex-shrink: 0; } }
+    .code-input { flex: 1; } .code-btn-wrap { width: 220rpx; flex-shrink: 0; } }
 }
 .btn-wrap { margin: 0 30rpx; }
 </style>

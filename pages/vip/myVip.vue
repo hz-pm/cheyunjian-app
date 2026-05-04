@@ -4,7 +4,7 @@
       <view class="card-top">
         <text class="crown">👑</text>
         <view class="card-info">
-          <text class="card-title">{{ userStore.isVip ? 'VIP会员' : '普通用户' }}</text>
+          <text class="card-title">{{ userStore.isVip ? (vipDetail?.cardName || 'VIP会员') : '普通用户' }}</text>
           <text class="card-sub">{{ userStore.isVip ? '尊享会员专属优惠' : '开通VIP享更多优惠' }}</text>
         </view>
       </view>
@@ -14,11 +14,11 @@
       </view>
     </view>
 
-    <view v-if="userStore.isVip" class="status-card">
+    <view v-if="userStore.isVip && vipDetail" class="status-card">
       <text class="status-title">会员状态</text>
       <view class="status-item">
         <text class="status-key">会员类型</text>
-        <text class="status-val">VIP会员</text>
+        <text class="status-val">{{ vipDetail.cardName || 'VIP会员' }}</text>
       </view>
       <view class="status-item">
         <text class="status-key">到期时间</text>
@@ -30,9 +30,37 @@
       </view>
     </view>
 
+    <view v-if="userStore.isVip && vipDetail" class="discount-card">
+      <text class="status-title">专属折扣</text>
+      <view class="status-item">
+        <text class="status-key">车云检立减</text>
+        <text class="status-val discount-val">¥{{ Number(vipDetail.carCheckDiscount || 0).toFixed(2) }}</text>
+      </view>
+      <view class="status-item">
+        <text class="status-key">出险查询立减</text>
+        <text class="status-val discount-val">¥{{ Number(vipDetail.accidentDiscount || 0).toFixed(2) }}</text>
+      </view>
+      <view class="status-item">
+        <text class="status-key">维保记录立减</text>
+        <text class="status-val discount-val">¥{{ Number(vipDetail.maintenanceDiscount || 0).toFixed(2) }}</text>
+      </view>
+    </view>
+
+    <view v-if="userStore.isVip && vipDetail && (vipDetail.remainingDailyQuota != null || vipDetail.remainingYearlyQuota != null)" class="quota-card">
+      <text class="status-title">折扣配额</text>
+      <view v-if="vipDetail.remainingDailyQuota != null" class="status-item">
+        <text class="status-key">今日剩余次数</text>
+        <text class="status-val">{{ vipDetail.remainingDailyQuota }} / {{ vipDetail.dailyQuota }}</text>
+      </view>
+      <view v-if="vipDetail.remainingYearlyQuota != null" class="status-item">
+        <text class="status-key">本年剩余次数</text>
+        <text class="status-val">{{ vipDetail.remainingYearlyQuota }} / {{ vipDetail.yearlyQuota }}</text>
+      </view>
+    </view>
+
     <view class="btn-wrap">
       <u-button
-        :text="userStore.isVip ? '续费VIP' : '立即开通VIP'"
+        :text="userStore.isVip ? '升级/续费VIP' : '立即开通VIP'"
         type="primary"
         color="#57ca9e"
         @click="uni.navigateTo({ url: '/pages/vip/vipCard' })"
@@ -42,16 +70,21 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
 import { useUserStore } from '@/store/user'
 import { getUserVipInfo } from '@/utils/api'
 
 const userStore = useUserStore()
+const vipDetail = ref(null)
 
 onShow(async () => {
   try {
     const res = await getUserVipInfo()
-    if (res.code === 200) userStore.updateVipStatus(res.data)
+    if (res.code === 200) {
+      userStore.updateVipStatus(res.data)
+      vipDetail.value = res.data
+    }
   } catch (e) { console.error(e) }
 })
 
@@ -90,6 +123,31 @@ function formatDate(dateStr) {
     .status-key { font-size: 28rpx; color: #666; }
     .status-val { font-size: 28rpx; color: #333;
       &.active { color: #57ca9e; font-weight: bold; } }
+  }
+}
+
+.discount-card {
+  background: #fff; border-radius: 20rpx; padding: 30rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.05); margin-bottom: 30rpx;
+  .status-title { font-size: 30rpx; font-weight: bold; color: #333; display: block; margin-bottom: 20rpx; }
+  .status-item { display: flex; flex-direction: row; justify-content: space-between;
+    padding: 20rpx 0; border-bottom: 1rpx solid #f5f5f5;
+    &:last-child { border-bottom: none; }
+    .status-key { font-size: 28rpx; color: #666; }
+    .status-val { font-size: 28rpx; color: #333; }
+    .discount-val { color: #57ca9e; font-weight: bold; }
+  }
+}
+
+.quota-card {
+  background: #fff; border-radius: 20rpx; padding: 30rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.05); margin-bottom: 30rpx;
+  .status-title { font-size: 30rpx; font-weight: bold; color: #333; display: block; margin-bottom: 20rpx; }
+  .status-item { display: flex; flex-direction: row; justify-content: space-between;
+    padding: 20rpx 0; border-bottom: 1rpx solid #f5f5f5;
+    &:last-child { border-bottom: none; }
+    .status-key { font-size: 28rpx; color: #666; }
+    .status-val { font-size: 28rpx; color: #333; }
   }
 }
 

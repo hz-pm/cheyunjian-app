@@ -3,7 +3,7 @@
     <!-- 头部 -->
     <view class="vip-header">
       <text class="vip-crown">👑</text>
-      <text class="vip-title">VIP会员</text>
+      <text class="vip-title">{{ userStore.isVip ? (userStore.vipCardName || 'VIP会员') : '普通用户' }}</text>
       <text v-if="userStore.isVip" class="vip-expire">有效期至：{{ formatDate(userStore.vipExpireTime) }}</text>
       <text v-else class="vip-desc">开通会员，享超值优惠</text>
     </view>
@@ -34,15 +34,24 @@
       <text class="benefits-title">🎁 会员专属权益</text>
       <view class="benefit-item">
         <text class="benefit-icon">✅</text>
-        <text class="benefit-text">车云检优惠折扣</text>
+        <text class="benefit-text">
+          车云检
+          <text v-if="selectedPlan && selectedPlan.carCheckDiscount > 0" class="discount-tag">立减¥{{ selectedPlan.carCheckDiscount }}</text>
+        </text>
       </view>
       <view class="benefit-item">
         <text class="benefit-icon">✅</text>
-        <text class="benefit-text">事故查询优惠价格</text>
+        <text class="benefit-text">
+          出险查询
+          <text v-if="selectedPlan && selectedPlan.accidentDiscount > 0" class="discount-tag">立减¥{{ selectedPlan.accidentDiscount }}</text>
+        </text>
       </view>
       <view class="benefit-item">
         <text class="benefit-icon">✅</text>
-        <text class="benefit-text">维保查询优惠价格</text>
+        <text class="benefit-text">
+          维保记录
+          <text v-if="selectedPlan && selectedPlan.maintenanceDiscount > 0" class="discount-tag">立减¥{{ selectedPlan.maintenanceDiscount }}</text>
+        </text>
       </view>
       <view class="benefit-item">
         <text class="benefit-icon">✅</text>
@@ -53,7 +62,7 @@
     <!-- 购买按钮 -->
     <view class="btn-wrap">
       <u-button
-        :text="userStore.isVip ? '续费VIP' : '立即开通'"
+        :text="userStore.isVip ? '升级/续费VIP' : '立即开通'"
         type="primary"
         color="#57ca9e"
         :loading="loading"
@@ -61,18 +70,63 @@
         @click="handleBuy"
       />
     </view>
+
+    <!-- 升级预览弹窗 -->
+    <view v-if="showUpgradePreview" class="popup-overlay" @touchmove.stop.prevent @click="showUpgradePreview = false"></view>
+    <view v-if="showUpgradePreview && upgradePreviewData" class="upgrade-popup">
+      <view class="upgrade-popup-header">
+        <text class="upgrade-popup-title">升级确认</text>
+        <text class="upgrade-popup-close" @click="showUpgradePreview = false">✕</text>
+      </view>
+      <view class="upgrade-popup-body">
+        <view class="upgrade-row">
+          <text class="upgrade-label">当前套餐</text>
+          <text class="upgrade-val">{{ upgradePreviewData.currentCardName }}（剩余{{ upgradePreviewData.remainingDays }}天）</text>
+        </view>
+        <view class="upgrade-row">
+          <text class="upgrade-label">剩余天数折算</text>
+          <text class="upgrade-val">{{ upgradePreviewData.convertedDays }} 天</text>
+        </view>
+        <view class="upgrade-row">
+          <text class="upgrade-label">本次新增天数</text>
+          <text class="upgrade-val">{{ upgradePreviewData.newCardDays }} 天</text>
+        </view>
+        <view class="upgrade-divider"></view>
+        <view class="upgrade-row">
+          <text class="upgrade-label">升级后总天数</text>
+          <text class="upgrade-val upgrade-val-highlight">{{ upgradePreviewData.totalDays }} 天</text>
+        </view>
+        <view class="upgrade-row">
+          <text class="upgrade-label">新到期时间</text>
+          <text class="upgrade-val upgrade-val-highlight">{{ formatPreviewDate(upgradePreviewData.newExpireTime) }}</text>
+        </view>
+      </view>
+      <view class="upgrade-popup-actions">
+        <view class="upgrade-btn-cancel" @click="showUpgradePreview = false">
+          <text>取消</text>
+        </view>
+        <view class="upgrade-btn-confirm" :class="{ 'loading': loading }" @click="showUpgradePreview = false; doPay()">
+          <text>确认升级</text>
+        </view>
+      </view>
+    </view>
   </view>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useUserStore } from '@/store/user'
-import { getVipCardList, buyVip, payCloudCheck } from '@/utils/api'
+import { getVipCardList, buyVip, processBuyVip, getUserVipInfo, upgradePreview } from '@/utils/api'
 
 const userStore = useUserStore()
 const plans = ref([])
 const selectedId = ref(null)
 const loading = ref(false)
+const selectedPlan = computed(() => plans.value.find(p => p.id === selectedId.value) || null)
+
+// 升级预览弹窗
+const showUpgradePreview = ref(false)
+const upgradePreviewData = ref(null)
 
 onMounted(() => {
   fetchPlans()
@@ -104,6 +158,30 @@ async function handleBuy() {
     return
   }
 
+  // 已是VIP时，先展示升级预览弹窗
+  if (userStore.isVip) {
+    try {
+      const previewRes = await upgradePreview({ vipCardId: selectedId.value })
+      if (previewRes.code === 200) {
+        upgradePreviewData.value = previewRes.data
+        showUpgradePreview.value = true
+        return
+      }
+    } catch (e) {
+      const msg = e?.msg || ''
+      // 后端拒绝（低级套餐/已是最高等级）：直接提示，不进入支付
+      if (msg && !msg.includes('无效VIP') && !msg.includes('无需折算')) {
+        uni.showModal({ title: '无法购买', content: msg, showCancel: false, confirmText: '知道了' })
+        return
+      }
+      // VIP刚过期等边缘情况：跳过预览直接进入支付
+    }
+  }
+
+  await doPay()
+}
+
+async function doPay() {
   loading.value = true
   try {
     // 先获取支付参数（假设 buyVip 返回微信支付参数）
@@ -121,26 +199,34 @@ async function handleBuy() {
       package: packageVal, signType, paySign
     })
 
-    // 支付成功
-    uni.showToast({ title: '开通成功！', icon: 'success' })
+    // 主动触发权益下发（兜底，防止回调漏发）
+    try { await processBuyVip(outTradeNo) } catch (e) { console.warn('processBuyVip:', e) }
     // 刷新VIP状态
-    setTimeout(async () => {
-      const { getUserVipInfo } = await import('@/utils/api')
-      const vipRes = await getUserVipInfo()
-      if (vipRes.code === 200) {
-        userStore.updateVipStatus(vipRes.data)
-      }
+    const vipRes = await getUserVipInfo()
+    if (vipRes.code === 200) {
+      userStore.updateVipStatus(vipRes.data)
+    }
+    uni.showToast({ title: '开通成功！', icon: 'success' })
+    setTimeout(() => {
       uni.navigateTo({ url: '/pages/vip/myVip' })
     }, 1000)
   } catch (e) {
     if (e?.errMsg?.includes('cancel')) {
       uni.navigateTo({ url: '/pages/pay/payResult?status=cancel' })
+    } else if (e?.msg) {
+      // 后端业务拒绝（如低级套餐拦截），直接展示原因
+      uni.showModal({ title: '操作失败', content: e.msg, showCancel: false, confirmText: '知道了' })
     } else {
       uni.navigateTo({ url: '/pages/pay/payResult?status=fail' })
     }
   } finally {
     loading.value = false
   }
+}
+
+function formatPreviewDate(dateStr) {
+  if (!dateStr) return '--'
+  return (dateStr.split('T')[0] || dateStr.substring(0, 10)).replace(/-/g, '/')
 }
 </script>
 
@@ -199,8 +285,60 @@ async function handleBuy() {
     &:last-child { border-bottom: none; }
     .benefit-icon { font-size: 28rpx; }
     .benefit-text { font-size: 28rpx; color: #333; }
+    .discount-tag { font-size: 24rpx; color: #57ca9e; font-weight: bold; margin-left: 10rpx; }
   }
 }
 
 .btn-wrap { margin: 0 30rpx; }
+
+.popup-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 998;
+}
+
+.upgrade-popup {
+  position: fixed;
+  left: 40rpx; right: 40rpx;
+  top: 50%; transform: translateY(-50%);
+  background: #fff;
+  border-radius: 24rpx;
+  z-index: 999;
+  overflow: hidden;
+
+  .upgrade-popup-header {
+    display: flex; flex-direction: row; align-items: center; justify-content: space-between;
+    padding: 30rpx 30rpx 20rpx;
+    border-bottom: 1rpx solid #f0f0f0;
+    .upgrade-popup-title { font-size: 34rpx; font-weight: bold; color: #333; }
+    .upgrade-popup-close { font-size: 36rpx; color: #999; padding: 10rpx; }
+  }
+
+  .upgrade-popup-body {
+    padding: 30rpx;
+    .upgrade-row {
+      display: flex; flex-direction: row; justify-content: space-between; align-items: center;
+      padding: 18rpx 0;
+      .upgrade-label { font-size: 28rpx; color: #666; }
+      .upgrade-val { font-size: 28rpx; color: #333; }
+      .upgrade-val-highlight { color: #57ca9e; font-weight: bold; }
+    }
+    .upgrade-divider { height: 1rpx; background: #f0f0f0; margin: 8rpx 0; }
+  }
+
+  .upgrade-popup-actions {
+    display: flex; flex-direction: row; border-top: 1rpx solid #f0f0f0;
+    .upgrade-btn-cancel {
+      flex: 1; padding: 30rpx 0; text-align: center;
+      font-size: 30rpx; color: #999;
+      border-right: 1rpx solid #f0f0f0;
+    }
+    .upgrade-btn-confirm {
+      flex: 2; padding: 30rpx 0; text-align: center;
+      font-size: 30rpx; color: #57ca9e; font-weight: bold;
+      &.loading { opacity: 0.6; }
+    }
+  }
+}
 </style>

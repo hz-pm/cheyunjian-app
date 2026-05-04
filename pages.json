@@ -19,6 +19,13 @@
 		  }
 		},
 		{
+			"path": "pages/login/webView",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "default"
+			}
+		},
+		{
 		  "path": "pages/main/mine",
 		  "style": {
 			"navigationBarTitleText": "我的",
@@ -110,6 +117,7 @@
 			"enablePullDownRefresh": false
 		  }
 		},
+		// #ifndef MP-WEIXIN
 		{
 		  "path": "pages/vip/vipCard",
 		  "style": {
@@ -128,6 +136,7 @@
 			"enablePullDownRefresh": false
 		  }
 		},
+		// #endif
 		{
 		  "path": "pages/mine/myInfo",
 		  "style": {
@@ -141,6 +150,15 @@
 		  "path": "pages/mine/question",
 		  "style": {
 			"navigationBarTitleText": "常见问题",
+			"navigationBarBackgroundColor": "#57ca9e",
+			"navigationBarTextStyle": "white",
+			"enablePullDownRefresh": false
+		  }
+		},
+		{
+		  "path": "pages/mine/authFile",
+		  "style": {
+			"navigationBarTitleText": "个人信息授权书",
 			"navigationBarBackgroundColor": "#57ca9e",
 			"navigationBarTextStyle": "white",
 			"enablePullDownRefresh": false
@@ -165,10 +183,28 @@
 		  }
 		},
 		{
+		  "path": "pages/reg/bindPhone",
+		  "style": {
+			"navigationBarTitleText": "绑定手机号",
+			"navigationBarBackgroundColor": "#57ca9e",
+			"navigationBarTextStyle": "white",
+			"enablePullDownRefresh": false
+		  }
+		},
+		{
 		  "path": "pages/pay/payResult",
 		  "style": {
 			"navigationBarTitleText": "支付结果",
 			"navigationBarBackgroundColor": "#57ca9e",
+			"navigationBarTextStyle": "white",
+			"enablePullDownRefresh": false
+		  }
+		},
+		{
+		  "path": "pages/order/detail",
+		  "style": {
+			"navigationBarTitleText": "订单详情",
+			"navigationBarBackgroundColor": "#30ad55",
 			"navigationBarTextStyle": "white",
 			"enablePullDownRefresh": false
 		  }
