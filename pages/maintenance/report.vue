@@ -18,10 +18,12 @@
 
 <script setup>
 import { ref } from 'vue'
-import { onLoad, onUnload } from '@dcloudio/uni-app'
+import { onLoad, onUnload, onShareAppMessage } from '@dcloudio/uni-app'
 import { getMaintenanceReport } from '@/utils/api'
+import { BASE_URL_IMG } from '@/utils/request'
 
 const taskId = ref('')
+const isShare = ref('0')
 const status = ref('loading')
 const reportUrl = ref('')
 const pollCount = ref(0)
@@ -31,6 +33,7 @@ const MAX_POLL = 10
 
 onLoad((options) => {
   taskId.value = options.taskId || ''
+  isShare.value = options.share === '1' ? '1' : '0'
   if (taskId.value) {
     startPolling()
   } else {
@@ -41,6 +44,12 @@ onLoad((options) => {
 
 onUnload(() => { if (pollTimer) clearTimeout(pollTimer) })
 
+onShareAppMessage(() => ({
+  title: '车辆维保报告',
+  path: `/pages/maintenance/report?taskId=${taskId.value}&share=1`,
+  imageUrl: BASE_URL_IMG + 'mp-share.png'
+}))
+
 async function startPolling() {
   if (pollCount.value >= MAX_POLL) {
     status.value = 'fail'
@@ -48,7 +57,7 @@ async function startPolling() {
     return
   }
   try {
-    const res = await getMaintenanceReport({ taskId: taskId.value, isShare: '0' })
+    const res = await getMaintenanceReport({ taskId: taskId.value, isShare: isShare.value })
     if (res.code === 200 && res.data && res.data.data) {
       reportUrl.value = res.data.data
       status.value = 'done'

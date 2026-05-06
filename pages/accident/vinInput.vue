@@ -173,6 +173,8 @@ const signConfirmLoading = ref(false)
 const signatureUrl = ref('')
 let sigCtx = null
 let sigDrawing = false
+let sigLastX = 0
+let sigLastY = 0
 
 function openSignPop() {
   showSignPop.value = true
@@ -195,19 +197,23 @@ function closeSignPop() {
 function onSignStart(e) {
   if (!sigCtx) return
   sigDrawing = true
-  const x = e.touches[0].x
-  const y = e.touches[0].y
-  sigCtx.beginPath()
-  sigCtx.moveTo(x, y)
+  sigLastX = e.touches[0].x
+  sigLastY = e.touches[0].y
 }
 
 function onSignMove(e) {
   if (!sigDrawing || !sigCtx) return
   const x = e.touches[0].x
   const y = e.touches[0].y
+  // draw(true) 每次会清空指令缓冲区，必须在每段开头重新 beginPath+moveTo
+  // 逐段绘制并用保留模式叠加，避免从不确定起点连出射线
+  sigCtx.beginPath()
+  sigCtx.moveTo(sigLastX, sigLastY)
   sigCtx.lineTo(x, y)
   sigCtx.stroke()
   sigCtx.draw(true)
+  sigLastX = x
+  sigLastY = y
 }
 
 function onSignEnd() {

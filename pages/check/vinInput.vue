@@ -230,7 +230,7 @@ async function handleSubmit() {
     await executeCheckTask(taskId)
     uni.hideLoading()
 
-    uni.navigateTo({ url: `/pages/check/result?vinCode=${vinCode.value}` })
+    uni.navigateTo({ url: `/pages/check/result?vinCode=${vinCode.value}&outTradeNo=${outTradeNo}` })
   } catch (e) {
     uni.hideLoading()
     if (e?.errMsg?.includes('cancel')) {

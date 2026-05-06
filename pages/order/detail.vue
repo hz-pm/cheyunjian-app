@@ -191,10 +191,19 @@
         :disabled="retryLoading"
         @click="goRetry"
       />
-      <!-- 检测中：提示等待 -->
+      <!-- 检测中：提示等待（type=2/3 异步报告可主动刷新；type=1 同步不应出现此状态） -->
       <view v-else-if="order.status === 1" class="processing-tip">
         <u-loading-icon size="32" color="#30ad55" />
-        <text class="processing-text">报告生成中，请稍后在记录页刷新查看</text>
+        <text class="processing-text">报告生成中，请稍候...</text>
+        <u-button
+          v-if="order.type === 2 || order.type === 3"
+          text="刷新查看报告"
+          type="primary"
+          color="#30ad55"
+          size="small"
+          style="margin-top: 20rpx;"
+          @click="goReport"
+        />
       </view>
       <!-- 退款失败需客服介入 -->
       <view v-else-if="order.status === 5" class="processing-tip">
@@ -297,7 +306,7 @@ function previewVinImg() {
 
 function goReport() {
   const t = order.value.type
-  if (t === 1) uni.navigateTo({ url: `/pages/check/result?vinCode=${order.value.vinCode}` })
+  if (t === 1) uni.navigateTo({ url: `/pages/check/result?vinCode=${order.value.vinCode}&outTradeNo=${order.value.outTradeNo}` })
   else if (t === 2) uni.navigateTo({ url: `/pages/accident/report?taskId=${order.value.id}` })
   else uni.navigateTo({ url: `/pages/maintenance/report?taskId=${order.value.id}` })
 }
@@ -352,7 +361,7 @@ async function goExecute() {
 async function doPay(taskId, type, payType) {
   // 1. 用已有 taskId 创建预支付订单（含自动绑定微信兜底）
   const payRes = await requestWechatPay({ payType, taskId })
-  const { timeStamp, nonceStr, paySign, signType } = payRes.data
+  const { outTradeNo, timeStamp, nonceStr, paySign, signType } = payRes.data
   const packageVal = payRes.data['package']
 
   // 2. 拉起微信支付
@@ -365,7 +374,7 @@ async function doPay(taskId, type, payType) {
 
   // 4. 跳转结果页
   if (type === 1) {
-    uni.navigateTo({ url: `/pages/check/result?vinCode=${order.value.vinCode}` })
+    uni.navigateTo({ url: `/pages/check/result?vinCode=${order.value.vinCode}&outTradeNo=${outTradeNo}` })
   } else if (type === 2) {
     uni.navigateTo({ url: `/pages/accident/report?taskId=${taskId}` })
   } else {

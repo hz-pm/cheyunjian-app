@@ -21,10 +21,12 @@
 
 <script setup>
 import { ref } from 'vue'
-import { onLoad, onUnload } from '@dcloudio/uni-app'
+import { onLoad, onUnload, onShareAppMessage } from '@dcloudio/uni-app'
 import { getAccidentReport } from '@/utils/api'
+import { BASE_URL_IMG } from '@/utils/request'
 
 const taskId = ref('')
+const isShare = ref('0')
 const status = ref('loading') // loading | done | fail
 const reportUrl = ref('')
 const pollCount = ref(0)
@@ -34,6 +36,7 @@ const MAX_POLL = 10
 
 onLoad((options) => {
   taskId.value = options.taskId || ''
+  isShare.value = options.share === '1' ? '1' : '0'
   if (taskId.value) {
     startPolling()
   } else {
@@ -46,6 +49,12 @@ onUnload(() => {
   stopPolling()
 })
 
+onShareAppMessage(() => ({
+  title: '事故记录报告',
+  path: `/pages/accident/report?taskId=${taskId.value}&share=1`,
+  imageUrl: BASE_URL_IMG + 'mp-share.png'
+}))
+
 function startPolling() {
   pollReport()
 }
@@ -57,7 +66,7 @@ async function pollReport() {
     return
   }
   try {
-    const res = await getAccidentReport({ taskId: taskId.value })
+    const res = await getAccidentReport({ taskId: taskId.value, isShare: isShare.value })
     if (res.code === 200 && res.data) {
       if (res.data.status === 'generated' && res.data.reportUrl) {
         reportUrl.value = res.data.reportUrl
