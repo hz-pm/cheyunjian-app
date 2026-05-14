@@ -115,20 +115,22 @@ export const getReportImgUrl = (params) => get('/index/cloud/reportImgUrl', para
 /* ========== 事故查询 ========== */
 
 /**
- * 轮询事故报告（支付并执行任务后调用）
- * @param {Object} params - { taskId }
+ * 轮询事故报告（支付后由后端自动提交，前端直接轮询）
+ * @param {Object} params - { taskId, isShare? }
+ * @param {Object} [options] - 透传 request 选项，轮询时建议 { silent: true, loading: false }
  * @returns { status: 'generated'|'generating', reportUrl? }
  */
-export const getAccidentReport = (params) => get('/index/check/task/report/accident', params)
+export const getAccidentReport = (params, options) => get('/index/check/task/report/accident', params, options)
 
 /* ========== 维保查询 ========== */
 
 /**
- * 轮询维保报告（支付并执行任务后调用）
+ * 轮询维保报告（支付后由后端自动提交，前端直接轮询）
  * @param {Object} params - { taskId, isShare? }
- * @returns { data: reportData }
+ * @param {Object} [options] - 透传 request 选项，轮询时建议 { silent: true, loading: false }
+ * @returns { data: reportUrl }
  */
-export const getMaintenanceReport = (params) => get('/index/check/task/report/maintenance', params)
+export const getMaintenanceReport = (params, options) => get('/index/check/task/report/maintenance', params, options)
 
 /* ========== VIP ========== */
 

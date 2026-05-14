@@ -52,7 +52,7 @@
         </view>
       </view>
 
-      <button class="btn" :loading="loading" @click="clickSubmit">立即检测</button>
+      <button class="btn" :loading="loading" @click="() => clickSubmit()">立即检测</button>
 
       <text class="btn-2" style="width: 90%;" @click="openDemoPop">查看检测范例</text>
 
@@ -105,8 +105,9 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useUserStore } from '@/store/user'
-import { createCheckTask, executeCheckTask, queryTaskPrice, VEHICLE_LICENSE_OCR_PATH } from '@/utils/api'
+import { createCheckTask, queryTaskPrice, VEHICLE_LICENSE_OCR_PATH } from '@/utils/api'
 import { requestWechatPay } from '@/composables/useWechatPay'
+import { requestSubscribeMsg } from '@/composables/useSubscribeMsg'
 import { BASE_URL, BASE_URL_IMG } from '@/utils/request'
 import { VIP_ENABLED } from '@/utils/config'
 
@@ -204,7 +205,7 @@ function uploadImage(filePath) {
   })
 }
 
-async function clickSubmit() {
+async function clickSubmit(forceNew = false) {
   if (!userStore.checkLogin()) return
   if (priceInfo.value?.maintenance) { showMaintenanceTip(); return }
   if (!pic.value) {
@@ -219,20 +220,59 @@ async function clickSubmit() {
     const taskRes = await createCheckTask({
       type: 3,
       vinCode: vinCode.value,
-      vinImg: pic.value
+      vinImg: pic.value,
+      forceNew
     })
-    const taskId = taskRes.data
+    const { taskId, isNew, status, expired, daysAgo } = taskRes.data
+
+    if (!isNew) {
+      if (status === 1) {
+        uni.showModal({
+          title: '提示',
+          content: '该车辆维保记录正在查询中，稍后可查看报告',
+          showCancel: false,
+          confirmText: '我知道了'
+        })
+        return
+      }
+      const content = expired
+        ? `您曾于${daysAgo}天前查询过该车辆维保记录，建议重新查询获取最新数据`
+        : '30天内已查询过该车辆维保记录，可直接查看已有报告，或重新查询获取最新数据'
+      uni.showModal({
+        title: '提示',
+        content,
+        showCancel: true,
+        cancelText: '查看报告',
+        confirmText: '继续查询',
+        success: (res) => {
+          if (res.confirm) {
+            clickSubmit(true)
+          } else {
+            uni.navigateTo({ url: `/pages/maintenance/report?taskId=${taskId}` })
+          }
+        }
+      })
+      return
+    }
 
     const payRes = await requestWechatPay({ payType: 5, taskId })
     const { timeStamp, nonceStr, paySign, signType } = payRes.data
     const packageVal = payRes.data['package']
 
-    await uni.requestPayment({ provider: 'wxpay', timeStamp, nonceStr, package: packageVal, signType, paySign })
+    // 支付前请求订阅消息授权（用户拒绝不影响支付）
+    await requestSubscribeMsg()
 
-    uni.showLoading({ title: '提交中...', mask: true })
-    await executeCheckTask(taskId)
-    uni.hideLoading()
+    // 仅"用户取消"立即返回，其他回调异常静默忽略（后端通过支付回调自动执行检测）
+    try {
+      await uni.requestPayment({ provider: 'wxpay', timeStamp, nonceStr, package: packageVal, signType, paySign })
+    } catch (payErr) {
+      if (payErr?.errMsg?.includes('cancel')) {
+        uni.navigateTo({ url: '/pages/pay/payResult?status=cancel' })
+        return
+      }
+    }
 
+    // 支付完成后后端自动提交检测，直接跳转报告页等待结果
     uni.navigateTo({ url: `/pages/maintenance/report?taskId=${taskId}` })
   } catch (e) {
     uni.hideLoading()

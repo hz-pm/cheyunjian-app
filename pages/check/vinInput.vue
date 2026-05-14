@@ -81,7 +81,7 @@
         type="primary"
         color="#30ad55"
         :loading="loading"
-        @click="handleSubmit"
+        @click="() => handleSubmit()"
       />
     </view>
 
@@ -97,6 +97,7 @@ import { ref, onMounted } from 'vue'
 import { useUserStore } from '@/store/user'
 import { createCheckTask, executeCheckTask, queryTaskPrice, VEHICLE_VIN_OCR_PATH } from '@/utils/api'
 import { requestWechatPay } from '@/composables/useWechatPay'
+import { requestSubscribeMsg } from '@/composables/useSubscribeMsg'
 import { BASE_URL } from '@/utils/request'
 import { VIP_ENABLED } from '@/utils/config'
 
@@ -201,7 +202,7 @@ function uploadVinImage(filePath) {
   })
 }
 
-async function handleSubmit() {
+async function handleSubmit(forceNew = false) {
   if (!userStore.checkLogin()) return
   if (priceInfo.value?.maintenance) { showMaintenanceTip(); return }
   if (!validateVin()) return
@@ -210,24 +211,77 @@ async function handleSubmit() {
   try {
     // 1. 创建检测任务，获取 taskId
     const taskRes = await createCheckTask({
-		type: 1, 
-		vinCode: vinCode.value, 
-		vinImg: vinImgPath.value ,
-		personName: ''
+		type: 1,
+		vinCode: vinCode.value,
+		vinImg: vinImgPath.value,
+		personName: '',
+		forceNew
 	})
-    const taskId = taskRes.data
+    const { taskId, isNew, status, expired, daysAgo } = taskRes.data
+
+    if (!isNew) {
+      if (status === 1) {
+        uni.showModal({
+          title: '提示',
+          content: '该车辆查询正在处理中，稍后可查看报告',
+          showCancel: false,
+          confirmText: '我知道了'
+        })
+        return
+      }
+      // 不论是否超30天，都给用户两个选择：查看旧报告 或 继续查询
+      const content = expired
+        ? `您曾于${daysAgo}天前查询过该车辆报告，建议重新查询获取最新数据`
+        : '30天内已查询过该车辆，可直接查看已有报告，或重新查询获取最新数据'
+      uni.showModal({
+        title: '提示',
+        content,
+        showCancel: true,
+        cancelText: '查看报告',
+        confirmText: '继续查询',
+        success: (res) => {
+          if (res.confirm) {
+            handleSubmit(true)
+          } else {
+            uni.navigateTo({ url: `/pages/check/result?vinCode=${vinCode.value}` })
+          }
+        }
+      })
+      return
+    }
 
     // 2. 创建预支付订单（含自动绑定微信兜底）
     const payRes = await requestWechatPay({ payType: 3, taskId })
     const { outTradeNo, timeStamp, nonceStr, paySign, signType } = payRes.data
     const packageVal = payRes.data['package']
 
-    // 3. 发起微信支付
-    await uni.requestPayment({ provider: 'wxpay', timeStamp, nonceStr, package: packageVal, signType, paySign })
+    // 3. 支付前请求订阅消息授权（用户拒绝不影响支付）
+    await requestSubscribeMsg()
 
-    // 4. 执行检测
+    // 4. 发起微信支付；仅"用户取消"立即返回，其他回调异常静默忽略
+    //    （微信偶发回调丢失，后端 getAndValidateOrder 会主动向微信查单）
+    try {
+      await uni.requestPayment({ provider: 'wxpay', timeStamp, nonceStr, package: packageVal, signType, paySign })
+    } catch (payErr) {
+      if (payErr?.errMsg?.includes('cancel')) {
+        uni.navigateTo({ url: '/pages/pay/payResult?status=cancel' })
+        return
+      }
+    }
+
+    // 5. 执行检测（同步接口）；若真未支付后端会抛 "请先完成支付"，走失败页
     uni.showLoading({ title: '检测中...', mask: true })
-    await executeCheckTask(taskId)
+    try {
+      await executeCheckTask(taskId)
+    } catch (execErr) {
+      uni.hideLoading()
+      const msg = execErr?.msg || ''
+      // 后端正在执行 / 已完成 / 已退款：均视为正常，继续跳转结果页
+      if (!msg.includes('已完成') && !msg.includes('已退款') && !msg.includes('任务提交中')) {
+        uni.navigateTo({ url: '/pages/pay/payResult?status=fail' })
+        return
+      }
+    }
     uni.hideLoading()
 
     uni.navigateTo({ url: `/pages/check/result?vinCode=${vinCode.value}&outTradeNo=${outTradeNo}` })

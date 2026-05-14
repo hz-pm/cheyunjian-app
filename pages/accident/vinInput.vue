@@ -150,8 +150,9 @@
 <script setup>
 import { ref, nextTick, onMounted, getCurrentInstance } from 'vue'
 import { useUserStore } from '@/store/user'
-import { createCheckTask, executeCheckTask, queryTaskPrice, VEHICLE_LICENSE_OCR_PATH, UPLOAD_IMAGE_PATH } from '@/utils/api'
+import { createCheckTask, queryTaskPrice, VEHICLE_LICENSE_OCR_PATH, UPLOAD_IMAGE_PATH } from '@/utils/api'
 import { requestWechatPay } from '@/composables/useWechatPay'
+import { requestSubscribeMsg } from '@/composables/useSubscribeMsg'
 import { BASE_URL, BASE_URL_IMG } from '@/utils/request'
 import { VIP_ENABLED } from '@/utils/config'
 
@@ -295,7 +296,7 @@ async function clickSubmit() {
 }
 
 // ── 实际提交（签名确认后调用）─────────────────────────
-async function doSubmit() {
+async function doSubmit(forceNew = false) {
   loading.value = true
   try {
     const taskRes = await createCheckTask({
@@ -303,20 +304,59 @@ async function doSubmit() {
       vinCode: vinCode.value,
       vinImg: pic.value,
       personName: owner.value,
-      spicUrl: signatureUrl.value
+      spicUrl: signatureUrl.value,
+      forceNew
     })
-    const taskId = taskRes.data
+    const { taskId, isNew, status, expired, daysAgo } = taskRes.data
+
+    if (!isNew) {
+      if (status === 1) {
+        uni.showModal({
+          title: '提示',
+          content: '该车辆事故记录正在查询中，稍后可查看报告',
+          showCancel: false,
+          confirmText: '我知道了'
+        })
+        return
+      }
+      const content = expired
+        ? `您曾于${daysAgo}天前查询过该车辆事故记录，建议重新查询获取最新数据`
+        : '30天内已查询过该车辆事故记录，可直接查看已有报告，或重新查询获取最新数据'
+      uni.showModal({
+        title: '提示',
+        content,
+        showCancel: true,
+        cancelText: '查看报告',
+        confirmText: '继续查询',
+        success: (res) => {
+          if (res.confirm) {
+            doSubmit(true)
+          } else {
+            uni.navigateTo({ url: `/pages/accident/report?taskId=${taskId}` })
+          }
+        }
+      })
+      return
+    }
 
     const payRes = await requestWechatPay({ payType: 4, taskId })
     const { timeStamp, nonceStr, paySign, signType } = payRes.data
     const packageVal = payRes.data['package']
 
-    await uni.requestPayment({ provider: 'wxpay', timeStamp, nonceStr, package: packageVal, signType, paySign })
+    // 支付前请求订阅消息授权（用户拒绝不影响支付）
+    await requestSubscribeMsg()
 
-    uni.showLoading({ title: '提交中...', mask: true })
-    await executeCheckTask(taskId)
-    uni.hideLoading()
+    // 仅"用户取消"立即返回，其他回调异常静默忽略（后端通过支付回调自动执行检测）
+    try {
+      await uni.requestPayment({ provider: 'wxpay', timeStamp, nonceStr, package: packageVal, signType, paySign })
+    } catch (payErr) {
+      if (payErr?.errMsg?.includes('cancel')) {
+        uni.navigateTo({ url: '/pages/pay/payResult?status=cancel' })
+        return
+      }
+    }
 
+    // 支付完成后后端自动提交检测，直接跳转报告页等待结果
     uni.navigateTo({ url: `/pages/accident/report?taskId=${taskId}` })
   } catch (e) {
     uni.hideLoading()
