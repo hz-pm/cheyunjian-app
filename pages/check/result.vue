@@ -3,13 +3,17 @@
     <!-- 加载中 -->
     <view v-if="loading" class="status-wrap">
       <u-loading-icon size="60" color="#57ca9e" />
-      <text class="status-text">报告加载中...</text>
+      <text class="status-text">{{ loadingText }}</text>
     </view>
 
-    <!-- 加载失败 -->
+    <!-- 报告生成中 / 获取失败 -->
     <view v-else-if="!report" class="status-wrap">
-      <text class="status-text">报告获取失败，请返回重试</text>
-      <u-button text="返回" type="primary" color="#57ca9e" @click="uni.navigateBack()" />
+      <text class="status-text">报告正在生成中，请稍候…</text>
+      <text class="status-sub">报告生成可能需要一点时间，请稍等片刻后点击重试，{{ "\n" }}也可以稍后在订单列表中查看报告</text>
+      <view class="status-btns">
+        <u-button text="重试" type="primary" color="#57ca9e" @click="fetchReport" />
+        <u-button text="返回" plain type="primary" color="#57ca9e" @click="goBack" />
+      </view>
     </view>
 
     <!-- 报告内容 -->
@@ -284,23 +288,23 @@
       </view>
     </view>
 
-    <!-- 导出图片弹窗 -->
-    <view v-if="showPopup" class="popup-mask" @click.self="showPopup=false">
-      <view class="popup-sheet">
-        <view class="attestation">
-          <text class="iconfont icon-info" style="font-size:28rpx;margin-right:6rpx;"></text>长按报告可保存至手机相册
-        </view>
-        <scroll-view scroll-y style="flex:1;">
-          <image :src="imgUrl" mode="widthFix" style="width:100%;" @longpress="saveImage"></image>
-        </scroll-view>
+    <!-- 导出图片弹窗：遮罩与面板平级，避免父级 touchmove 阻断 scroll-view -->
+    <view v-if="showPopup" class="popup-mask" @touchmove.stop.prevent @click="showPopup=false"></view>
+    <view v-if="showPopup" class="popup-sheet">
+      <view class="attestation">
+        <text class="iconfont icon-info" style="font-size:28rpx;margin-right:6rpx;"></text>长按报告可保存至手机相册
+        <text class="popup-close" @click="showPopup=false">✕</text>
       </view>
+      <scroll-view scroll-y class="popup-scroll" enhanced :show-scrollbar="false">
+        <image :src="imgUrl" mode="widthFix" style="width:100%;display:block;" @longpress="saveImage"></image>
+      </scroll-view>
     </view>
   </view>
 </template>
 
 <script setup>
 import { ref, computed, getCurrentInstance } from 'vue'
-import { onLoad, onShareAppMessage } from '@dcloudio/uni-app'
+import { onLoad, onUnload, onShareAppMessage } from '@dcloudio/uni-app'
 import { getCheckDetails, getReportImgUrl } from '@/utils/api'
 import { BASE_URL_IMG } from '@/utils/request'
 
@@ -309,6 +313,7 @@ const instance = getCurrentInstance()
 const vinCode = ref('')
 const outTradeNo = ref('')
 const loading = ref(true)
+const loadingText = ref('报告加载中...')
 const detail = ref({})
 const report = ref(null)
 const tabIndex = ref(0)
@@ -332,8 +337,31 @@ onShareAppMessage(() => ({
   imageUrl: BASE_URL_IMG + 'mp-share.png'
 }))
 
-async function fetchReport() {
+// 报告生成需要时间：首次拿不到结果时自动静默重试，全部失败后才展示重试页
+const MAX_AUTO_RETRY = 3
+const AUTO_RETRY_INTERVAL = 3000
+let autoRetryCount = 0
+let retryTimer = null
+
+onUnload(() => {
+  if (retryTimer) {
+    clearTimeout(retryTimer)
+    retryTimer = null
+  }
+})
+
+function fetchReport() {
+  autoRetryCount = 0
+  if (retryTimer) {
+    clearTimeout(retryTimer)
+    retryTimer = null
+  }
   loading.value = true
+  loadingText.value = '报告加载中...'
+  loadReportOnce()
+}
+
+async function loadReportOnce() {
   canvasSrc.value = ''
   try {
     const params = { vinCode: vinCode.value }
@@ -367,9 +395,23 @@ async function fetchReport() {
     }
   } catch (e) {
     console.error(e)
-  } finally {
+  }
+
+  if (report.value) {
+    loading.value = false
+    return
+  }
+  if (autoRetryCount < MAX_AUTO_RETRY) {
+    autoRetryCount++
+    loadingText.value = '报告生成中，请稍候…'
+    retryTimer = setTimeout(loadReportOnce, AUTO_RETRY_INTERVAL)
+  } else {
     loading.value = false
   }
+}
+
+function goBack() {
+  uni.navigateBack()
 }
 
 function extractedPercentage(str) {
@@ -548,7 +590,22 @@ function saveImage() {
   align-items: center;
   padding-top: 300rpx;
   gap: 30rpx;
-  .status-text { font-size: 30rpx; color: #fff; }
+  .status-text { font-size: 32rpx; color: #fff; font-weight: bold; }
+  .status-sub {
+    font-size: 26rpx;
+    color: rgba(255, 255, 255, 0.85);
+    text-align: center;
+    line-height: 40rpx;
+    white-space: pre-wrap;
+    padding: 0 60rpx;
+  }
+  .status-btns {
+    display: flex;
+    flex-direction: row;
+    gap: 30rpx;
+    margin-top: 20rpx;
+    :deep(.u-button) { width: 220rpx; }
+  }
 }
 
 /* 头部 */
@@ -901,20 +958,21 @@ function saveImage() {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 999;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+  z-index: 998;
 }
 
 .popup-sheet {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
   background: #fff;
   border-radius: 15rpx 15rpx 0 0;
   height: 71vh;
   display: flex;
   flex-direction: column;
+  z-index: 999;
 
   .attestation {
+    position: relative;
     background: #fff8ed;
     color: #f3a54f;
     height: 74rpx;
@@ -926,5 +984,21 @@ function saveImage() {
     align-items: center;
     flex-shrink: 0;
   }
+
+  .popup-close {
+    position: absolute;
+    right: 20rpx;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 32rpx;
+    color: #999;
+    padding: 10rpx 20rpx;
+    line-height: 1;
+  }
+}
+
+.popup-scroll {
+  flex: 1;
+  height: calc(71vh - 74rpx);
 }
 </style>

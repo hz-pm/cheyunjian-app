@@ -15,7 +15,7 @@
         <image
           :src="BASE_URL_IMG + 'img-banner.webp'"
           class="banner-img"
-          mode="aspectFill"
+          mode="widthFix"
         />
       </swiper-item>
     </swiper>
@@ -155,7 +155,7 @@ function goVip() {
 /* 轮播 */
 .banner-swiper {
   width: 100%;
-  height: 400rpx;
+  height: 410rpx;
   .banner-img {
     width: 100%;
     height: 100%;

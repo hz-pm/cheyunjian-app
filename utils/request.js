@@ -4,7 +4,7 @@
  */
 
 const BASE_URL_IMG = 'https://xinnengyuanyunjian.top/images/'
-// const BASE_URL = 'http://192.168.9.114:8099'
+// const BASE_URL = 'http://192.168.9.117:8099'
 const BASE_URL = 'https://api.xinnengyuanyunjian.top'
 const TOKEN_KEY = 'Authorization'
 

@@ -367,9 +367,10 @@ async function doPay(taskId, type, payType) {
   // 2. 拉起微信支付
   await uni.requestPayment({ provider: 'wxpay', timeStamp, nonceStr, package: packageVal, signType, paySign })
 
-  // 3. 执行检测任务
-  uni.showLoading({ title: '检测中...', mask: true })
-  await executeCheckTask(taskId)
+  // 3. 支付回调后端会异步触发检测任务执行（CheckTaskPaySuccessListener）
+  //    这里给 5 秒等待动画，让后端有时间完成第三方调用，避免结果页拿不到数据
+  uni.showLoading({ title: '正在生成报告...', mask: true })
+  await new Promise(r => setTimeout(r, 5000))
   uni.hideLoading()
 
   // 4. 跳转结果页

@@ -142,7 +142,7 @@ export const getVipCardList = () => get('/index/vip/getVipCardList')
  * @param {Object} params - { vipCardId }
  * @returns { currentCardName, remainingDays, convertedDays, newCardDays, totalDays, newExpireTime }
  */
-export const upgradePreview = (params) => get('/index/vip/upgradePreview', params)
+export const upgradePreview = (params, options) => get('/index/vip/upgradePreview', params, options)
 
 /** 获取用户 VIP 信息 */
 export const getUserVipInfo = () => get('/index/vip/getUserVipInfo')
@@ -151,10 +151,10 @@ export const getUserVipInfo = () => get('/index/vip/getUserVipInfo')
  * 购买 VIP（创建预支付订单）
  * @param {Object} data - { vipCardId }
  */
-export const buyVip = (data) => post('/index/vip/buyVip', data)
+export const buyVip = (data, options) => post('/index/vip/buyVip', data, options)
 
 /**
  * 支付成功后主动触发VIP权益下发（兜底，防止回调漏发）
  * @param {string} outTradeNo - 商户订单号
  */
-export const processBuyVip = (outTradeNo) => post(`/index/vip/processBuyVip?outTradeNo=${outTradeNo}`)
+export const processBuyVip = (outTradeNo, options) => post(`/index/vip/processBuyVip?outTradeNo=${outTradeNo}`, null, options)

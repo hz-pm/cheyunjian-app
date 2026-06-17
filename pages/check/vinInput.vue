@@ -12,6 +12,18 @@
       </view>
     </view>
 
+    <!-- 检测范例弹窗 -->
+    <view v-if="showDemoPop" class="popup-overlay" @touchmove.stop.prevent @click="showDemoPop = false"></view>
+    <view v-if="showDemoPop" class="popup-sheet">
+      <view class="popup-header">
+        <text class="popup-title">检测范例</text>
+        <text class="popup-close" @click="showDemoPop = false">✕</text>
+      </view>
+      <scroll-view scroll-y class="popup-scroll">
+        <image :src="BASE_URL_IMG+'cyj_example_check.webp'" mode="widthFix" style="width: 100%;"></image>
+      </scroll-view>
+    </view>
+
     <!-- 表单卡片 -->
     <view class="form-card">
 	  <!-- 行驶证上传卡片 -->
@@ -85,20 +97,37 @@
       />
     </view>
 
+    <!-- 查看检测范例 -->
+    <view class="demo-btn-wrap">
+      <text class="btn-2" @click="openDemoPop">查看检测范例</text>
+    </view>
+
     <!-- 免责声明 -->
     <view class="disclaimer">
       <text class="disclaimer-text">免责声明：本报告提供的评估结果仅基于用户自主填写的车辆信息，结合新能源汽车充电及工况大数据模型进行测算，结果仅供参考。评估方不对任何用户基于本报告内容所做的决策或行动承担任何直接或间接的责任。</text>
     </view>
+	
+	<!-- 新增：自定义炫酷 Loading 遮罩层 -->
+	<view class="custom-loading-mask" v-if="isGenerating" @touchmove.stop.prevent>
+	  <view class="loading-content">
+		<!-- 动态光环旋转 -->
+		<view class="radar-spinner">
+		  <view class="spinner-inner"></view>
+		</view>
+		<text class="loading-title">正在生成车辆报告</text>
+		<text class="loading-desc">{{ dynamicLoadingText }}</text>
+	  </view>
+	</view>
   </view>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useUserStore } from '@/store/user'
-import { createCheckTask, executeCheckTask, queryTaskPrice, VEHICLE_VIN_OCR_PATH } from '@/utils/api'
+import { createCheckTask, queryTaskPrice, VEHICLE_VIN_OCR_PATH } from '@/utils/api'
 import { requestWechatPay } from '@/composables/useWechatPay'
 import { requestSubscribeMsg } from '@/composables/useSubscribeMsg'
-import { BASE_URL } from '@/utils/request'
+import { BASE_URL, BASE_URL_IMG } from '@/utils/request'
 import { VIP_ENABLED } from '@/utils/config'
 
 const userStore = useUserStore()
@@ -108,6 +137,11 @@ const vinImgPath = ref('')
 const loading = ref(false)
 const ocrLoading = ref(false)
 const priceInfo = ref(null)
+const showDemoPop = ref(false)
+
+// 新增响应式变量
+const isGenerating = ref(false)
+const dynamicLoadingText = ref('正在安全连接云端...')
 
 function formatPrice(val) {
   return val != null ? Number(val).toFixed(2) : '0.00'
@@ -149,6 +183,10 @@ function validateVin() {
 
 function goVip() {
   uni.navigateTo({ url: '/pages/vip/vipCard' })
+}
+
+function openDemoPop() {
+  showDemoPop.value = true
 }
 
 function showVinGuide() {
@@ -269,24 +307,21 @@ async function handleSubmit(forceNew = false) {
       }
     }
 
-    // 5. 执行检测（同步接口）；若真未支付后端会抛 "请先完成支付"，走失败页
-    uni.showLoading({ title: '检测中...', mask: true })
-    try {
-      await executeCheckTask(taskId)
-    } catch (execErr) {
-      uni.hideLoading()
-      const msg = execErr?.msg || ''
-      // 后端正在执行 / 已完成 / 已退款：均视为正常，继续跳转结果页
-      if (!msg.includes('已完成') && !msg.includes('已退款') && !msg.includes('任务提交中')) {
-        uni.navigateTo({ url: '/pages/pay/payResult?status=fail' })
-        return
-      }
-    }
-    uni.hideLoading()
+    // 5. 支付回调后端会异步触发检测任务执行（CheckTaskPaySuccessListener）
+    // ====== 使用自定义 Loading 并动态切换文案 ======
+	isGenerating.value = true
+	dynamicLoadingText.value = '正在安全连接车辆云端数据...'
+	// 模拟真实的逐步检测过程
+	setTimeout(() => { dynamicLoadingText.value = '正在核对多维历史数据...' }, 1500)
+	setTimeout(() => { dynamicLoadingText.value = '深度分析三电及车况信息...' }, 3000)
+	setTimeout(() => { dynamicLoadingText.value = '即将完成，正在排版专属报告...' }, 4500)
+	
+    await new Promise(r => setTimeout(r, 5000))
+    isGenerating.value = false
 
     uni.navigateTo({ url: `/pages/check/result?vinCode=${vinCode.value}&outTradeNo=${outTradeNo}` })
   } catch (e) {
-    uni.hideLoading()
+    isGenerating.value = false // 发生错误时也要关闭自定义 Loading
     if (e?.errMsg?.includes('cancel')) {
       uni.navigateTo({ url: '/pages/pay/payResult?status=cancel' })
     } else {
@@ -295,7 +330,7 @@ async function handleSubmit(forceNew = false) {
     }
   } finally {
     loading.value = false
-    uni.hideLoading()
+    isGenerating.value = false // 发生错误时也要关闭自定义 Loading
   }
 }
 </script>
@@ -315,41 +350,42 @@ async function handleSubmit(forceNew = false) {
 
   .top-bg-img {
     width: 100%;
-    height: 400rpx;
+    height: 320rpx;
     display: block;
   }
 
   .top-content {
     position: absolute;
-    top: 0;
+    top: 20rpx;
     left: 0;
     right: 0;
-    bottom: 0;
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: space-between;
     padding: 0 30rpx 0 40rpx;
 
     .top-text {
-      flex: 1;
+      width: 72%;
       display: flex;
       flex-direction: column;
-      gap: 16rpx;
+      gap: 15rpx;
       .top-title {
-        font-size: 44rpx;
+        font-size: 35rpx;
         font-weight: bold;
         color: #fff;
+        margin-top: 15rpx;
       }
       .top-desc {
-        font-size: 26rpx;
+        font-size: 30rpx;
         color: rgba(255, 255, 255, 0.85);
         line-height: 1.5;
       }
     }
 
     .top-icon {
-      width: 200rpx;
-      height: 200rpx;
+      width: 220rpx;
+      height: 220rpx;
       flex-shrink: 0;
     }
   }
@@ -583,6 +619,68 @@ async function handleSubmit(forceNew = false) {
 /* 按钮 */
 .btn-wrap { margin: 16rpx 5%; }
 
+/* 查看检测范例 */
+.demo-btn-wrap {
+  margin: 20rpx 5% 0;
+}
+
+.btn-2 {
+  display: block;
+  color: #30ad55;
+  border: 1rpx solid #30ad55;
+  font-size: 30rpx;
+  background: #fff;
+  border-radius: 20rpx;
+  text-align: center;
+  padding: 18rpx 0;
+}
+
+/* 弹窗 */
+.popup-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+}
+
+.popup-sheet {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  background: #fff;
+  border-radius: 15rpx 15rpx 0 0;
+  max-height: 75vh;
+  display: flex;
+  flex-direction: column;
+  z-index: 999;
+}
+
+.popup-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30rpx 30rpx 20rpx;
+  flex-shrink: 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.popup-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.popup-close {
+  font-size: 36rpx;
+  color: #999;
+  padding: 10rpx;
+}
+
+.popup-scroll {
+  flex: 1;
+  height: 65vh;
+}
+
 /* 免责声明 */
 .disclaimer {
   margin: 24rpx 5% 0;
@@ -592,5 +690,84 @@ async function handleSubmit(forceNew = false) {
     line-height: 1.7;
     display: block;
   }
+}
+
+/* ================= 自定义 Loading 动画 ================= */
+.custom-loading-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px); /* 增加毛玻璃高级感 */
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  .loading-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 100rpx;
+  }
+
+  .radar-spinner {
+    width: 140rpx;
+    height: 140rpx;
+    border-radius: 50%;
+    border: 6rpx solid #e2f4e8;
+    border-top-color: #30ad55;
+    position: relative;
+    animation: spin 1.2s linear infinite;
+    margin-bottom: 40rpx;
+    box-shadow: 0 0 30rpx rgba(48, 173, 85, 0.2);
+
+    .spinner-inner {
+      position: absolute;
+      top: 10rpx;
+      left: 10rpx;
+      right: 10rpx;
+      bottom: 10rpx;
+      border-radius: 50%;
+      border: 6rpx solid transparent;
+      border-bottom-color: #30ad55;
+      opacity: 0.6;
+      animation: spin-reverse 0.8s linear infinite;
+    }
+  }
+
+  .loading-title {
+    font-size: 38rpx;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20rpx;
+    letter-spacing: 2rpx;
+  }
+
+  .loading-desc {
+    font-size: 26rpx;
+    color: #30ad55;
+    font-weight: 500;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+}
+
+/* 旋转动画 */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes spin-reverse {
+  0% { transform: rotate(360deg); }
+  100% { transform: rotate(0deg); }
+}
+
+/* 文字呼吸动画 */
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
 }
 </style>

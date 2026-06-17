@@ -117,7 +117,6 @@
 			"enablePullDownRefresh": false
 		  }
 		},
-		// #ifndef MP-WEIXIN
 		{
 		  "path": "pages/vip/vipCard",
 		  "style": {
@@ -136,7 +135,6 @@
 			"enablePullDownRefresh": false
 		  }
 		},
-		// #endif
 		{
 		  "path": "pages/mine/myInfo",
 		  "style": {

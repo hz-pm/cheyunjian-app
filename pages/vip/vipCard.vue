@@ -161,7 +161,7 @@ async function handleBuy() {
   // 已是VIP时，先展示升级预览弹窗
   if (userStore.isVip) {
     try {
-      const previewRes = await upgradePreview({ vipCardId: selectedId.value })
+      const previewRes = await upgradePreview({ vipCardId: selectedId.value }, { silent: true })
       if (previewRes.code === 200) {
         upgradePreviewData.value = previewRes.data
         showUpgradePreview.value = true
@@ -169,12 +169,14 @@ async function handleBuy() {
       }
     } catch (e) {
       const msg = e?.msg || ''
-      // 后端拒绝（低级套餐/已是最高等级）：直接提示，不进入支付
-      if (msg && !msg.includes('无效VIP') && !msg.includes('无需折算')) {
+      // 同级续费/低级套餐预览接口都会抛"等级须高于"：放行进入支付，
+      // 低级套餐由后端 buyVip 拦截（"暂不支持购买低级套餐"），同级正常续费
+      // VIP刚过期（"无效VIP"/"无需折算"）：跳过预览直接进入支付
+      const passThrough = !msg || msg.includes('无效VIP') || msg.includes('无需折算') || msg.includes('等级须高于')
+      if (!passThrough) {
         uni.showModal({ title: '无法购买', content: msg, showCancel: false, confirmText: '知道了' })
         return
       }
-      // VIP刚过期等边缘情况：跳过预览直接进入支付
     }
   }
 
@@ -184,37 +186,56 @@ async function handleBuy() {
 async function doPay() {
   loading.value = true
   try {
-    // 先获取支付参数（假设 buyVip 返回微信支付参数）
-    const res = await buyVip({ vipCardId: selectedId.value })
-    if (res.code !== 200) {
-      uni.showToast({ title: res.msg || '下单失败', icon: 'none' })
-      return
-    }
+    // 1. 取微信登录 code，供后端换 session_key 计算虚拟支付签名
+    const code = await wxLogin()
 
-    const { outTradeNo, timeStamp, nonceStr, paySign, signType } = res.data
-    const packageVal = res.data['package']
+    // 2. 取平台（影响 signData.platform）
+    let platform = 'android'
+    try {
+      const sys = uni.getSystemInfoSync()
+      platform = sys.platform === 'ios' ? 'ios' : 'android'
+    } catch (e) { /* 忽略，默认 android */ }
 
-    await uni.requestPayment({
-      provider: 'wxpay', timeStamp, nonceStr,
-      package: packageVal, signType, paySign
-    })
+    // 3. 下单，拿虚拟支付参数（silent：失败由下方 catch 统一弹窗，避免 toast+modal 双重提示）
+    const res = await buyVip({ vipCardId: selectedId.value, code, platform }, { silent: true })
+    const { outTradeNo, signData, mode, paySig, signature } = res.data
 
-    // 主动触发权益下发（兜底，防止回调漏发）
-    try { await processBuyVip(outTradeNo) } catch (e) { console.warn('processBuyVip:', e) }
+    // 4. 调起微信小程序「虚拟支付」（VIP=虚拟商品，iOS 强制走此通道）
+    await requestVirtualPayment({ signData, mode, paySig, signature })
+
+    // 5. 主动触发权益下发（兜底，防止消息推送漏达）；
+    //    支付已成功，此处失败只代表权益未即时到账，不向用户报错
+    let activated = false
+    try {
+      const pres = await processBuyVip(outTradeNo, { silent: true })
+      activated = pres.code === 200
+    } catch (e) { console.warn('processBuyVip:', e) }
     // 刷新VIP状态
-    const vipRes = await getUserVipInfo()
-    if (vipRes.code === 200) {
-      userStore.updateVipStatus(vipRes.data)
+    try {
+      const vipRes = await getUserVipInfo()
+      if (vipRes.code === 200) {
+        userStore.updateVipStatus(vipRes.data)
+      }
+    } catch (e) { console.warn('getUserVipInfo:', e) }
+    if (activated) {
+      uni.showToast({ title: '开通成功！', icon: 'success' })
+    } else {
+      uni.showToast({ title: '支付成功，会员权益下发中', icon: 'none', duration: 2500 })
     }
-    uni.showToast({ title: '开通成功！', icon: 'success' })
     setTimeout(() => {
       uni.navigateTo({ url: '/pages/vip/myVip' })
     }, 1000)
   } catch (e) {
-    if (e?.errMsg?.includes('cancel')) {
+    console.error('[buyVip] 失败详情：', JSON.stringify(e))
+    if (e?.errMsg && e.errMsg.includes('cancel')) {
+      // 用户主动取消支付
       uni.navigateTo({ url: '/pages/pay/payResult?status=cancel' })
+    } else if (e?.errMsg) {
+      // wx.requestVirtualPayment 失败：reject 的是 {errMsg, errCode}，展示微信原始错误便于定位
+      const detail = e.errCode != null ? `${e.errMsg}（errCode=${e.errCode}）` : e.errMsg
+      uni.showModal({ title: '支付失败', content: detail, showCancel: false, confirmText: '知道了' })
     } else if (e?.msg) {
-      // 后端业务拒绝（如低级套餐拦截），直接展示原因
+      // 后端业务拒绝（如低级套餐拦截）或前端环境不支持，直接展示原因
       uni.showModal({ title: '操作失败', content: e.msg, showCancel: false, confirmText: '知道了' })
     } else {
       uni.navigateTo({ url: '/pages/pay/payResult?status=fail' })
@@ -222,6 +243,37 @@ async function doPay() {
   } finally {
     loading.value = false
   }
+}
+
+// 获取微信登录临时凭证 code
+function wxLogin() {
+  return new Promise((resolve, reject) => {
+    uni.login({
+      provider: 'weixin',
+      success: (r) => (r && r.code) ? resolve(r.code) : reject({ msg: '微信登录失败，请重试' }),
+      fail: () => reject({ msg: '微信登录失败，请重试' })
+    })
+  })
+}
+
+// 调起微信小程序虚拟支付（仅微信小程序环境支持）
+function requestVirtualPayment({ signData, mode, paySig, signature }) {
+  return new Promise((resolve, reject) => {
+    // #ifdef MP-WEIXIN
+    if (typeof wx === 'undefined' || !wx.requestVirtualPayment) {
+      reject({ msg: '当前微信版本过低，请升级微信后再试' })
+      return
+    }
+    wx.requestVirtualPayment({
+      signData, mode, paySig, signature,
+      success: resolve,
+      fail: reject
+    })
+    // #endif
+    // #ifndef MP-WEIXIN
+    reject({ msg: '请在微信小程序中购买会员' })
+    // #endif
+  })
 }
 
 function formatPreviewDate(dateStr) {
